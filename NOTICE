@@ -1,0 +1,63 @@
+==========================================================================
+== TWICE - Toolkit for Web-based Interactive Collaborative Environments ==
+== Copyright 2013 Oliver Schmid                                         ==
+==========================================================================
+
+This product includes software developed at
+the University of Fribourg (http://www.unifr.ch/).
+
+
+Basic toolkit functionalities are provided by the Google Web Toolkit library package copyright by Google Inc.
+The original software is available from
+	https://developers.google.com/web-toolkit/
+
+Bi-directional communciation functionalities are provided by the Atmosphere framework library package. 
+Parts of the Atmosphere framework library are licensed under the CDDL 1.0. 
+The original software is available from
+	https://github.com/Atmosphere/atmosphere
+
+Websocket server functionalities are provided by pywebsocket, copyright by Google Inc.
+The original software is available from 
+	http://code.google.com/p/pywebsocket/
+
+The proxy servlet implementation is provided by the ProxyServlet implementation copyright by Mort Bay Consulting Pty. Ltd.
+The original software is available from
+	http://grepcode.com/file/repo1.maven.org/maven2/org.mortbay.jetty/jetty-util/6.1H.22/org/mortbay/servlet/ProxyServlet.java
+
+This software contains graphical art work from the icon theme of the Oxygen project licensed under the Creative Common Attribution-ShareAlike 3.0 License. 
+The Oxygen project web page is available at
+	http://www.oxygen-icons.org/
+
+Cryptography functionalities are provided by the gwt-crypto library package which is open source software.
+The original software is available from
+	http://code.google.com/p/gwt-crypto/
+
+JSON functionalities are provided by the org.json library package copyright by JSON.org as well as by the json-simple library package.
+The original software is available from
+	https://github.com/douglascrockford/JSON-java
+and
+	http://code.google.com/p/json-simple/
+
+Utils functionalities are provided by the Commons BeanUtils library package copyright by the Apache Software Foundation.
+The original software is available from
+	http://commons.apache.org/beanutils/
+
+HttpClient functionalities are provided by the HttpClient library package copyright by the Apache Software Foundation.
+The original software is available from
+	http://hc.apache.org/httpcomponents-client-ga/
+
+Input/Output functionalities are provided by the Commons IO library package copyright by the Apache Software Foundation.
+The original software is available from
+	http://commons.apache.org/io/
+
+QR code generation functionalities are provided by the ZXing ("Zebra Crossing") library package copyright by ZXing authors.
+The original software is available from
+	http://code.google.com/p/zxing/
+
+Base64 encoding and decoding is provided by the open source implementation written and copyright by Mark Renouf. 
+The original software is available from
+	http://code.google.com/p/gwt-phpcallback/source/browse/trunk/Dev/PhpRpcLib/src/com/mostka/phprpc/client/Base64.java?r=42
+
+The client side UUID generation functionality is provided by the Math.uuid.js open source implementation written and copyright by Robert Kieffer.
+The original software is available from
+	http://www.broofa.com/Tools/Math.uuid.js

@@ -1,0 +1,55 @@
+<!-- 
+ Copyright 2013 Oliver Schmid
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+  
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.unifr.pai.twice.layout</groupId>
+	<artifactId>DynamicLayout</artifactId>
+	<name>DynamicLayout</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.unifr.pai.twice.module</groupId>
+			<artifactId>TWICEModule</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.unifr.pai.twice.dragndrop</groupId>
+			<artifactId>DragNDrop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.unifr.pai.twice.utils.device</groupId>
+			<artifactId>DeviceUtils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.unifr.pai.twice.mouseControl</groupId>
+			<artifactId>MouseControl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.unifr.pai.twice.comm.serverPush</groupId>
+			<artifactId>ServerPush</artifactId>
+		</dependency>
+	</dependencies>
+	<parent>
+		<groupId>ch.unifr.pai.twice</groupId>
+		<artifactId>TWICE-Lib</artifactId>
+		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Lib</relativePath>
+	</parent>
+	<version>${twice.version}</version>
+	<description>This module provides a dynamic layouting mechanism depending on the type of devices. For big screens, a tab-oriented arrangement of components allows to rearrange the components by drag and drop while the mobile layouting mechanism offers access to the different components by a menu triggered by a button on the top left of the screen.</description>
+</project>

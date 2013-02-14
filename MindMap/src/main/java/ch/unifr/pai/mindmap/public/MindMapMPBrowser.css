@@ -1,0 +1,184 @@
+/*
+ * Copyright 2013 Oliver Schmid
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body{
+overflow:hidden;
+}
+
+.resizingFrame{
+	margin:0px;
+	padding:0px;
+	border:0px;
+	
+}
+
+.layoutFrame{
+	width: 100%;
+	height: 100%;
+}
+
+.hover{
+	border: solid 5px blue!important;	
+}
+
+.hoverTabBar{
+	border: solid 1px black;
+	
+}
+
+.miceWidgetButton{
+	margin-left: 3px;	
+}
+
+.miceWidgetCaption{
+	border-bottom: solid 1px black;
+	
+}
+.remoteCursorMask{
+	background-color: black;	
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+
+
+#reportingArea{
+background-color:red;
+}
+#menuBarArea{
+background-color:#002550;
+}
+ 
+#header{
+	background-color:#002550;
+	float:left;
+}
+
+#mindmap-title{
+	vertical-align: middle;
+	font-size: 12px;
+	color:#ffffff;
+	float:left;
+}
+
+#header-image{
+	height: 100%;
+	float:right;
+}
+
+#trash{
+	margin:7px;
+	height: 60px;
+	width: 60px;
+}
+
+#trash.hover{
+	height:74px ! important;
+	width: 74px ! important;
+	margin: 0px ! important;
+}
+
+
+.userRepresentation.hover{
+	height:74px ! important;
+	width: 74px ! important;
+	margin: 0px ! important;
+}
+
+.userRepresentation{
+	width: 60px;
+	height: 60px;
+	margin: 7px;
+}
+
+.defaultUserRepresentation{
+	background-color:grey;
+}
+
+button{
+	height: 40px;
+	margin: 10px;
+	min-width: 100px;
+}
+
+.keyboard button{
+	height: 50px;
+	font-size: 16px;
+}
+
+.keyboard td{
+	text-align: center;
+}
+
+.hover-menuBarArea{
+	width: 60px ! important;
+	height: 60px ! important;
+	overflow: hidden ! important;
+}
+
+.note{
+	background-image: url("images/postit.png");
+	background-size: 100% 100%;
+	width:110px;
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:10px;
+	padding-bottom:20px;
+}
+
+.noteText{
+ 	height:100%;
+ 	word-wrap: break-word;
+ 	margin-bottom: 10px;
+}
+
+.noteText img{
+	max-height:100%!important;
+	max-width:auto!important;
+	margin:auto;
+}
+
+.noteUserName{
+	font-weight: bold;
+	display:block;
+	margin-bottom:6px;
+}
+
+.noteContent{
+	overflow:auto;
+}
+
+.editing{
+	background-color: yellow!important;
+}
+
+.remotelyBlocked{
+	border: 2px solid red!important;
+}
+
+.drag-proxy{
+	border: 2px solid #002550!important;
+}
+
+.transparentText{
+	filter:alpha(opacity=0);
+	-moz-opacity:0.0;
+	opacity:0.0;
+}
+
+
+
+
+

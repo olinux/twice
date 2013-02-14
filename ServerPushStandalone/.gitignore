@@ -1,0 +1,7 @@
+/generated
+/target
+/test
+/test-classes
+.classpath
+.settings
+bin

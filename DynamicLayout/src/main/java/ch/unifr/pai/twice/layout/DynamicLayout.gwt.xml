@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
+<!-- 
+ Copyright 2013 Oliver Schmid
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+  
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<module>
+	<inherits name="com.google.gwt.user.User" />
+	<inherits name="ch.unifr.pai.twice.dragndrop.DragNDrop" />
+	<inherits name="ch.unifr.pai.twice.utils.device.DeviceUtils" />
+	<inherits name="com.google.web.bindery.autobean.AutoBean"/>
+	<inherits name="com.google.gwt.user.theme.clean.Clean"/>
+	<inherits name="ch.unifr.pai.twice.mousecontrol.MouseControl"/>
+	<inherits name="ch.unifr.pai.twice.module.TWICEModule"/>
+	<inherits name='ch.unifr.pai.twice.comm.serverPush.ServerPush' />
+	<source path="client"/>
+	<define-property name="layout"
+		values="standard,mobile,unknown" />
+	<property-provider name="layout">
+  <![CDATA[
+  	  if(window.sessionStorage){
+  	     var type = window.sessionStorage.getItem('ch.unifr.pai.mice.layout');
+  	     if(type!=null){
+  	     	return type;
+  	     }
+  	  }
+  	  var args = location.search;
+      var start = args.indexOf("layout");
+      if (start >= 0) {
+        var value = args.substring(start);
+        var begin = value.indexOf("=") + 1;
+        var end = value.indexOf("&");
+        if (end == -1) {	
+          end = value.length;
+        }
+        return value.substring(begin, end);
+      }
+      return "unknown";
+  ]]>
+	</property-provider>
+	
+	<replace-with
+		class="ch.unifr.pai.twice.layout.client.singlepointer.SinglePointerLayout">
+		<when-type-is class="ch.unifr.pai.twice.layout.client.DynamicLayout" />
+	</replace-with>	
+	<replace-with
+		class="ch.unifr.pai.twice.layout.client.mobile.MobileLayout">
+		<when-type-is class="ch.unifr.pai.twice.layout.client.DynamicLayout" />
+		<when-property-is name="deviceType" value="touch" />
+	</replace-with>
+	<replace-with
+		class="ch.unifr.pai.twice.layout.client.mobile.MobileLayout">
+		<when-type-is class="ch.unifr.pai.twice.layout.client.DynamicLayout" />
+		<when-property-is name="layout" value="mobile" />
+	</replace-with>
+	<replace-with
+		class="ch.unifr.pai.twice.layout.client.singlepointer.SinglePointerLayout">
+		<when-type-is class="ch.unifr.pai.twice.layout.client.DynamicLayout" />
+		<when-property-is name="layout" value="standard" />
+	</replace-with>
+</module>

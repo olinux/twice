@@ -1,0 +1,112 @@
+/*
+ * Copyright 2013 Oliver Schmid
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+#header,#footer {
+	background-color: #002550;
+	float: left;
+	width: 100%;
+}
+
+#addButton {
+	width: 100%;
+	margin-top: 5px;
+}
+
+#mindmap-title {
+	vertical-align: middle;
+	font-size: 10px;
+	color: #ffffff;
+	float: left;
+}
+
+#header-image {
+	height: 60px;
+	float: right;
+}
+
+.panel tr td{
+	border: #000000 solid 1px;
+	border-top: 0px;
+	min-height: 30px;
+}
+
+.readOnly{
+	height:30px;
+}
+
+.editArea{
+	height:100%;
+}
+
+.entry img{
+	height: 100%!important;
+	width:auto!important;
+}
+
+.panel tr:nth-child(1) td{
+	border-top:#000000 solid 1px!important;
+}
+
+.panel tr:nth-child(odd) {
+	background-color: #eee;
+}
+
+.panel tr:nth-child(even) {
+	background-color: #fff;
+}
+
+table{
+	margin:auto;
+	width:100%;
+}
+.buttonpanel{
+	width:auto;
+	height:100%;
+}
+
+textarea{
+	width: 95%;
+	margin:auto;
+}
+
+.editWidget tr{
+	background-color: #fff!important;
+}
+
+.panel .editWidget tr td{
+	text-align:center;
+	border: 0px!important;
+}
+
+.entry {
+	height:40px;
+	
+}
+
+.entry-blocked{
+	border: 1px solid red;
+}
+
+
+.readOnly {
+	vertical-align: middle;
+	width:100%;
+}
+
+
+.panel{ width:100%; height:auto; }
+
+.gwt-StackLayoutPanelContent *{
+margin:auto;}
