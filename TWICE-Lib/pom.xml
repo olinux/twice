@@ -1,22 +1,37 @@
-<!-- 
- Copyright 2013 Oliver Schmid
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.apache.org/licenses/LICENSE-2.0
-  
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright 2013 Oliver Schmid Licensed under the Apache License, Version 
+	2.0 (the "License"); you may not use this file except in compliance with 
+	the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>TWICE-Lib</artifactId>
 	<packaging>pom</packaging>
 	<name>Parent project for TWICE core</name>
+	<distributionManagement>
+		<site>
+			<id>github</id>
+			<url>https://github.com/olinux/twice</url>
+		</site>
+	</distributionManagement>
+	<licenses>
+		<license>
+			<name>Apache License v. 2.0</name>
+			<comments>Some pieces of code and dependencies might be work of third party developers and some of them are provided under different licenses. For more details, please see the NOTICE file in the root folder of the Git repository</comments>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Oliver Schmid</name>
+			<organization>University of Fribourg</organization>
+			<email>oliver.schmid@unifr.ch</email>
+			<url>http://diuf.unifr.ch/main/pai/people/oliver-schmid</url>
+		</developer>
+	</developers>
 	<build>
 		<resources>
 			<resource>
@@ -30,13 +45,13 @@
 				</includes>
 			</resource>
 		</resources>
-		
+
 	</build>
 	<parent>
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Parent</artifactId>
 		<version>1.0.0-FIXED</version>
-	</parent> 
+	</parent>
 	<modules>
 		<module>../Authentication</module>
 		<module>../TWICEModule</module>

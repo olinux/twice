@@ -1,29 +1,35 @@
-<!-- 
- Copyright 2013 Oliver Schmid
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.apache.org/licenses/LICENSE-2.0
-  
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright 2013 Oliver Schmid Licensed under the Apache License, Version 
+	2.0 (the "License"); you may not use this file except in compliance with 
+	the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.unifr.pai.twice</groupId>
 	<artifactId>TWICE-Parent</artifactId>
 	<version>1.0.0-FIXED</version>
 	<packaging>pom</packaging>
+	<url>http://olinux.github.com/twice</url>
 	<properties>
 		<gwt.version>2.4.0</gwt.version>
 		<twice.version>0.9.0</twice.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>gwt-crypto repo</id>
+			<url>http://gwt-crypto.googlecode.com/svn/trunk/repo/</url>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<site>
+			<id>github</id>
+			<url>https://github.com/olinux/twice</url>
+		</site>
+	</distributionManagement>
 	<build>
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -33,24 +39,22 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<!-- 	<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.4</version>
-					<configuration><autoVersionSubmodules>true</autoVersionSubmodules>
-			<updateVersionsToSnapshot>false</updateVersionsToSnapshot><developmentVersion>2.0.0-SNAPSHOT</developmentVersion>
-					</configuration>
-					<executions>
-						<execution>
-						<goals>
-							<goal>update-versions</goal>
-						</goals>
-						<phase>validate</phase>
-						</execution>
-					</executions>
-				</plugin>-->
-		</plugins>		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
+			</plugin>
+		</plugins>
 	</build>
+	<!-- <reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+			</plugin>
+		</plugins>
+	</reporting>-->
 	<dependencies>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -157,10 +161,17 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
-		<modules> 
- 		<module>../TWICE-Lib</module> 
-<!-- 		<module>../TWICE-WebApp</module> -->
+
+	<modules>
+		<module>../TWICE-Lib</module>
+		<!-- <module>../TWICE-WebApp</module> -->
 	</modules>
-		<description>The parent project of the TWICE-modules. This is the central place to adapt stuff like the TWICE version, the version of GWT and the modules involved within the build process. This project is also well suited to create a general &quot;toolkit&quot; build</description>
+	<description>The parent project of the TWICE-modules. This is the central place to adapt stuff like the TWICE version, the version of GWT and the modules involved within the build process. This project is also well suited to create a general &quot;toolkit&quot; build</description>
+	<scm>
+		<url>https://github.com/olinux/twice</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/olinux/twice/issues</url>
+	</issueManagement>
 </project>

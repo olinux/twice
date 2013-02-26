@@ -16,12 +16,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.unifr.pai.twice.authentication</groupId>
 	<artifactId>Authentication</artifactId>
-	<repositories>
-		<repository>
-			<id>gwt-crypto repo</id>
-			<url>http://gwt-crypto.googlecode.com/svn/trunk/repo/</url>
-		</repository>
-	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>com.googlecode.gwt.crypto</groupId>
