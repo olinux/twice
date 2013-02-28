@@ -9,3 +9,4 @@ For module specific descriptions, please visit the [Maven Sites](http://olinux.g
 
 This project is licensed under the [Apache License v. 2.0] (http://www.apache.org/licenses/LICENSE-2.0) -- some parts and/or dependencies of the code are work of third party authors which partially have different licenses. Please see the NOTICE document for further information.
 
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/21fc96ecdd5b75775df8dfeea272aa3a "githalytics.com")](http://githalytics.com/olinux/twice)
