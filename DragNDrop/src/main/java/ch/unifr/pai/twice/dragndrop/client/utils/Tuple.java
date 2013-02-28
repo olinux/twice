@@ -17,25 +17,34 @@ package ch.unifr.pai.twice.dragndrop.client.utils;
 
 import java.io.Serializable;
 
-public class Tuple<First, Second> implements Serializable{
+/**
+ * A container to return two independent objects from a method
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <First>
+ * @param <Second>
+ * @param <Third>
+ */
+public class Tuple<First, Second> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private First first;
 	private Second second;
-	
+
 	@SuppressWarnings("unused")
-	private Tuple(){		
+	private Tuple() {
 	}
-	
-	public Tuple(First first, Second second){
+
+	public Tuple(First first, Second second) {
 		this.first = first;
 		this.second = second;
 	}
-	
-	public First getFirst(){
+
+	public First getFirst() {
 		return first;
 	}
-	
-	public Second getSecond(){
+
+	public Second getSecond() {
 		return second;
 	}
 

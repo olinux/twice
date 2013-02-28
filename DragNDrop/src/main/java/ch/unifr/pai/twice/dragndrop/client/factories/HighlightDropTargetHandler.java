@@ -16,38 +16,42 @@ package ch.unifr.pai.twice.dragndrop.client.factories;
  */
 
 import ch.unifr.pai.twice.dragndrop.client.factories.DropTargetHandlerFactory.Priority;
+import ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler;
 import ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandlerAdapter;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HighlightDropTargetHandler extends DropTargetHandlerAdapter{
+/**
+ * A special type of a {@link DropTargetHandler} which is highlighted if a dragged widget is hovering the drop target
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class HighlightDropTargetHandler extends DropTargetHandlerAdapter {
 
-	private Widget highlightElement;
-	
-	public HighlightDropTargetHandler(Widget highlightElement){
+	private final Widget highlightElement;
+
+	public HighlightDropTargetHandler(Widget highlightElement) {
 		this(null, highlightElement);
 	}
-	
-	public HighlightDropTargetHandler(Priority p, Widget highlightElement){
+
+	public HighlightDropTargetHandler(Priority p, Widget highlightElement) {
 		super(p);
 		this.highlightElement = highlightElement;
 	}
-	
+
 	@Override
-	public void onHover(String deviceId, Widget widget, Element dragProxy, Event event,
-			Double intersectionPercentage,
-			Double intersectionPercentageWithTarget) {
-		if(highlightElement != null)
+	public void onHover(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage, Double intersectionPercentageWithTarget) {
+		if (highlightElement != null)
 			highlightElement.addStyleName("hover");
 	}
 
 	@Override
 	public void onHoverEnd(String deviceId, Widget widget, Element dragProxy, Event event) {
-		if(highlightElement != null)
+		if (highlightElement != null)
 			highlightElement.removeStyleName("hover");
 	}
 
-	
 }

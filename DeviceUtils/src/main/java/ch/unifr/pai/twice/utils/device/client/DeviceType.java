@@ -19,15 +19,45 @@ import ch.unifr.pai.twice.utils.device.client.deviceType.DeviceTypeProvider;
 
 import com.google.gwt.core.client.GWT;
 
+/**
+ * Enumeration of the currently supported device types.
+ * 
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public enum DeviceType {
-	CURSOR, MULTICURSOR, TOUCH;
-	
+	/**
+	 * Cursor-oriented devices (e.g. desktop-PCs, notebooks)
+	 */
+	CURSOR,
+
+	/**
+	 * Multi-cursor devices - shared devices which allow the use of multiple input devices (e.g. mouse pointers / text input mechanisms) on a single device. The
+	 * multi-cursor is thought to be executed on rather powerful devices with big screens (visible for multiple users at the same time) and can be established
+	 * through the URL-Parameter "deviceType=multicursor"
+	 */
+	MULTICURSOR,
+
+	/**
+	 * Touch devices - typically mobile devices such as smart phones and tablets
+	 */
+	TOUCH;
+
+	/**
+	 * The current {@link DeviceTypeProvider}
+	 */
 	private static DeviceTypeProvider provider;
-	public static DeviceType getDeviceType(){
-		if(provider==null)
+
+	/**
+	 * Function to get the current device type through deferred binding. To save resources, the provider is instantiated lazily
+	 * 
+	 * @return
+	 */
+	public static DeviceType getDeviceType() {
+		if (provider == null)
 			provider = GWT.create(DeviceTypeProvider.class);
-		return provider.getDeviceType();		
+		return provider.getDeviceType();
 	}
-	
-	
+
 }

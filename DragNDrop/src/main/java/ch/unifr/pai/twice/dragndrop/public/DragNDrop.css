@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+/* Currently, we do not support multiple mouse pointer schemes, therefore the pointer shall be default everywhere*/
 * {
 	cursor: default !important;
 }
@@ -21,6 +22,7 @@
 	cursor: default;
 }
 
+/*switch off the selection functionality on long click because it would interfere with the drag and drop behavior*/
 .draggable, .draggable * {
 	cursor: default;
 	-moz-user-select: none;
@@ -29,7 +31,7 @@
 	/*border: 2px solid #002550;*/
 }
 
-
+/*styling the drag proxy*/
 .drag-proxy {
 	opacity: 0.5;
 	z-index: 9999;
@@ -39,6 +41,7 @@
 	display: none;
 }
 
+/*marking the original widget as blocked if it is dragged*/
 .drag-proxy-origin {
 	border: 4px solid #002550;
 }

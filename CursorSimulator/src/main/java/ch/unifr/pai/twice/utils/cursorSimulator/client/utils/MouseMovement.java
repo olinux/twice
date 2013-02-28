@@ -17,18 +17,42 @@ package ch.unifr.pai.twice.utils.cursorSimulator.client.utils;
 
 import com.google.gwt.user.client.Command;
 
+/**
+ * A class defining an atomic mouse movement by the definition of x-coordinate, y-coordinate as well as the duration of the callback. Additionally, a callback
+ * can be defined which is fired after the movement has been executed.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MouseMovement {
 
 	private final int x;
 	private final int y;
 	private final int duration;
 	private final Command callback;
-	
-	public MouseMovement(int x, int y, int duration){
+
+	/**
+	 * @param x
+	 *            - the X-coordinate
+	 * @param y
+	 *            - the Y-coordinate
+	 * @param duration
+	 *            - the duration of the movementRandomCursor (in ms)
+	 */
+	public MouseMovement(int x, int y, int duration) {
 		this(x, y, duration, null);
 	}
-	
-	
+
+	/**
+	 * @param x
+	 *            - the X-coordinate
+	 * @param y
+	 *            - the Y-coordinate
+	 * @param duration
+	 *            - the duration of the movement (in ms)
+	 * @param callback
+	 *            - the command that shall be executed when the movement has been done.
+	 */
 	public MouseMovement(int x, int y, int duration, Command callback) {
 		super();
 		this.x = x;
@@ -37,22 +61,32 @@ public class MouseMovement {
 		this.callback = callback;
 	}
 
+	/**
+	 * @return the X-coordinate
+	 */
 	public int getX() {
 		return x;
 	}
 
+	/**
+	 * @return the Y-coordinate
+	 */
 	public int getY() {
 		return y;
 	}
 
+	/**
+	 * @return the duration of the movement (in ms)
+	 */
 	public int getDuration() {
 		return duration;
 	}
 
+	/**
+	 * @return the command executed after the movement is done.
+	 */
 	public Command getCallback() {
 		return callback;
 	}
-	
-	
-	
+
 }

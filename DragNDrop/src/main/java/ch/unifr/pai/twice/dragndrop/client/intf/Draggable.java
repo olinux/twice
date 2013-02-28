@@ -18,12 +18,21 @@ package ch.unifr.pai.twice.dragndrop.client.intf;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
-import com.google.gwt.event.dom.client.HasTouchCancelHandlers;
 import com.google.gwt.event.dom.client.HasTouchEndHandlers;
 import com.google.gwt.event.dom.client.HasTouchMoveHandlers;
 import com.google.gwt.event.dom.client.HasTouchStartHandlers;
 
-public interface Draggable extends HasMouseOverHandlers, HasMouseDownHandlers, HasMouseUpHandlers, HasTouchStartHandlers, HasTouchEndHandlers, HasTouchMoveHandlers{
+/**
+ * An interface to be implemented by widgets which shall be draggable
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public interface Draggable extends HasMouseOverHandlers, HasMouseDownHandlers, HasMouseUpHandlers, HasTouchStartHandlers, HasTouchEndHandlers,
+		HasTouchMoveHandlers {
 
+	/**
+	 * @return true if the widget is draggable, false if it is not
+	 */
 	boolean isDraggable();
 }

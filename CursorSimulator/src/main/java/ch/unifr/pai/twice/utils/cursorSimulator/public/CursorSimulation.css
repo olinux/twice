@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+
+/*The style for a faked cursor (absolute positioning, high z-index to ensure that the mouse pointer is on top of other elements)*/
 .fakedCursor{
 	position:absolute;
 	z-index:40000;
@@ -20,35 +22,43 @@
 	background-repeat: no-repeat;
 }
 
+/*The image for the first simulated mouse pointer*/
 #cursor0{
 	background-image: url('cursors/blue.png');
 }
-
+/*The image for the second simulated mouse pointer*/
 #cursor1{
 	background-image: url('cursors/gold.png');
 }
+/*The image for the third simulated mouse pointer*/
 #cursor2{
 	background-image: url('cursors/purple.png');
 }
-
+/*The image for the fourth simulated mouse pointer*/
 #cursor3{
 	background-image: url('cursors/yellow.png');
 }
+/*The image for the fifth simulated mouse pointer*/
 #cursor4{
 	background-image: url('cursors/pink.png');
 }
+/*The image for the sixth simulated mouse pointer*/
 #cursor5{
 	background-image: url('cursors/light_pink.png');
 }
+/*The image for the seventh simulated mouse pointer*/
 #cursor6{
 	background-image: url('cursors/green.png');
 }
+/*The image for the eighth simulated mouse pointer*/
 #cursor7{
 	background-image: url('cursors/grey.png');
 }
+/*The image for the ninth simulated mouse pointer*/
 #cursor8{
 	background-image: url('cursors/red.png');
 }
+/*The image for the tenth simulated mouse pointer*/
 #cursor9{
 	background-image: url('cursors/black.png');
 }

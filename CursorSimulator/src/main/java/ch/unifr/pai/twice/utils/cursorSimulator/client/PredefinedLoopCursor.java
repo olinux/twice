@@ -21,15 +21,24 @@ import ch.unifr.pai.twice.utils.cursorSimulator.client.utils.MouseMovement;
  * Like the {@link PredefinedCursor} but this version loops the movements once they are finished
  * 
  * @author oli
- *
+ * 
  */
 public class PredefinedLoopCursor extends PredefinedCursor {
 
-	public PredefinedLoopCursor(int index, int startX, int startY,
-			MouseMovement... path) {
+	/**
+	 * @see {@link PredefinedCursor#PredefinedCursor(int, int, int, MouseMovement...)}
+	 * @param index
+	 * @param startX
+	 * @param startY
+	 * @param path
+	 */
+	public PredefinedLoopCursor(int index, int startX, int startY, MouseMovement... path) {
 		super(index, startX, startY, path);
 	}
 
+	/**
+	 * @see ch.unifr.pai.twice.utils.cursorSimulator.client.PredefinedCursor#move()
+	 */
 	@Override
 	public void move() {
 		if (i > (path.length - 1))

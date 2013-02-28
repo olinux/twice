@@ -16,9 +16,26 @@ package ch.unifr.pai.twice.authentication.client.security;
  */
 
 /**
- * An exception indicating that there is something wrong with that message (e.g.
- * the signature is not valid)
+ * An exception indicating that there is something wrong with that message (e.g. the signature is not valid)
  */
 public class MessagingException extends Exception {
+
+	private static final long serialVersionUID = 1L;
+
+	public MessagingException() {
+		super();
+	}
+
+	public MessagingException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public MessagingException(String message) {
+		super(message);
+	}
+
+	public MessagingException(Throwable cause) {
+		super(cause);
+	}
 
 }

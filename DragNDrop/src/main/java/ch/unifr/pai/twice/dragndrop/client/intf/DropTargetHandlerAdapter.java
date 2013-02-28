@@ -21,43 +21,62 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * An adapter of the {@link DropTargetHandler} providing typical standard implementations and values
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class DropTargetHandlerAdapter implements DropTargetHandler {
 
-	public DropTargetHandlerAdapter(){
+	public DropTargetHandlerAdapter() {
 		this(null);
 	}
-	
-	public DropTargetHandlerAdapter(Priority p){
-		if(p == null)
+
+	public DropTargetHandlerAdapter(Priority p) {
+		if (p == null)
 			p = Priority.NORMAL;
 		this.p = p;
 	}
-	
+
 	private Priority p = Priority.NORMAL;
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler#getPriority()
+	 */
 	@Override
 	public Priority getPriority() {
 		return p;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler#onDrop(java.lang.String, com.google.gwt.user.client.ui.Widget,
+	 * com.google.gwt.dom.client.Element, com.google.gwt.user.client.Event, java.lang.Double, java.lang.Double)
+	 */
 	@Override
-	public boolean onDrop(String deviceId, Widget widget, Element dragProxy, Event event,
-			Double intersectionPercentage,
-			Double intersectionPercentageWithTarget) {
+	public boolean onDrop(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage, Double intersectionPercentageWithTarget) {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler#onHover(java.lang.String, com.google.gwt.user.client.ui.Widget,
+	 * com.google.gwt.dom.client.Element, com.google.gwt.user.client.Event, java.lang.Double, java.lang.Double)
+	 */
 	@Override
-	public void onHover(String deviceId, Widget widget, Element dragProxy, Event event,
-			Double intersectionPercentage,
-			Double intersectionPercentageWithTarget) {
-		
+	public void onHover(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage, Double intersectionPercentageWithTarget) {
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler#onHoverEnd(java.lang.String, com.google.gwt.user.client.ui.Widget,
+	 * com.google.gwt.dom.client.Element, com.google.gwt.user.client.Event)
+	 */
 	@Override
-	public void onHoverEnd(String deviceId, Widget widget, Element dragProxy, Event event) {		
+	public void onHoverEnd(String deviceId, Widget widget, Element dragProxy, Event event) {
 	}
-	
-	
 
 }

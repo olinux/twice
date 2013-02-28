@@ -17,10 +17,21 @@ package ch.unifr.pai.twice.utils.device.client.deviceType;
 
 import ch.unifr.pai.twice.utils.device.client.DeviceType;
 
+/**
+ * A provider to ask for the current device type - by default this value is set to {@link DeviceType#CURSOR} unless the implementation is changed through
+ * deferred binding. This class can be used to differentiate implementations between device types without using explicit deferred binding and is therefore well
+ * suited for very small distinctions between the different implementations
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class DeviceTypeProvider {
 
-	public DeviceType getDeviceType(){
+	/**
+	 * @return the device type of the currently executed application
+	 */
+	public DeviceType getDeviceType() {
 		return DeviceType.CURSOR;
 	}
-	
+
 }

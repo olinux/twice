@@ -26,13 +26,15 @@ package ch.unifr.pai.twice.utils.device.client;
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * This class is provided by Robert Kieffer and is used for the generation of universally unique identifiers in a GWT-safe way
+ * 
+ */
 public class UUIDGenerator {
-	private static final char[] CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-			.toCharArray();
+	private static final char[] CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
 	/**
-	 * Generate a random uuid of the specified length. Example: uuid(15) returns
-	 * "VcydxgltxrVZSTV"
+	 * Generate a random uuid of the specified length. Example: uuid(15) returns "VcydxgltxrVZSTV"
 	 * 
 	 * @param len
 	 *            the desired number of characters
@@ -52,8 +54,7 @@ public class UUIDGenerator {
 	 * @param len
 	 *            the desired number of characters
 	 * @param radix
-	 *            the number of allowable values for each character (must be <=
-	 *            62)
+	 *            the number of allowable values for each character (must be <= 62)
 	 */
 	public static String uuid(int len, int radix) {
 		if (radix > CHARS.length) {
@@ -68,8 +69,7 @@ public class UUIDGenerator {
 	}
 
 	/**
-	 * Generate a RFC4122, version 4 ID. Example:
-	 * "92329D39-6F5C-4520-ABFC-AAB64544E172"
+	 * Generate a RFC4122, version 4 ID. Example: "92329D39-6F5C-4520-ABFC-AAB64544E172"
 	 */
 	public static String uuid() {
 		StringBuilder sb = new StringBuilder();
@@ -79,18 +79,18 @@ public class UUIDGenerator {
 		for (int i = 0; i < 36; i++) {
 			switch (i) {
 			// rfc4122 requires these characters
-			case 8:
-			case 13:
-			case 18:
-			case 23:
-				sb.append('-');
-				break;
-			case 14:
-				sb.append('4');
-				break;
-			default:
-				r = (int) (Math.random() * 16);
-				sb.append(CHARS[(i == 19) ? (r & 0x3) | 0x8 : r & 0xf]);
+				case 8:
+				case 13:
+				case 18:
+				case 23:
+					sb.append('-');
+					break;
+				case 14:
+					sb.append('4');
+					break;
+				default:
+					r = (int) (Math.random() * 16);
+					sb.append(CHARS[(i == 19) ? (r & 0x3) | 0x8 : r & 0xf]);
 			}
 		}
 		return sb.toString();

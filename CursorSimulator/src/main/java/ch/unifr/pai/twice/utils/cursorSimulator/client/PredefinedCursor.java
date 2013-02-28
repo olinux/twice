@@ -20,18 +20,31 @@ import ch.unifr.pai.twice.utils.cursorSimulator.client.utils.MouseMovement;
 import com.google.gwt.user.client.Command;
 
 /**
- * A simulated cursor with a predefined path. As soon as the cursor has finished
- * its movement, it stops. If the cursor shall repeat its movements after the
- * end of the path, please use {@link PredefinedLoopCursor}
+ * A simulated cursor with a predefined path. As soon as the cursor has finished its movement, it stops. If the cursor shall repeat its movements after the end
+ * of the path, please use {@link PredefinedLoopCursor}
  * 
  * @author oli
  * 
  */
 public class PredefinedCursor extends Cursor {
 
+	/**
+	 * The current movement step index of the predefined movement path
+	 */
 	protected int i = 0;
+	/**
+	 * The predefined movement path
+	 */
 	protected MouseMovement[] path;
-	private Command callback = new Command() {
+	/**
+	 * The callback executed after every executed movement
+	 */
+	private final Command callback = new Command() {
+		/**
+		 * Shifts the index of the movement path one step further if the movement has not yet been completed
+		 * 
+		 * @see com.google.gwt.user.client.Command#execute()
+		 */
 		@Override
 		public void execute() {
 			if (i >= 0 && i < path.length) {
@@ -44,12 +57,24 @@ public class PredefinedCursor extends Cursor {
 		}
 	};
 
-	public PredefinedCursor(int index, int startX, int startY,
-			MouseMovement... path) {
+	/**
+	 * @param index
+	 *            - the index of the mouse pointer (has to be unique if multiple mouse pointers are used)
+	 * @param startX
+	 *            - the initial X-coordinate of the mouse pointer
+	 * @param startY
+	 *            - the initial Y-coordinate of the mouse pointer
+	 * @param path
+	 *            - the path that shall be followed by the mouse pointer
+	 */
+	public PredefinedCursor(int index, int startX, int startY, MouseMovement... path) {
 		super(index, startX, startY);
 		this.path = path;
 	}
 
+	/**
+	 * Starts the movement of the mouse pointer which follows its predefined path until it reaches the end
+	 */
 	public void move() {
 		if (i < path.length) {
 			MouseMovement next = path[i];

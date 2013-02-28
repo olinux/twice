@@ -18,80 +18,91 @@ package ch.unifr.pai.twice.dragndrop.client.factories;
 import ch.unifr.pai.twice.dragndrop.client.intf.DragNDropHandler;
 import ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * A factory for {@link DragNDropHandler}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class DropHandlerFactory {
 
 	private static DragNDropHandler defaultDropHandler;
 	private static DragNDropHandler resetDropHandler;
 	private static DragNDropHandler resetWhenNotOnDropArea;
-	
-	public static DragNDropHandler resetWhenNotOnDropArea(){
-		if(resetWhenNotOnDropArea==null)
+
+	/**
+	 * @return a {@link DragNDropHandler} that resets the position of a dragged widget if it is not released on top of a drop target
+	 */
+	public static DragNDropHandler resetWhenNotOnDropArea() {
+		if (resetWhenNotOnDropArea == null)
 			resetWhenNotOnDropArea = new DragNDropHandler() {
-			@Override
-			public boolean onDrop(String deviceId, Widget w, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget, 
-					boolean outOfBox) {
-				return dropTarget!=null;
-			}
+				@Override
+				public boolean onDrop(String deviceId, Widget w, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget,
+						boolean outOfBox) {
+					return dropTarget != null;
+				}
 
-			@Override
-			public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop,
-					Event event) {
-			}
+				@Override
+				public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop, Event event) {
+				}
 
-			@Override
-			public void onStartDrag(String deviceId, Widget draggedWidget) {
-				
-			}
-		};
-		return resetWhenNotOnDropArea;		
+				@Override
+				public void onStartDrag(String deviceId, Widget draggedWidget) {
+
+				}
+			};
+		return resetWhenNotOnDropArea;
 	}
-	
-	
-	public static DragNDropHandler defaultHandler(){
-		if(defaultDropHandler==null)
+
+	/**
+	 * @return a {@link DragNDropHandler} which accepts any drops and therefore positions the dragged widget where it has been dropped (unless a drop target
+	 *         does not override this function)
+	 */
+	public static DragNDropHandler defaultHandler() {
+		if (defaultDropHandler == null)
 			defaultDropHandler = new DragNDropHandler() {
-			@Override
-			public boolean onDrop(String deviceId, Widget w, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget,
-					boolean outOfBox) {
-				return true;
-			}
+				@Override
+				public boolean onDrop(String deviceId, Widget w, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget,
+						boolean outOfBox) {
+					return true;
+				}
 
-			@Override
-			public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop,
-					Event event) {
-			}
+				@Override
+				public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop, Event event) {
+				}
 
-			@Override
-			public void onStartDrag(String deviceId, Widget draggedWidget) {
-				
-			}
-		};
-		return defaultDropHandler;		
+				@Override
+				public void onStartDrag(String deviceId, Widget draggedWidget) {
+
+				}
+			};
+		return defaultDropHandler;
 	}
-	
-	public static DragNDropHandler resetPositionOnOutOfBox(){
-		if(resetDropHandler==null)
+
+	/**
+	 * @return resets the position if it has been dropped outside of the boundary-box
+	 */
+	public static DragNDropHandler resetPositionOnOutOfBox() {
+		if (resetDropHandler == null)
 			resetDropHandler = new DragNDropHandler() {
-			@Override
-			public boolean onDrop(String deviceId, Widget w, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget,
-					boolean outOfBox) {
-				return !outOfBox;
-			}
+				@Override
+				public boolean onDrop(String deviceId, Widget w, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget,
+						boolean outOfBox) {
+					return !outOfBox;
+				}
 
-			@Override
-			public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop,
-					Event event) {
-			}
+				@Override
+				public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop, Event event) {
+				}
 
-			@Override
-			public void onStartDrag(String deviceId, Widget draggedWidget) {
-				
-			}
-		};
-		return resetDropHandler;	
+				@Override
+				public void onStartDrag(String deviceId, Widget draggedWidget) {
+
+				}
+			};
+		return resetDropHandler;
 	}
 }

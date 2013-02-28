@@ -17,73 +17,88 @@ package ch.unifr.pai.twice.utils.cursorSimulator.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Random;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 
 /**
  * This cursor moves by completely random values within the current screen size.
- *
+ * 
  * @author oli
- *
+ * 
  */
 public class RandomCursor extends Cursor {
 
-
+	/**
+	 * The interval in ms in which a new random position shall be reached
+	 */
 	private final int interval;
+	/**
+	 * A boolean flag defining if the movement is currently stopped
+	 */
 	private boolean stopped;
-	
-	public RandomCursor(int index, int interval, int startX,
-			int startY) {
+
+	/**
+	 * @param index
+	 *            - @see {@link Cursor#Cursor(int, int, int)}
+	 * @param interval
+	 *            - the interval in ms in which a new random position shall be reached
+	 * @param startX
+	 *            - @see {@link Cursor#Cursor(int, int, int)}
+	 * @param startY
+	 *            - @see {@link Cursor#Cursor(int, int, int)}
+	 */
+	public RandomCursor(int index, int interval, int startX, int startY) {
 		super(index, startX, startY);
 		this.interval = interval;
 	}
-	
+
+	/**
+	 * Move the mouse pointer randomly (the mouse pointer does not move every time but decides on if to move within this interval depending on a random boolean
+	 * choice as well.
+	 */
 	private void move() {
 		int newX;
 		int newY;
-		if (Random.nextBoolean()){
-			newX = Random.nextInt(Window.getClientWidth()
-					- RandomCursor.this.getOffsetWidth());
-			newY = Random.nextInt(Window.getClientHeight()
-					- RandomCursor.this.getOffsetHeight());			
+		if (Random.nextBoolean()) {
+			newX = Random.nextInt(Window.getClientWidth() - RandomCursor.this.getOffsetWidth());
+			newY = Random.nextInt(Window.getClientHeight() - RandomCursor.this.getOffsetHeight());
 		}
-		else{
+		else {
 			newX = RandomCursor.this.getAbsoluteLeft();
 			newY = RandomCursor.this.getAbsoluteTop();
 		}
-		move(newX, newY, interval, moveCallback);		
+		move(newX, newY, interval, moveCallback);
 	}
-	
-	public void stop(){
+
+	/**
+	 * Lets the movement stop
+	 */
+	public void stop() {
 		stopped = true;
 	}
-	
-	public void start(){
+
+	/**
+	 * Start the movement
+	 */
+	public void start() {
 		stopped = false;
 		move();
 	}
-	
-	private Timer moveTimer = new Timer() {
-		@Override
-		public void run() {
-			
-		}
-	};
-	
-	private Command moveCallback = new Command(){
+
+	/**
+	 * The callback executed after every movement letting the mouse pointer move on as long as it is not stopped
+	 */
+	private final Command moveCallback = new Command() {
 		@Override
 		public void execute() {
-			if(!stopped){
-				int newX = Random.nextInt(Window.getClientWidth()
-						- RandomCursor.this.getOffsetWidth());
-				int newY = Random.nextInt(Window.getClientHeight()
-						- RandomCursor.this.getOffsetHeight());
+			if (!stopped) {
+				int newX = Random.nextInt(Window.getClientWidth() - RandomCursor.this.getOffsetWidth());
+				int newY = Random.nextInt(Window.getClientHeight() - RandomCursor.this.getOffsetHeight());
 
 				if (Random.nextBoolean())
 					move(newX, newY, interval, moveCallback);
 				else
 					moveCallback.execute();
-			}		
+			}
 		}
 	};
 

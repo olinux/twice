@@ -21,13 +21,26 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import com.google.gwt.user.rebind.UserAgentPropertyGenerator;
 
+/**
+ * GWT by default does not allow unsupported browsers (which are very few, very exotic ones only) to execute the application. In terms of best effort, we
+ * override this behavior by defining that unknown devices should be provided with the standard Firefox "gecko1_8" compatible implementation of the application.
+ * 
+ * Until now, we only know about the native browser of the Nintendo 3DS browser who is affected by this issue.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class EnableUnsupportedBrowsers extends UserAgentPropertyGenerator {
 
+	/**
+	 * Overriding the default behaviour of GWT and let unknown devices to execute the Firefox "gecko1_8" version of the application.
+	 * 
+	 * @see com.google.gwt.user.rebind.UserAgentPropertyGenerator#generate(com.google.gwt.core.ext.TreeLogger, java.util.SortedSet, java.lang.String,
+	 *      java.util.SortedSet)
+	 */
 	@Override
-	public String generate(TreeLogger logger, SortedSet<String> possibleValues,
-			String fallback, SortedSet<ConfigurationProperty> configProperties) {
-		String value = super.generate(logger, possibleValues, fallback,
-				configProperties);
+	public String generate(TreeLogger logger, SortedSet<String> possibleValues, String fallback, SortedSet<ConfigurationProperty> configProperties) {
+		String value = super.generate(logger, possibleValues, fallback, configProperties);
 		value = value.replace("return 'unknown';", "return 'gecko1_8';");
 		return value;
 	}

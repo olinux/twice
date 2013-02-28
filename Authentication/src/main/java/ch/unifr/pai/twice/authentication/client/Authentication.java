@@ -17,16 +17,31 @@ package ch.unifr.pai.twice.authentication.client;
 
 import com.google.gwt.user.client.Window;
 
+/**
+ * A simple implementation of an authentication module used to gather the user name of a participant. This implementation asks the user for his/her name through
+ * a standard prompt and stores the value in a static variable (valid for a client session).
+ * 
+ * Improved implementations can introduce the confirmation of user credentials (e.g. password, etc.) as well as connect to further information sources to gather
+ * data about a user from external services (e.g. Google+, Facebook, etc.)
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class Authentication {
 
 	private static String username;
-	
+
+	/**
+	 * Returns the user name for the identification and the signature of triggered messages within the collaborative session
+	 * 
+	 * @return the user name
+	 */
 	public static String getUserName() {
 		if (username == null) {
 			String s = Window.prompt("What's your name?", "");
-			if (s != null && !s.isEmpty()) {
+			if ((s != null) && !s.isEmpty()) {
 				username = s;
-			} 
+			}
 		}
 		return username;
 	}

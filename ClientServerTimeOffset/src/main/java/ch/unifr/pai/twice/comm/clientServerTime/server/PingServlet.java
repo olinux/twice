@@ -24,14 +24,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ch.unifr.pai.twice.comm.clientServerTime.client.ClientServerTimeOffset;
+
+/**
+ * The ping servlet called by {@link ClientServerTimeOffset}. All this servlet does is responding to a GET request and providing the current system time of the
+ * server in milliseconds
+ * 
+ * @author Oliver Schmid
+ */
 @WebServlet("/ping")
 public class PingServlet extends HttpServlet {
 
+	/**
+	 * Responds to a GET request and returns the current system time in milliseconds within the HTTP response.
+	 * 
+	 */
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.getWriter().write(String.valueOf(new Date().getTime()));
 	}
-	
-	
+
 }

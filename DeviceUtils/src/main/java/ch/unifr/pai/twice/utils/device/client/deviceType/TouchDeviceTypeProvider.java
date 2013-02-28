@@ -17,8 +17,18 @@ package ch.unifr.pai.twice.utils.device.client.deviceType;
 
 import ch.unifr.pai.twice.utils.device.client.DeviceType;
 
+/**
+ * The replacement installation of the {@link DeviceTypeProvider} for {@link DeviceType#TOUCH} devices
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class TouchDeviceTypeProvider extends DeviceTypeProvider {
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.utils.device.client.deviceType.DeviceTypeProvider#getDeviceType()
+	 */
 	@Override
 	public DeviceType getDeviceType() {
 		return DeviceType.TOUCH;
