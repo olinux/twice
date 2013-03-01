@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,85 +23,91 @@ import ch.unifr.pai.twice.widgets.client.events.UndoableRemoteKeyPressEvent.Undo
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Command;
 
-public class UndoableRemoteKeyPressHandlerImpl implements UndoableRemoteKeyPressHandler{
+/**
+ * Handler for an {@link UndoableRemoteKeyPressEvent}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class UndoableRemoteKeyPressHandlerImpl implements UndoableRemoteKeyPressHandler {
 	private String value;
-	private Map<String, Integer> cursorPositions = new HashMap<String, Integer>();
-	private Command updateCallback;
+	private final Map<String, Integer> cursorPositions = new HashMap<String, Integer>();
+	private final Command updateCallback;
 	private int thisCursorPos;
-	
-	public String getValue(){
+
+	public String getValue() {
 		return value;
 	}
-	
-	public Map<String, Integer> getCursorPositions(){
+
+	public Map<String, Integer> getCursorPositions() {
 		return cursorPositions;
 	}
-	
-	public void setValue(String value){
+
+	public void setValue(String value) {
 		this.value = value;
 		updateCallback.execute();
 	}
-	
-	public void setCursorPositions(Map<String, Integer> positions){
-		for(String p : positions.keySet()){
+
+	public void setCursorPositions(Map<String, Integer> positions) {
+		for (String p : positions.keySet()) {
 			cursorPositions.put(p, positions.get(p).intValue());
 		}
 		updateCallback.execute();
 	}
-	
-	
+
 	@Override
 	public void onEvent(UndoableRemoteKeyPressEvent event) {
 		String device = event.getOriginatingDevice();
 		if (event.getKeyCode() != null) {
 			switch (event.getKeyCode()) {
-			case KeyCodes.KEY_DELETE:
-				delete(device);
-				break;
-			case KeyCodes.KEY_BACKSPACE:
-				bckspc(device);
-				break;
+				case KeyCodes.KEY_DELETE:
+					delete(device);
+					break;
+				case KeyCodes.KEY_BACKSPACE:
+					bckspc(device);
+					break;
 			}
-		} else if (event.getText() != null) {
+		}
+		else if (event.getText() != null) {
 			addChar(event.getText(), device);
 		}
 		Integer cursorPos = event.getCursorPos();
 		if (cursorPos != null) {
 			if (cursorPos > 0) {
 				shiftCursorPosRight(device, cursorPos);
-			} else {
+			}
+			else {
 				shiftCursorPosLeft(device, Math.abs(cursorPos));
 			}
 		}
 	}
-	
+
 	@Override
 	public void undo(UndoableRemoteKeyPressEvent event) {
 		value = event.getStorageProperty("value");
 	}
-	
+
 	@Override
 	public void saveState(UndoableRemoteKeyPressEvent event) {
 		event.setStorageProperty("value", value);
 	}
-	
-	public UndoableRemoteKeyPressHandlerImpl(Command updateCallback){
-		this.updateCallback = updateCallback;	
+
+	public UndoableRemoteKeyPressHandlerImpl(Command updateCallback) {
+		this.updateCallback = updateCallback;
 	}
-	
-	public int getThisCursorPos(){
+
+	public int getThisCursorPos() {
 		return thisCursorPos;
 	}
-	
+
 	public int getCursorPos(String device) {
 		Integer pos = cursorPositions.get(device);
 		return pos == null ? 0 : pos;
 	}
-	
+
 	private void delete(String device) {
 		if (thisCursorPos < value.length()) {
-			value = value.substring(0, thisCursorPos)
-					+ value.substring(thisCursorPos + 1);
+			value = value.substring(0, thisCursorPos) + value.substring(thisCursorPos + 1);
 			shiftAll(thisCursorPos, device, -1);
 			updateCallback.execute();
 		}
@@ -108,24 +115,23 @@ public class UndoableRemoteKeyPressHandlerImpl implements UndoableRemoteKeyPress
 
 	private void bckspc(String device) {
 		if (thisCursorPos > 0 && value != null && value.length() > 0) {
-			value = value.substring(0, thisCursorPos - 1)
-					+ (thisCursorPos< value.length() ? value.substring(thisCursorPos) : "");
-			shiftAll(thisCursorPos+1, device, -1);
+			value = value.substring(0, thisCursorPos - 1) + (thisCursorPos < value.length() ? value.substring(thisCursorPos) : "");
+			shiftAll(thisCursorPos + 1, device, -1);
 			updateCallback.execute();
 		}
 	}
 
 	private void shiftCursorPosLeft(String device, int amount) {
 		int pos = thisCursorPos;
-		if (pos >= amount){
-			thisCursorPos = pos-amount;
+		if (pos >= amount) {
+			thisCursorPos = pos - amount;
 			updateCallback.execute();
 		}
 	}
 
 	private void shiftCursorPosRight(String device, int amount) {
 		int pos = thisCursorPos;
-		if (value != null && pos + amount <= value.length()){
+		if (value != null && pos + amount <= value.length()) {
 			thisCursorPos = pos + amount;
 			updateCallback.execute();
 		}
@@ -133,29 +139,27 @@ public class UndoableRemoteKeyPressHandlerImpl implements UndoableRemoteKeyPress
 
 	private void addChar(String text, String device) {
 		StringBuilder sb = new StringBuilder();
-		if (value != null && thisCursorPos>-1)
-			sb.append(value.substring(0,
-					Math.min(value.length(), thisCursorPos)));
+		if (value != null && thisCursorPos > -1)
+			sb.append(value.substring(0, Math.min(value.length(), thisCursorPos)));
 		sb.append(text);
-		if (value != null && thisCursorPos>-1 && thisCursorPos < value.length()) {
-			sb.append(value.substring(
-					Math.min(value.length(), thisCursorPos)));
+		if (value != null && thisCursorPos > -1 && thisCursorPos < value.length()) {
+			sb.append(value.substring(Math.min(value.length(), thisCursorPos)));
 		}
 		value = sb.toString();
 		shiftAll(thisCursorPos, device, text.length());
 		updateCallback.execute();
 	}
-	
+
 	private void shiftAll(int curPos, String device, int amount) {
-		if((amount>0 && curPos <= thisCursorPos) || (amount<0 && curPos>thisCursorPos))
-			thisCursorPos = thisCursorPos+amount;
+		if ((amount > 0 && curPos <= thisCursorPos) || (amount < 0 && curPos > thisCursorPos))
+			thisCursorPos = thisCursorPos + amount;
 		for (String s : cursorPositions.keySet()) {
 			int p = cursorPositions.get(s);
-//			if (!s.equals(device)) {
-				//shift right
-				if((amount<0 && curPos < p) || (amount>0 && curPos>p))
-					cursorPositions.put(s, p + amount);
-//			}
+			// if (!s.equals(device)) {
+			// shift right
+			if ((amount < 0 && curPos < p) || (amount > 0 && curPos > p))
+				cursorPositions.put(s, p + amount);
+			// }
 		}
 		updateCallback.execute();
 	}

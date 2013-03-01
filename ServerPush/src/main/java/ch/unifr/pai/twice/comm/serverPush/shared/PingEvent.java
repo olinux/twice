@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.shared;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +18,15 @@ import ch.unifr.pai.twice.comm.serverPush.client.DiscardingRemoteEvent;
 import ch.unifr.pai.twice.comm.serverPush.client.RemoteEventHandler;
 import ch.unifr.pai.twice.comm.serverPush.shared.PingEvent.PingEventHandler;
 
-public abstract class PingEvent extends DiscardingRemoteEvent<PingEventHandler>{
+/**
+ * The ping event used for confirmation of blocking events
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public abstract class PingEvent extends DiscardingRemoteEvent<PingEventHandler> {
 	public static final Type<PingEventHandler> TYPE = new Type<PingEventHandler>();
 
-	public static interface PingEventHandler extends RemoteEventHandler<PingEvent>{
-	}	
+	public static interface PingEventHandler extends RemoteEventHandler<PingEvent> {
+	}
 }

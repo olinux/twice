@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.module.test.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,12 @@ package ch.unifr.pai.twice.module.test.client;
 
 import com.google.gwt.user.client.ui.Label;
 
-public class SomeClass extends Label{
+/**
+ * A widget
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class SomeClass extends Label {
 
 }

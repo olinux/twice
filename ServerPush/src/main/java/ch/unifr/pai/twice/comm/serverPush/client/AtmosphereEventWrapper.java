@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +19,26 @@ import java.io.Serializable;
 import ch.unifr.pai.twice.authentication.client.security.MessagingException;
 import ch.unifr.pai.twice.authentication.client.security.TWICESecurityManager;
 
-public class AtmosphereEventWrapper implements Serializable{
+/**
+ * event wrapper for atmosphere
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class AtmosphereEventWrapper implements Serializable {
 	private String serializedEvent;
-	public void setEvent(RemoteEvent<?> e, TWICESecurityManager security){
+
+	public void setEvent(RemoteEvent<?> e, TWICESecurityManager security) {
 		try {
 			this.serializedEvent = e.serialize(security);
-		} catch (MessagingException e1) {
+		}
+		catch (MessagingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
-	
-	public String getSerializedEvent(){
+
+	public String getSerializedEvent() {
 		return serializedEvent;
 	}
 }

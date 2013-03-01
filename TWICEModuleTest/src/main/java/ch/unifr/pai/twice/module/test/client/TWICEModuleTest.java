@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.module.test.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +21,13 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+/**
+ * An example of asynchronous module instantiation (the instantiation of a module with GWT.runAsync allows to create split points. This means, that the
+ * application does not even need to download the code of a module as long as it has not been accessed).
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class TWICEModuleTest implements EntryPoint {
 
 	@Override
@@ -30,13 +38,13 @@ public class TWICEModuleTest implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onSuccess(SomeClass result) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		}));
 	}

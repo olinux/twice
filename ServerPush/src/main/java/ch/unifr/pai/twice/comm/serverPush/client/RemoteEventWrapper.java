@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,14 @@ package ch.unifr.pai.twice.comm.serverPush.client;
 
 import com.google.web.bindery.event.shared.Event;
 
-public abstract class RemoteEventWrapper<H extends RemoteEventHandler<?>, L extends Event<?>> extends RemoteEvent<H>{
+/**
+ * A wrapper for standard GWT events to be distributable to distant devices.
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <H>
+ * @param <L>
+ */
+public abstract class RemoteEventWrapper<H extends RemoteEventHandler<?>, L extends Event<?>> extends RemoteEvent<H> {
 	public abstract void wrap(L event);
 }

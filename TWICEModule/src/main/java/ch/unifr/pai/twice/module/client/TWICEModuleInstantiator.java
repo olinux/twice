@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.module.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +20,35 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
-public interface TWICEModuleInstantiator<M extends Widget> extends TWICEModule<M>{	
-	RunAsyncCallback instantiate(AsyncCallback<M> callback);
-	Map<String, Object> getConfigurableFields(M instance);
-	void configure(Map<String, String> properties, M instance);
-	
-}
+/**
+ * An internal interface for the instantiator logic - the actual implementations are generated through GWT at compile time
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <M>
+ */
+public interface TWICEModuleInstantiator<M extends Widget> extends TWICEModule<M> {
 
+	/**
+	 * Instantiate the current widget (<M>) and invoke the callback.
+	 * 
+	 * @param callback
+	 * @return
+	 */
+	RunAsyncCallback instantiate(AsyncCallback<M> callback);
+
+	/**
+	 * @param instance
+	 * @return the configurable fields of the given instance including its value
+	 */
+	Map<String, Object> getConfigurableFields(M instance);
+
+	/**
+	 * Configure the instance with the given properties
+	 * 
+	 * @param properties
+	 * @param instance
+	 */
+	void configure(Map<String, String> properties, M instance);
+
+}

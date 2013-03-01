@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.multipointer.client.widgets;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +24,12 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.Context2d.TextAlign;
 import com.google.gwt.canvas.dom.client.Context2d.TextBaseline;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -55,8 +54,8 @@ import com.google.gwt.user.client.ui.TextBox;
 
 public class MultiFocusTextBox extends Composite implements HasValue<String> {
 
-	private int padding = 5;
-	private int fontSize = 13;
+	private final int padding = 5;
+	private final int fontSize = 13;
 	private final Map<String, Cursor> cursors = new HashMap<String, Cursor>();
 
 	FlowPanel p = new FlowPanel();
@@ -64,9 +63,9 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 	AbsolutePanel multiFocus = new AbsolutePanel();
 	private final int cursorSpeed = 700;
 	private final Context2d context;
-	private TextBox textBox = new TextBox();
+	private final TextBox textBox = new TextBox();
 	private final Canvas c;
-	private Timer blinkTimer;
+	private final Timer blinkTimer;
 	private boolean cursorsVisible;
 
 	private void showCursor() {
@@ -74,12 +73,8 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 
 			@Override
 			public void onPreviewNativeEvent(NativePreviewEvent event) {
-				if (event.getTypeInt() == Event.ONMOUSEUP
-						&& !c.getElement().isOrHasChild(
-								Element.as(event.getNativeEvent()
-										.getEventTarget()))) {
-					String uuid = MultiCursorController.getUUID(event
-							.getNativeEvent());
+				if (event.getTypeInt() == Event.ONMOUSEUP && !c.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
+					String uuid = MultiCursorController.getUUID(event.getNativeEvent());
 					Cursor c = cursors.get(uuid);
 					if (c != null) {
 						c.hide();
@@ -88,8 +83,8 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 			}
 		});
 	}
-	
-	private void setStyle(){
+
+	private void setStyle() {
 		getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		getElement().getStyle().setBorderWidth(1, Unit.PX);
 	}
@@ -98,7 +93,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 
 	int currentWidth;
 	int currentHeight;
-	
+
 	public void replaceTextInput(InputElement el) {
 		if (!el.isDisabled() && !el.getAttribute("multifocus").equals("true")) {
 			replacedElement = el;
@@ -112,38 +107,36 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 			refreshDisplay();
 		}
 	}
-	
-	public void refreshDisplay(){
-		if(replacedElement!=null){
-			if(replacedElement.getParentElement()!=null)
+
+	public void refreshDisplay() {
+		if (replacedElement != null) {
+			if (replacedElement.getParentElement() != null)
 				replacedElement.getParentElement().insertAfter(this.getElement(), replacedElement);
 			setStyle();
-//			c.getElement().setAttribute("style", replacedElement.getAttribute("style"));
-//			c.getElement().setAttribute("class", replacedElement.getAttribute("class"));
+			// c.getElement().setAttribute("style", replacedElement.getAttribute("style"));
+			// c.getElement().setAttribute("class", replacedElement.getAttribute("class"));
 			copyProperties(replacedElement, this.getElement(), "border", "padding", "margin", "outline", "verticalAlign");
-			this.setWidth(currentWidth+"px");
-			this.setHeight(currentHeight+"px");
+			this.setWidth(currentWidth + "px");
+			this.setHeight(currentHeight + "px");
 			replacedElement.setAttribute("multifocus", "true");
 			replacedElement.setAttribute("id", "");
 			replacedElement.getStyle().setDisplay(Display.NONE);
-			
+
 		}
 	}
-	
-	private void copyProperties(Element original, Element target, String... properties){
-		for(String property : properties)
+
+	private void copyProperties(Element original, Element target, String... properties) {
+		for (String property : properties)
 			copyProperty(property, original, target);
 	}
-	
-	private void copyProperty(String property, Element original, Element target){
+
+	private void copyProperty(String property, Element original, Element target) {
 		String value = original.getStyle().getProperty(property);
-		if(value!=null && !value.isEmpty()){
+		if (value != null && !value.isEmpty()) {
 			target.getStyle().setProperty(property, value);
 		}
 	}
 
-	
-	
 	public MultiFocusTextBox() {
 		blinkTimer = new Timer() {
 
@@ -166,60 +159,55 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
-				processInput(MultiCursorController.getUUID(event
-						.getNativeEvent()), event.getCharCode());
+				processInput(MultiCursorController.getUUID(event.getNativeEvent()), event.getCharCode());
 			}
 		});
 		c.addKeyUpHandler(new KeyUpHandler() {
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				Cursor c = cursors.get(MultiCursorController
-						.getUUID(event.getNativeEvent()));
+				Cursor c = cursors.get(MultiCursorController.getUUID(event.getNativeEvent()));
 				if (c != null) {
 					switch (event.getNativeKeyCode()) {
-					case KeyCodes.KEY_LEFT:
-						c.setPosition(Math.max(0, c.position - 1));
-						scrollIfNecessary();
-						break;
-					case KeyCodes.KEY_RIGHT:
-						c.setPosition(Math.min(value.length(), c.position + 1));
-						scrollIfNecessary();
-						break;
-					case KeyCodes.KEY_UP:
-						c.setPosition(0);
-						scrollIfNecessary();
-						break;
-					case KeyCodes.KEY_DOWN:
-						c.setPosition(value != null ? value.length() : 0);
-						scrollIfNecessary();
-						break;
-					case KeyCodes.KEY_DELETE:
-						if (value != null && c.position < value.length()) {
-							setValue(value.substring(0, c.position)
-									+ value.substring(c.position + 1));
-							for (Cursor cursor : cursors.values()) {
-								if (c.position < cursor.getPosition()) {
-									cursor.setPosition(cursor.getPosition() - 1);
-								}
-							}
+						case KeyCodes.KEY_LEFT:
+							c.setPosition(Math.max(0, c.position - 1));
 							scrollIfNecessary();
-						}
-						break;
-					case KeyCodes.KEY_BACKSPACE:
-						if (value != null && c.position > 0
-								&& c.position <= value.length()) {
-							setValue(value.substring(0, c.position - 1)
-									+ value.substring(c.position));
-							c.setPosition(c.position - 1);
-							for (Cursor cursor : cursors.values()) {
-								if (c.position < cursor.position) {
-									cursor.setPosition(cursor.getPosition() - 1);
-								}
-							}
+							break;
+						case KeyCodes.KEY_RIGHT:
+							c.setPosition(Math.min(value.length(), c.position + 1));
 							scrollIfNecessary();
-						}
-						break;
+							break;
+						case KeyCodes.KEY_UP:
+							c.setPosition(0);
+							scrollIfNecessary();
+							break;
+						case KeyCodes.KEY_DOWN:
+							c.setPosition(value != null ? value.length() : 0);
+							scrollIfNecessary();
+							break;
+						case KeyCodes.KEY_DELETE:
+							if (value != null && c.position < value.length()) {
+								setValue(value.substring(0, c.position) + value.substring(c.position + 1));
+								for (Cursor cursor : cursors.values()) {
+									if (c.position < cursor.getPosition()) {
+										cursor.setPosition(cursor.getPosition() - 1);
+									}
+								}
+								scrollIfNecessary();
+							}
+							break;
+						case KeyCodes.KEY_BACKSPACE:
+							if (value != null && c.position > 0 && c.position <= value.length()) {
+								setValue(value.substring(0, c.position - 1) + value.substring(c.position));
+								c.setPosition(c.position - 1);
+								for (Cursor cursor : cursors.values()) {
+									if (c.position < cursor.position) {
+										cursor.setPosition(cursor.getPosition() - 1);
+									}
+								}
+								scrollIfNecessary();
+							}
+							break;
 					}
 				}
 			}
@@ -228,11 +216,8 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				repositionCursor(MultiCursorController.getUUID(event
-						.getNativeEvent()), MultiCursorController
-						.getColorNative(event.getNativeEvent()), event
-						.getRelativeX(c.getCanvasElement()), event
-						.getRelativeY(c.getCanvasElement()));
+				repositionCursor(MultiCursorController.getUUID(event.getNativeEvent()), MultiCursorController.getColorNative(event.getNativeEvent()),
+						event.getRelativeX(c.getCanvasElement()), event.getRelativeY(c.getCanvasElement()));
 			}
 		});
 		multiFocus.insert(c, 0, 0, 0);
@@ -240,7 +225,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		context = c.getContext2d();
 		context.setTextAlign(TextAlign.LEFT);
 		context.setTextBaseline(TextBaseline.TOP);
-		context.setFont("normal "+fontSize+"px sans-serif");
+		context.setFont("normal " + fontSize + "px sans-serif");
 		c.getElement().getStyle().setPadding(padding, Unit.PX);
 		setStyle();
 		// TODO Auto-generated constructor stub
@@ -268,8 +253,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 			b.append(c);
 			double textWidth = context.measureText(b.toString()).getWidth();
 			if (x - 5 < textWidth) {
-				double charWidth = context.measureText(String.valueOf(c))
-						.getWidth();
+				double charWidth = context.measureText(String.valueOf(c)).getWidth();
 				if (textWidth - (charWidth / 2.0) > x)
 					return Math.max(b.length() - 1, 0);
 				else
@@ -318,13 +302,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 				c.hide();
 			}
 			this.position = position;
-			this.x = (int) Math.max(
-					0,
-					context.measureText(
-							value == null ? ""
-									: position < value.length() ? value
-											.substring(0, position) : value)
-							.getWidth());
+			this.x = (int) Math.max(0, context.measureText(value == null ? "" : position < value.length() ? value.substring(0, position) : value).getWidth());
 			for (Cursor c : cursors.values()) {
 				c.show();
 			}
@@ -336,8 +314,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 	}
 
 	@Override
-	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<String> handler) {
+	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
@@ -351,7 +328,8 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		if (c == null) {
 			c = new Cursor(color, uuid);
 			registerCursor(uuid, c);
-		} else {
+		}
+		else {
 			c.setColor(color);
 		}
 		return c;
@@ -366,14 +344,14 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		int pos;
 		if (origincursor != null) {
 			pos = origincursor.position;
-		} else {
+		}
+		else {
 			pos = value != null ? value.length() : 0;
 		}
 		if (value == null)
 			setValue(String.valueOf(c));
 		else if (pos <= value.length()) {
-			setValue(value.substring(0, pos) + c
-					+ ((pos == value.length()) ? "" : value.substring(pos)));
+			setValue(value.substring(0, pos) + c + ((pos == value.length()) ? "" : value.substring(pos)));
 		}
 		for (Cursor cursor : cursors.values()) {
 			if (pos <= cursor.getPosition()) {
@@ -390,23 +368,17 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 				lastCursor = cursor.position;
 		}
 		if (value != null) {
-			int width = (int) context.measureText(
-					value.substring(0, lastCursor)).getWidth()
-					+ padding;
+			int width = (int) context.measureText(value.substring(0, lastCursor)).getWidth() + padding;
 			int fullwidth = (int) context.measureText(value).getWidth();
 			int relPosLeft = width - multiFocus.getElement().getScrollLeft();
 			if (relPosLeft < 0) {
 				multiFocus.getElement().setScrollLeft(width - padding);
-			} else if (relPosLeft > multiFocus.getOffsetWidth() - padding) {
-				multiFocus.getElement().setScrollLeft(
-						width - multiFocus.getOffsetWidth() + padding);
 			}
-			if (multiFocus.getElement().getScrollLeft() > 0
-					&& (multiFocus.getElement().getScrollLeft() + multiFocus
-							.getOffsetWidth()) > fullwidth) {
-				multiFocus.getElement().setScrollLeft(
-						fullwidth - multiFocus.getOffsetWidth() + 2
-								* padding);
+			else if (relPosLeft > multiFocus.getOffsetWidth() - padding) {
+				multiFocus.getElement().setScrollLeft(width - multiFocus.getOffsetWidth() + padding);
+			}
+			if (multiFocus.getElement().getScrollLeft() > 0 && (multiFocus.getElement().getScrollLeft() + multiFocus.getOffsetWidth()) > fullwidth) {
+				multiFocus.getElement().setScrollLeft(fullwidth - multiFocus.getOffsetWidth() + 2 * padding);
 			}
 		}
 	}

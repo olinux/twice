@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.shared;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +14,15 @@ package ch.unifr.pai.twice.comm.serverPush.shared;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Some constants for defining the connection path between the client and the server side
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class Constants {
 
 	public static final String BASEPATH = "mice/comm/";
 	public static final String ATMOSPHERE = "atmosphere";
-	
+
 }

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,34 +31,42 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.Event;
 
+/**
+ * The fundamental functionality of the remote eventing mechanism
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public abstract class RemoteEventing {
 
 	/**
-	 * Delay the of the event delivery in milliseconds. The bigger the value the
-	 * less probable is a conflict between events, but the bigger is the latency
+	 * Delay the of the event delivery in milliseconds. The bigger the value the less probable is a conflict between events, but the bigger is the latency
 	 * between firing and executing the event.
 	 */
 	private int eventDeliveryDelay;
 
 	/**
-	 * Non-blocking events are executed locally (the execution doesn't have to
-	 * wait for the event to come back from the server. Since this evicts the
-	 * network latency, those events will be executed very fast. If they are in
-	 * conflict with remote events, they will regularly be rolled back. To
-	 * prevent this, a delay can be introduced to reduce that effect. If this
-	 * value is smaller than the eventDeliveryDelay, the latter will be applied.
+	 * Non-blocking events are executed locally (the execution doesn't have to wait for the event to come back from the server. Since this evicts the network
+	 * latency, those events will be executed very fast. If they are in conflict with remote events, they will regularly be rolled back. To prevent this, a
+	 * delay can be introduced to reduce that effect. If this value is smaller than the eventDeliveryDelay, the latter will be applied.
 	 */
 	private int localEventDeliveryDelay;
-	
+
 	/**
 	 * The estimated server time offset - used to normalize the event time stamp to establish a common time base for all leaf nodes
 	 */
 	private Long serverTimeOffset;
-	
-	
-	private Stack<UndoableRemoteEvent<?>> eventHistory = new Stack<UndoableRemoteEvent<?>>();
-	private Map<String, Long> discardedEventsHistory = new HashMap<String, Long>();
 
+	private final Stack<UndoableRemoteEvent<?>> eventHistory = new Stack<UndoableRemoteEvent<?>>();
+	private final Map<String, Long> discardedEventsHistory = new HashMap<String, Long>();
+
+	/**
+	 * Returns the estimated server time for the given timestamp of the local system clock
+	 * 
+	 * @param timestamp
+	 *            - the local system clock timestamp or null for "now"
+	 * @return the corresponding, estimated timestamp of the server side clock
+	 */
 	public long getEstimatedServerTime(Long timestamp) {
 		if (timestamp == null)
 			timestamp = new Date().getTime();
@@ -66,13 +75,15 @@ public abstract class RemoteEventing {
 		}
 		return timestamp;
 	}
-	
-	public RemoteEventing(){
+
+	public RemoteEventing() {
 		updateServerTimeOffset();
 	}
-	
-	
-	private void updateServerTimeOffset(){
+
+	/**
+	 * Calculate the server time offset
+	 */
+	private void updateServerTimeOffset() {
 		ClientServerTimeOffset.getServerTimeOffset(new AsyncCallback<Long>() {
 
 			@Override
@@ -87,15 +98,20 @@ public abstract class RemoteEventing {
 		});
 	}
 
-	public void fireEventFromSource(Event<?> event, Object source) {		
+	/**
+	 * Fires the event to the distributed eventing mechanism if the event is an instance of {@link RemoteEvent} This includes the serialization and the
+	 * encryption of the message as well as the enrichment with data such as origin client identifier and user name
+	 * 
+	 * @param event
+	 * @param source
+	 */
+	public void fireEventFromSource(Event<?> event, Object source) {
 		if (source instanceof RemoteWidget) {
 			source = ((RemoteWidget) source).getEventSource();
 		}
 		if (event instanceof RemoteEvent) {
 			RemoteEvent<?> remoteEvent = ((RemoteEvent<?>) event);
-			remoteEvent
-					.setTimestamp(getEstimatedServerTime(((RemoteEvent<?>) event)
-							.getTimestamp()));
+			remoteEvent.setTimestamp(getEstimatedServerTime(((RemoteEvent<?>) event).getTimestamp()));
 			remoteEvent.setOriginatingDevice(UUID.get());
 			remoteEvent.setUserName(Authentication.getUserName());
 			if (source != null)
@@ -103,24 +119,54 @@ public abstract class RemoteEventing {
 			GWT.log("Send message");
 			try {
 				sendMessage(remoteEvent.serialize(getSecurityManager()));
-			} catch (MessagingException e) {
+			}
+			catch (MessagingException e) {
 				e.printStackTrace();
 			}
-//			atmosphereClient.broadcast(remoteEvent.serialize());
+			// atmosphereClient.broadcast(remoteEvent.serialize());
 			if (!remoteEvent.isBlocking())
 				fireEventInOrder(remoteEvent, source, true);
-		} else {
+		}
+		else {
 			fireEventInOrder(event, source, true);
 		}
 	}
-	
+
+	/**
+	 * @return the {@link TWICESecurityManager} to be used for the decryption and encryption of messages
+	 */
 	protected abstract TWICESecurityManager getSecurityManager();
+
+	/**
+	 * Send the message to the distributed eventing mechanism
+	 * 
+	 * @param message
+	 */
 	protected abstract void sendMessage(String message);
+
+	/**
+	 * fire the event within the local event bus
+	 * 
+	 * @param e
+	 */
 	protected abstract void fireEventLocally(Event<?> e);
+
+	/**
+	 * fire the event within the local event bus with the given source
+	 * 
+	 * @param e
+	 * @param source
+	 */
 	protected abstract void fireEventFromSourceLocally(Event<?> e, Object source);
 
-	public void fireEventInOrder(Event<?> event, Object source,
-			boolean localEvent) {
+	/**
+	 * Fire the event in their correct order of appearance. If necessary also handle conflicts
+	 * 
+	 * @param event
+	 * @param source
+	 * @param localEvent
+	 */
+	public void fireEventInOrder(Event<?> event, Object source, boolean localEvent) {
 		if (event instanceof RemoteEvent) {
 			RemoteEvent<?> remoteEvent = (RemoteEvent<?>) event;
 			if (eventHistory != null) {
@@ -132,12 +178,11 @@ public abstract class RemoteEventing {
 					// event
 					while (eventHistory.size() > 0) {
 						e = eventHistory.pop();
-						if (e.getTimestamp() == null
-								|| e.getTimestamp().longValue() <= timestamp
-										.longValue()) {
+						if (e.getTimestamp() == null || e.getTimestamp().longValue() <= timestamp.longValue()) {
 							eventHistory.push(e);
 							break;
-						} else {
+						}
+						else {
 							e.setUndo(true);
 							// Fire events directly - there is no need for an
 							// additional delay
@@ -154,29 +199,21 @@ public abstract class RemoteEventing {
 						// been fired already
 						DiscardingRemoteEvent<?> discardingRemoteEvent = ((DiscardingRemoteEvent<?>) event);
 						if (discardingRemoteEvent.getInstanceId() != null) {
-							Long lastTimeStamp = discardedEventsHistory
-									.get(discardingRemoteEvent.getInstanceId());
-							Long eventTimeStamp = discardingRemoteEvent
-									.getTimestamp();
-							if (lastTimeStamp == null
-									|| (eventTimeStamp != null && lastTimeStamp
-											.longValue() < eventTimeStamp
-											.longValue())) {
-								discardedEventsHistory.put(
-										discardingRemoteEvent.getInstanceId(),
-										discardingRemoteEvent.getTimestamp());
-								fireEventToTheLocalBusWithDelay(event, source,
-										localEvent);
+							Long lastTimeStamp = discardedEventsHistory.get(discardingRemoteEvent.getInstanceId());
+							Long eventTimeStamp = discardingRemoteEvent.getTimestamp();
+							if (lastTimeStamp == null || (eventTimeStamp != null && lastTimeStamp.longValue() < eventTimeStamp.longValue())) {
+								discardedEventsHistory.put(discardingRemoteEvent.getInstanceId(), discardingRemoteEvent.getTimestamp());
+								fireEventToTheLocalBusWithDelay(event, source, localEvent);
 							}
-						} else {
+						}
+						else {
 							// If the discarding event has no identifier, it
 							// will be fired.
-							fireEventToTheLocalBusWithDelay(event, source,
-									localEvent);
+							fireEventToTheLocalBusWithDelay(event, source, localEvent);
 						}
-					} else {
-						fireEventToTheLocalBusWithDelay(event, source,
-								localEvent);
+					}
+					else {
+						fireEventToTheLocalBusWithDelay(event, source, localEvent);
 						// If the event is blocking, it is ensured that there
 						// will not be another event with a timestamp before the
 						// one of the remote event anymore (everything else
@@ -190,8 +227,7 @@ public abstract class RemoteEventing {
 					if (event instanceof UndoableRemoteEvent)
 						eventHistory.push((UndoableRemoteEvent<?>) event);
 					for (UndoableRemoteEvent<?> undidEvent : undidEvents) {
-						fireEventToTheLocalBusWithDelay(undidEvent, source,
-								localEvent);
+						fireEventToTheLocalBusWithDelay(undidEvent, source, localEvent);
 						eventHistory.push(undidEvent);
 					}
 
@@ -199,19 +235,25 @@ public abstract class RemoteEventing {
 			}
 		}
 	}
-	
-	private void fireEventToTheLocalBusWithDelay(final Event<?> event,
-			final Object source, boolean localEvent) {
+
+	/**
+	 * Fires the event to the local event bus after a specific delay
+	 * 
+	 * @param event
+	 * @param source
+	 * @param localEvent
+	 */
+	private void fireEventToTheLocalBusWithDelay(final Event<?> event, final Object source, boolean localEvent) {
 		if (event instanceof RemoteEvent) {
 			if (((RemoteEvent<?>) event).isFireLocally()) {
-				int delay = localEvent ? Math.max(localEventDeliveryDelay,
-						eventDeliveryDelay) : eventDeliveryDelay;
+				int delay = localEvent ? Math.max(localEventDeliveryDelay, eventDeliveryDelay) : eventDeliveryDelay;
 				if (delay == 0) {
 					if (source == null)
 						fireEventLocally(event);
 					else
 						fireEventFromSourceLocally(event, source);
-				} else {
+				}
+				else {
 					Timer t = new Timer() {
 
 						@Override

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.shared;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,32 +22,34 @@ import ch.unifr.pai.twice.comm.serverPush.client.RemoteEventHandler;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.GwtEvent.Type;
+
 /**
- * @author oli
- *
- *	Use ServerPushEventBus functionality instead
+ * Use ServerPushEventBus functionality instead
+ * 
+ * @author Oliver Schmid
+ * 
  * @param <T>
  */
-@Deprecated 
-public abstract class MiceEvent<T extends Enum<?>> implements Serializable{
+@Deprecated
+public abstract class MiceEvent<T extends Enum<?>> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private T type;
 	private long timeStamp;
 	private Map<String, String> params;
-	
-	public String getParam(String param){
-		if(params==null)
+
+	public String getParam(String param) {
+		if (params == null)
 			return null;
-		return params.get(param);		
+		return params.get(param);
 	}
-	
-	public void addParam(String key, String value){
-		if(params==null)
+
+	public void addParam(String key, String value) {
+		if (params == null)
 			params = new HashMap<String, String>();
 		params.put(key, value);
 	}
-	
+
 	public long getTimeStamp() {
 		return timeStamp;
 	}
@@ -55,10 +58,10 @@ public abstract class MiceEvent<T extends Enum<?>> implements Serializable{
 		this.timeStamp = timeStamp;
 	}
 
-	private MiceEvent(){
+	private MiceEvent() {
 		super();
 	}
-	
+
 	public MiceEvent(T type) {
 		super();
 		this.type = type;
@@ -67,53 +70,54 @@ public abstract class MiceEvent<T extends Enum<?>> implements Serializable{
 	public T getType() {
 		return type;
 	}
-	
+
 	public static abstract class MiceEventHandler<T extends Enum<?>, E extends MiceEvent<T>> implements RemoteEventHandler {
-		private T type;
-		public MiceEventHandler(T type){
+		private final T type;
+
+		public MiceEventHandler(T type) {
 			this.type = type;
 		}
-		
-		public void processEvent(Serializable event){
-			onEvent((E)event);
+
+		public void processEvent(Serializable event) {
+			onEvent((E) event);
 		}
-		
+
 		public abstract void onEvent(E event);
-		
-		public T getType(){
+
+		public T getType() {
 			return type;
 		}
 	}
-	
+
 	private static Map<Object, Type<?>> typeMap = new HashMap<Object, Type<?>>();
-	
-	public static <H extends MiceEventHandler<?, ?>> Type<H> getGwtEventType(H handler){
-		Type<H> t = (Type<H>)typeMap.get(handler.getType());
-		if(t==null){
+
+	public static <H extends MiceEventHandler<?, ?>> Type<H> getGwtEventType(H handler) {
+		Type<H> t = (Type<H>) typeMap.get(handler.getType());
+		if (t == null) {
 			t = new Type<H>();
-			typeMap.put(handler.getType(), t);					
+			typeMap.put(handler.getType(), t);
 		}
 		return t;
 	}
-	
-	
-	
-	public static GwtEvent<MiceEventHandler<?, MiceEvent<?>>> getGwtEvent(final MiceEvent<?> event){
+
+	public static GwtEvent<MiceEventHandler<?, MiceEvent<?>>> getGwtEvent(final MiceEvent<?> event) {
 		return new GwtEvent<MiceEventHandler<?, MiceEvent<?>>>() {
 			@Override
 			public com.google.gwt.event.shared.GwtEvent.Type<MiceEventHandler<?, MiceEvent<?>>> getAssociatedType() {
 				return (com.google.gwt.event.shared.GwtEvent.Type<MiceEventHandler<?, MiceEvent<?>>>) typeMap.get(event.getType());
 			}
+
 			@Override
 			protected void dispatch(MiceEventHandler<?, MiceEvent<?>> handler) {
 				handler.onEvent(event);
 			}
+
 			@Override
 			public Object getSource() {
 				return event;
 			}
 		};
-		
+
 	}
-	
+
 }

@@ -1,0 +1,6 @@
+ch.unifr.pai.mindmap.client
+ch.unifr.pai.mindmap.client.components
+ch.unifr.pai.mindmap.client.components.websearch
+ch.unifr.pai.mindmap.client.interaction.longclick
+ch.unifr.pai.mindmap.client.mindmap
+ch.unifr.pai.mindmap.client.rpc

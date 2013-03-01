@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.mousecontrol.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,9 +32,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HTML;
 
 /**
- * The touchpad widget for cursor based devices. Here, the relative position of
- * the mouse is captured (in ppm) and sent to the server. The server calculates
- * the corresponding coordinates for the cursor based on the screen dimensions.
+ * The touchpad widget for cursor based devices. Here, the relative position of the mouse is captured (in ppm) and sent to the server. The server calculates the
+ * corresponding coordinates for the cursor based on the screen dimensions.
  * 
  * @author oli
  * 
@@ -42,12 +42,13 @@ public class TouchPadCursorWidget extends TouchPadWidget {
 
 	private int x;
 	private int y;
-	
+
 	private int dragOffsetWidth;
 	private int dragOffsetHeight;
-	private int borderSize = 40;
-	
-	private HTML dragArea = new HTML();
+	private final int borderSize = 40;
+
+	private final HTML dragArea = new HTML();
+
 	public TouchPadCursorWidget() {
 		super(true);
 		dragArea.getElement().setAttribute("oncontextmenu", "return false;");
@@ -56,7 +57,7 @@ public class TouchPadCursorWidget extends TouchPadWidget {
 		dragArea.addMouseDownHandler(new MouseDownHandler() {
 
 			@Override
-			public void onMouseDown(MouseDownEvent event) {				
+			public void onMouseDown(MouseDownEvent event) {
 				event.preventDefault();
 				down(NativeEvent.BUTTON_RIGHT != event.getNativeButton());
 			}
@@ -73,75 +74,99 @@ public class TouchPadCursorWidget extends TouchPadWidget {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-//				event.preventDefault();
+				// event.preventDefault();
 				x = event.getRelativeX(dragArea.getElement());
 				y = event.getRelativeY(dragArea.getElement());
 			}
 		});
-		
+
 		dragArea.addMouseOverHandler(new MouseOverHandler() {
-			
+
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
-				if(keyboardHandler==null){
+				if (keyboardHandler == null) {
 
 					GWT.log("ADD KEYBOARD HANDLER");
 					keyboardHandler = Event.addNativePreviewHandler(keyboardPreviewHandler);
 				}
 			}
 		});
-		
+
 		dragArea.addMouseOutHandler(new MouseOutHandler() {
-			
+
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
-				if(keyboardHandler!=null){
+				if (keyboardHandler != null) {
 					GWT.log("REMOVE KEYBOARD HANDLER");
 					keyboardHandler.removeHandler();
 					keyboardHandler = null;
 				}
 			}
 		});
-	}	
-
-	@Override
-	protected void updateScreenDimensions() {
-		//Do nothing special since we're calculating relative values
 	}
 
-	private void updateWidgetSize(){
-		Scheduler.get().scheduleDeferred(new ScheduledCommand(){
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#updateScreenDimensions()
+	 */
+	@Override
+	protected void updateScreenDimensions() {
+		// Do nothing special since we're calculating relative values
+	}
+
+	/**
+	 * 
+	 */
+	private void updateWidgetSize() {
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
 			@Override
 			public void execute() {
-				dragOffsetWidth = dragArea.getOffsetWidth()-2*borderSize;
-				dragOffsetHeight = dragArea.getOffsetHeight()-2*borderSize;
-			}});
+				dragOffsetWidth = dragArea.getOffsetWidth() - 2 * borderSize;
+				dragOffsetHeight = dragArea.getOffsetHeight() - 2 * borderSize;
+			}
+		});
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
+	 */
 	@Override
 	protected void onAttach() {
 		updateWidgetSize();
 		super.onAttach();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.LayoutPanel#onResize()
+	 */
 	@Override
 	public void onResize() {
 		super.onResize();
 		updateWidgetSize();
-		
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#getX()
+	 */
 	@Override
 	protected int getX() {
-		double percent = 100.0/dragOffsetWidth*Math.min(Math.max(0, x-borderSize), dragOffsetWidth);
-		return (int)(screenWidth/100.0*percent);
+		double percent = 100.0 / dragOffsetWidth * Math.min(Math.max(0, x - borderSize), dragOffsetWidth);
+		return (int) (screenWidth / 100.0 * percent);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#getY()
+	 */
 	@Override
 	protected int getY() {
-		double percent = 100.0/dragOffsetHeight*Math.min(Math.max(0, y-borderSize), dragOffsetHeight);
-		return (int)(screenHeight/100.0*percent);
+		double percent = 100.0 / dragOffsetHeight * Math.min(Math.max(0, y - borderSize), dragOffsetHeight);
+		return (int) (screenHeight / 100.0 * percent);
 	}
 
 }

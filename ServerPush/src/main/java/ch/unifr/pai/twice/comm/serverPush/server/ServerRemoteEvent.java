@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.server;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,33 +26,46 @@ import org.json.simple.parser.ParseException;
 
 import ch.unifr.pai.twice.comm.serverPush.client.RemoteEvent;
 
-public class ServerRemoteEvent implements Comparable<ServerRemoteEvent>{
+/**
+ * Server-side representation of a remote event including the required fields for further processing
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class ServerRemoteEvent implements Comparable<ServerRemoteEvent> {
 
-	private Object message;
+	private final Object message;
 	private String timeStamp;
 	private String context;
 	private String blockingEvent;
 	private String type;
 	private String originUUID;
 	private List<String> receipients;
-	
-	
+
 	public ServerRemoteEvent(Object message) {
 		this.message = message;
 		extract();
 	}
-	
-	public boolean isBlockingEvent(){
-		return blockingEvent!=null && blockingEvent.equals("1");
+
+	/**
+	 * @return true if it is a blocking event
+	 */
+	public boolean isBlockingEvent() {
+		return blockingEvent != null && blockingEvent.equals("1");
 	}
 
+	/**
+	 * update the object with the value of the JSON message
+	 */
 	private void extract() {
 		JSONParser parser = new JSONParser();
 		ContainerFactory containerFactory = new ContainerFactory() {
+			@Override
 			public List<?> creatArrayContainer() {
 				return new LinkedList();
 			}
 
+			@Override
 			public Map createObjectContainer() {
 				return new HashMap();
 			}
@@ -59,56 +73,78 @@ public class ServerRemoteEvent implements Comparable<ServerRemoteEvent>{
 		};
 
 		try {
-			Map json = (Map) parser.parse(message!=null ? message.toString() : null, containerFactory);
+			Map json = (Map) parser.parse(message != null ? message.toString() : null, containerFactory);
 			timeStamp = (String) json.get(RemoteEvent.TIMESTAMP);
-			context = (String)json.get(RemoteEvent.CONTEXT);
-			blockingEvent = (String)json.get(RemoteEvent.BLOCKINGEVENT);
-			type = (String)json.get(RemoteEvent.EVENTTYPEKEY);
-			originUUID = (String)json.get(RemoteEvent.ORIGINATINGDEVICE);
+			context = (String) json.get(RemoteEvent.CONTEXT);
+			blockingEvent = (String) json.get(RemoteEvent.BLOCKINGEVENT);
+			type = (String) json.get(RemoteEvent.EVENTTYPEKEY);
+			originUUID = (String) json.get(RemoteEvent.ORIGINATINGDEVICE);
 			receipients = (List<String>) json.get(RemoteEvent.RECEIPIENTS);
-			
-		} catch (ParseException pe) {
+
+		}
+		catch (ParseException pe) {
 			System.out.println(pe);
 		}
 	}
-	
-	public String getContext(){
+
+	/**
+	 * @return the context identifier of the event
+	 */
+	public String getContext() {
 		return context;
 	}
-	
-	public String getTimestamp(){
+
+	/**
+	 * @return the timestamp of the event as string
+	 */
+	public String getTimestamp() {
 		return timeStamp;
 	}
-	
-	public String getType(){
+
+	/**
+	 * @return the type of the event as string
+	 */
+	public String getType() {
 		return type;
 	}
-	
-	public long getDelay(){
-		if(timeStamp==null)
+
+	/**
+	 * @return the current delay between now and the timeStamp
+	 */
+	public long getDelay() {
+		if (timeStamp == null)
 			return 0l;
 		long delay = new Date().getTime() - Long.parseLong(timeStamp);
-		if(delay<0)
+		if (delay < 0)
 			return 0l;
 		return delay;
-		
+
 	}
-	
-	
-	public Long getTimestampAsLong(){
+
+	/**
+	 * @return the timestamp as a long or null if it can not be parsed properly
+	 */
+	public Long getTimestampAsLong() {
 		try {
-			return getTimestamp()==null ? null : Long.parseLong(getTimestamp());
-		} catch (NumberFormatException e) {
-			//It's not a valid timestamp, therefore it's null.
+			return getTimestamp() == null ? null : Long.parseLong(getTimestamp());
+		}
+		catch (NumberFormatException e) {
+			// It's not a valid timestamp, therefore it's null.
 			return null;
 		}
 	}
 
+	/**
+	 * @return the serialized message
+	 */
 	public String getSerialized() {
-		return message!=null ? message.toString() : null;
+		return message != null ? message.toString() : null;
 	}
-	
-	public Object getMessage(){
+
+	/**
+	 * @return
+	 */
+	public Object getMessage() {
 		return message;
 	}
 
@@ -116,12 +152,18 @@ public class ServerRemoteEvent implements Comparable<ServerRemoteEvent>{
 	public int compareTo(ServerRemoteEvent o) {
 		return getTimestamp().compareTo(o.getTimestamp());
 	}
-	
-	public String getOriginUUID(){
+
+	/**
+	 * @return the identifier of the originating device
+	 */
+	public String getOriginUUID() {
 		return originUUID;
 	}
-	
-	public List<String> getReceipients(){
+
+	/**
+	 * @return the unique identifiers of the receipients if there are some
+	 */
+	public List<String> getReceipients() {
 		return receipients;
 	}
 }

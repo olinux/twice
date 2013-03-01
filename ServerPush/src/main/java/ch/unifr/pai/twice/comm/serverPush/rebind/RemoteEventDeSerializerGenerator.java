@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.rebind;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,11 +31,16 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+/**
+ * Generator logic for the remote event deserializer. Generation takes place at compile time.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class RemoteEventDeSerializerGenerator extends Generator {
 
 	@Override
-	public String generate(TreeLogger logger, GeneratorContext context,
-			String typeName) throws UnableToCompleteException {
+	public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
 		// Build a new class, that implements a "paintScreen" method
 		JClassType classType;
 
@@ -45,28 +51,18 @@ public class RemoteEventDeSerializerGenerator extends Generator {
 			SourceWriter src = getSourceWriter(classType, context, logger);
 			if (src != null) {
 				src.println("@Override");
-				src.println("public " + RemoteEvent.class.getName()
-						+ "<?> deserialize(" + JSONObject.class.getName()
-						+ " o, String t, String string, "+TWICESecurityManager.class.getName()+" securityManager) throws "+MessagingException.class.getName()+" {");
-				JClassType abstractRemoteEvent = context.getTypeOracle()
-						.findType(RemoteEvent.class.getName());
+				src.println("public " + RemoteEvent.class.getName() + "<?> deserialize(" + JSONObject.class.getName() + " o, String t, String string, "
+						+ TWICESecurityManager.class.getName() + " securityManager) throws " + MessagingException.class.getName() + " {");
+				JClassType abstractRemoteEvent = context.getTypeOracle().findType(RemoteEvent.class.getName());
 				src.println("if(t==null){");
 				src.println("return null;");
 				src.println("}");
 				for (JClassType subType : abstractRemoteEvent.getSubtypes()) {
-					if (!subType
-							.getPackage()
-							.getName()
-							.contains(
-									ch.unifr.pai.twice.comm.serverPush.client.RemoteEventDeserializer.class
-											.getPackage().getName())
+					if (!subType.getPackage().getName()
+							.contains(ch.unifr.pai.twice.comm.serverPush.client.RemoteEventDeserializer.class.getPackage().getName())
 							&& !subType.getName().endsWith("Impl")) {
-						src.println("else if(t.equals("
-								+ subType.getQualifiedSourceName()
-								+ ".class.getName())){");
-						src.println(subType.getQualifiedSourceName()
-								+ " event = " + GWT.class.getName()
-								+ ".create(" + subType.getQualifiedSourceName()
+						src.println("else if(t.equals(" + subType.getQualifiedSourceName() + ".class.getName())){");
+						src.println(subType.getQualifiedSourceName() + " event = " + GWT.class.getName() + ".create(" + subType.getQualifiedSourceName()
 								+ ".class);");
 						src.println("return event.deserialize(string, securityManager);");
 						src.println("}");
@@ -76,18 +72,17 @@ public class RemoteEventDeSerializerGenerator extends Generator {
 				src.commit(logger);
 			}
 			return typeName + "Impl";
-		} catch (NotFoundException e) {
+		}
+		catch (NotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public SourceWriter getSourceWriter(JClassType classType,
-			GeneratorContext context, TreeLogger logger) {
+	public SourceWriter getSourceWriter(JClassType classType, GeneratorContext context, TreeLogger logger) {
 		String packageName = classType.getPackage().getName();
 		String simpleName = classType.getSimpleSourceName() + "Impl";
-		ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(
-				packageName, simpleName);
+		ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 		composer.setSuperclass(classType.getName());
 
 		composer.addImport(classType.getQualifiedSourceName());
@@ -98,11 +93,11 @@ public class RemoteEventDeSerializerGenerator extends Generator {
 		// composer.addImport("com.google.gwt.user.client.ui.Button");
 		// composer.addImport("com.google.gwt.user.client.ui.RootPanel");
 
-		PrintWriter printWriter = context.tryCreate(logger, packageName,
-				simpleName);
+		PrintWriter printWriter = context.tryCreate(logger, packageName, simpleName);
 		if (printWriter == null) {
 			return null;
-		} else {
+		}
+		else {
 			SourceWriter sw = composer.createSourceWriter(context, printWriter);
 			return sw;
 		}

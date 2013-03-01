@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.mousecontrol.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +26,16 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class TouchPadNintendoDS extends TouchPadWidget{
+/**
+ * The mouse control with Nintendo 3DS is quite different: The device has two screens where one of them is interactive while the other is not. We therefore need
+ * a special layout and listen to scroll events instead of touch / cursor events.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class TouchPadNintendoDS extends TouchPadWidget {
 
-	private HTML focus = new HTML();
+	private final HTML focus = new HTML();
 	Label l = new Label();
 	long lastScroll = -1;
 	long scrollThreshold = 1000;
@@ -44,13 +52,12 @@ public class TouchPadNintendoDS extends TouchPadWidget{
 	long timerThreshold = 200;
 	boolean reset;
 	boolean dontProcess;
-	
-	
+
 	int currentScreenX;
 	int currentScreenY;
 
 	HandlerRegistration windowScrollHandler;
-	
+
 	public TouchPadNintendoDS() {
 		super(false);
 		add(focus);
@@ -71,9 +78,10 @@ public class TouchPadNintendoDS extends TouchPadWidget{
 					if (currentX == -1 || currentY == -1) {
 						currentX = left;
 						currentY = top;
-					} else if (left != currentX || top != currentY) {
-//						l.getElement().getStyle().setDisplay(Display.NONE);
-//						focus.setVisible(false);
+					}
+					else if (left != currentX || top != currentY) {
+						// l.getElement().getStyle().setDisplay(Display.NONE);
+						// focus.setVisible(false);
 						int dX = currentX - left;
 						int dY = currentY - top;
 						currentX = left;
@@ -81,59 +89,69 @@ public class TouchPadNintendoDS extends TouchPadWidget{
 						updatePos(dX, dY);
 						lastUpdate = new Date().getTime();
 
-					} 
-//					else if (lastUpdate != -1
-//							&& new Date().getTime() - lastUpdate > timerThreshold) {
-//						lastUpdate = -1;
-//						currentX = -1;
-//						currentY = -1;
-//						skipEvents = eventsAfterReset;
-//						Window.scrollTo(1000, 1000);
-//						l.getElement().getStyle().setDisplay(Display.BLOCK);
-//						focus.setVisible(true);
-//					}
+					}
+					// else if (lastUpdate != -1
+					// && new Date().getTime() - lastUpdate > timerThreshold) {
+					// lastUpdate = -1;
+					// currentX = -1;
+					// currentY = -1;
+					// skipEvents = eventsAfterReset;
+					// Window.scrollTo(1000, 1000);
+					// l.getElement().getStyle().setDisplay(Display.BLOCK);
+					// focus.setVisible(true);
+					// }
 				}
 			}
 		};
 
-		
-		
 	}
 
-
-
-
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#getX()
+	 */
 	@Override
 	protected int getX() {
 		return currentScreenX;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#getY()
+	 */
 	@Override
 	protected int getY() {
 		return currentScreenY;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#updateScreenDimensions()
+	 */
 	@Override
 	protected void updateScreenDimensions() {
 	}
 
-	
 	private void updatePos(int dX, int dY) {
 		if (dX != 0) {
-			int changeX = (int) Math.floor(((double) dX * MOVEFACTOR));
+			int changeX = (int) Math.floor((dX * MOVEFACTOR));
 			currentScreenX = Math.max(Math.min(currentScreenX + changeX, screenWidth), 0);
 		}
 		if (dY != 0) {
-			int changeY = (int) Math.floor(((double) dY * MOVEFACTOR));
+			int changeY = (int) Math.floor((dY * MOVEFACTOR));
 			currentScreenY = Math.max(Math.min(currentScreenY + changeY, screenHeight), 0);
 		}
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#start()
+	 */
 	@Override
 	public void start() {
 		super.start();
-		if(windowScrollHandler!=null)
+		if (windowScrollHandler != null)
 			windowScrollHandler.removeHandler();
 		windowScrollHandler = Window.addWindowScrollHandler(new Window.ScrollHandler() {
 
@@ -141,14 +159,8 @@ public class TouchPadNintendoDS extends TouchPadWidget{
 			public void onWindowScroll(ScrollEvent event) {
 				if (skipEvents > 0)
 					skipEvents--;
-				l.getElement()
-						.getStyle()
-						.setLeft(RootPanel.getBodyElement().getScrollLeft(),
-								Unit.PX);
-				l.getElement()
-						.getStyle()
-						.setTop(RootPanel.getBodyElement().getScrollTop(),
-								Unit.PX);
+				l.getElement().getStyle().setLeft(RootPanel.getBodyElement().getScrollLeft(), Unit.PX);
+				l.getElement().getStyle().setTop(RootPanel.getBodyElement().getScrollTop(), Unit.PX);
 			}
 		});
 		Timer t2 = new Timer() {
@@ -163,24 +175,25 @@ public class TouchPadNintendoDS extends TouchPadWidget{
 		t2.schedule(1000);
 	}
 
-
-
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#stop()
+	 */
 	@Override
 	public void stop() {
 		super.stop();
 		updater.cancel();
-		if(windowScrollHandler!=null)
+		if (windowScrollHandler != null)
 			windowScrollHandler.removeHandler();
 	}
 
-
-
-
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#attachToRootPanel()
+	 */
 	@Override
 	public boolean attachToRootPanel() {
 		return true;
 	}
 
-	
-	
 }

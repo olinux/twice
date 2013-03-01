@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +15,36 @@ package ch.unifr.pai.twice.comm.serverPush.client;
  * limitations under the License.
  */
 
-public abstract class DiscardingRemoteEvent<H extends RemoteEventHandler<?>> extends RemoteEvent<H>{
+/**
+ * A discarding remote event. This type of event is very responsive since a newer event always replaces the previous event fully (e.g. mouse pointer position).
+ * If such an event is delayed, it can therefore simply be ignored because a newer event has already been processed.
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <H>
+ */
+public abstract class DiscardingRemoteEvent<H extends RemoteEventHandler<?>> extends RemoteEvent<H> {
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.comm.serverPush.client.RemoteEvent#isBlocking()
+	 */
 	@Override
 	public boolean isBlocking() {
 		return false;
 	}
-	
-	public void setInstanceId(String id){
+
+	/**
+	 * @param id
+	 */
+	public void setInstanceId(String id) {
 		setProperty("instanceid", id);
 	}
-	
-	public String getInstanceId(){
+
+	/**
+	 * @return
+	 */
+	public String getInstanceId() {
 		return getProperty("instanceid");
 	}
 

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.mousecontrol.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,28 +17,50 @@ package ch.unifr.pai.twice.mousecontrol.client;
 import ch.unifr.pai.twice.module.client.TWICEModule;
 import ch.unifr.pai.twice.utils.device.client.UUID;
 
+/**
+ * The {@link TWICEModule} wrapper for the {@link TouchPadWidget}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class TouchPadModule implements TWICEModule<TouchPadWidget> {
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.module.client.TWICEModule#start(com.google.gwt.user.client.ui.Widget)
+	 */
+	@Override
 	public void start(TouchPadWidget instance) {
 		instance.initialize(UUID.get(), null, null);
 		instance.start();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.module.client.TWICEModule#stop(com.google.gwt.user.client.ui.Widget)
+	 */
 	@Override
 	public void stop(TouchPadWidget instance) {
 		instance.stop();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.module.client.TWICEModule#dontShowInMenu(com.google.gwt.user.client.ui.Widget)
+	 */
 	@Override
 	public boolean dontShowInMenu(TouchPadWidget instance) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.module.client.TWICEModule#attachToRootPanel(com.google.gwt.user.client.ui.Widget)
+	 */
 	@Override
 	public boolean attachToRootPanel(TouchPadWidget instance) {
-		return instance!=null ? instance.attachToRootPanel() : false;
+		return instance != null ? instance.attachToRootPanel() : false;
 	}
-	
 
 }

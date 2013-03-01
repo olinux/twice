@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +17,22 @@ package ch.unifr.pai.twice.comm.serverPush.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
+/**
+ * A special type of event which includes additional undo functionality to establish optimistic concurrency control. Do instantiate this class directly through
+ * the {@link GWT#create(Class)} method.
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <H>
+ */
 public abstract class UndoableRemoteEvent<H extends UndoableRemoteEventHandler<?>> extends RemoteEvent<H> {
-	
+
 	private boolean undo;
-	
+
 	private final Map<String, Object> stateStorage = new HashMap<String, Object>();
-	
+
 	public boolean isUndo() {
 		return undo;
 	}
@@ -29,18 +40,18 @@ public abstract class UndoableRemoteEvent<H extends UndoableRemoteEventHandler<?
 	public void setUndo(boolean undo) {
 		this.undo = undo;
 	}
-	
-	public <T> void setStorageProperty(String key, T value){
+
+	public <T> void setStorageProperty(String key, T value) {
 		stateStorage.put(key, value);
 	}
-	
-	public <T> T getStorageProperty(String key){
-		return (T)stateStorage.get(key);
+
+	public <T> T getStorageProperty(String key) {
+		return (T) stateStorage.get(key);
 	}
 
 	@Override
 	public boolean isBlocking() {
 		return false;
 	}
-	
+
 }

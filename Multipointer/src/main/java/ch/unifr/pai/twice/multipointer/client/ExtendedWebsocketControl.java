@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.multipointer.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,21 +33,32 @@ import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class ExtendedWebsocketControl extends MultiCursorController implements
-		ResizeHandler {
+/**
+ * The currently used controller for multi-cursor device types
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class ExtendedWebsocketControl extends MultiCursorController implements ResizeHandler {
 
 	private boolean opened = false;
 
 	private JavaScriptObject websocket;
 
-	private List<MouseCursor> visibleCursors = new ArrayList<MouseCursor>();
+	private final List<MouseCursor> visibleCursors = new ArrayList<MouseCursor>();
 
 	private final Map<String, MouseCursor> assignedMouseCursors = new HashMap<String, MouseCursor>();
 
 	private final Storage storage = Storage.getLocalStorageIfSupported();
 
-	private List<CursorColor> cursorColors = new ArrayList<CursorColor>();
+	private final List<CursorColor> cursorColors = new ArrayList<CursorColor>();
 
+	/**
+	 * A map between the cursor name (related to the .png's in the public folder) and their corresponding HTML color codes.
+	 * 
+	 * @author Oliver Schmid
+	 * 
+	 */
 	private class CursorColor {
 		String cursor;
 		String colorCode;
@@ -60,6 +72,9 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 
 	int currentCursor = -1;
 
+	/**
+	 * Initializes the available cursor colors.
+	 */
 	private void initializeCursorList() {
 		visibleCursors.clear();
 		assignedMouseCursors.clear();
@@ -73,32 +88,45 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 		cursorColors.add(new CursorColor("purple", "#cb2c7a"));
 	}
 
-	
-	
+	/**
+	 * Create and attach a new mouse pointer representation
+	 * 
+	 * 
+	 * @param cursor
+	 * @param color
+	 * @return
+	 */
 	private MouseCursor defineMouseCursor(String cursor, String color) {
 		final MouseCursor c = new MouseCursor(cursor, color);
 		c.addMouseCursorEventHandler(new Handler() {
-			
+
 			@Override
 			public void onMouseCursorTimeout(MouseCursorTimeoutEvent event) {
 				visibleCursors.remove(c);
 			}
 		});
-		if(visibleCursors.size()<getMaxCursorsOnScreen()){
+		if (visibleCursors.size() < getMaxCursorsOnScreen()) {
 			c.show();
 			visibleCursors.add(c);
 		}
-		
+
 		RootPanel.get().add(c);
 		return c;
 	}
 
 	HandlerRegistration r;
 
+	/**
+	 * @return if the component is executed within a frame
+	 */
 	public native boolean isInIFrame() /*-{
 		return $wnd.top.location != $wnd.location;
 	}-*/;
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.multipointer.client.MultiCursorController#start()
+	 */
 	@Override
 	public void start() {
 		if (!isInIFrame()) {
@@ -114,7 +142,8 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 			Integer port;
 			try {
 				port = p != null ? Integer.parseInt(p) : 8080;
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				port = 8080;
 			}
 			b.setPort(port + 1);
@@ -127,6 +156,10 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.multipointer.client.MultiCursorController#stop()
+	 */
 	@Override
 	public void stop() {
 		super.stop();
@@ -138,25 +171,48 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 
 	}
 
+	/**
+	 * Sends a message through the websocket to the server
+	 * 
+	 * @param websocket
+	 * @param message
+	 */
 	private native void send(JavaScriptObject websocket, String message)/*-{
 		if (websocket != null)
 			websocket.send(message);
 	}-*/;
 
-	private native JavaScriptObject createOnBeforeUnloadHandler(
-			JavaScriptObject websocket)/*-{
+	/**
+	 * stops the web socket connection before unload to prevent connections to be unused.
+	 * 
+	 * @param websocket
+	 * @return
+	 */
+	private native JavaScriptObject createOnBeforeUnloadHandler(JavaScriptObject websocket)/*-{
 		$wnd.onbeforeunload = function() {
 			//$wnd.alert("CLOSE WEBSOCKET: "+websocket);
 			websocket.close();
 		}
 	}-*/;
 
+	/**
+	 * stops the websocket connection
+	 * 
+	 * @param websocket
+	 * @return
+	 */
 	private native JavaScriptObject stopWebsocket(JavaScriptObject websocket)/*-{
 		websocket.close();
 	}-*/;
 
-	private native JavaScriptObject createWebsocket(ExtendedWebsocketControl w,
-			String url)/*-{
+	/**
+	 * Initializes a websocket connection if available
+	 * 
+	 * @param w
+	 * @param url
+	 * @return
+	 */
+	private native JavaScriptObject createWebsocket(ExtendedWebsocketControl w, String url)/*-{
 		if ("WebSocket" in $wnd) {
 			// Let us open a web socket
 			var ws = new WebSocket(url);
@@ -185,6 +241,11 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 		return null;
 	}-*/;
 
+	/**
+	 * If a message arrives, it is analyzed and provided to the {@link MouseCursor} for further interpretation.
+	 * 
+	 * @param data
+	 */
 	private void onMessage(String data) {
 		if (data != null) {
 			String[] values = data.split("@");
@@ -193,9 +254,9 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 				MouseCursor m = getOrCreateCursor(uuid);
 				if (m != null) {
 					boolean isActive = visibleCursors.contains(m);
-					if(isActive || visibleCursors.size()<getMaxCursorsOnScreen()){
-						if(!isActive){
-							GWT.log("New cursor. Current visible cursors: "+visibleCursors.size());
+					if (isActive || visibleCursors.size() < getMaxCursorsOnScreen()) {
+						if (!isActive) {
+							GWT.log("New cursor. Current visible cursors: " + visibleCursors.size());
 							visibleCursors.add(m);
 						}
 						if (values.length > 1) {
@@ -216,6 +277,14 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 		}
 	}
 
+	/**
+	 * Looks up the assigned mouse pointer for a specific device (by the uuid) and returns it. If no mouse pointer is assigned to this UUID, a new cursor is
+	 * assigned to this device and returned. This method also informs the web socket server about the new assignment for passing through that information to the
+	 * according client.
+	 * 
+	 * @param uuid
+	 * @return
+	 */
 	private MouseCursor getOrCreateCursor(String uuid) {
 		MouseCursor m = assignedMouseCursors.get(uuid);
 		// If a cursor is already assigned to the uuid, return this one
@@ -232,39 +301,51 @@ public class ExtendedWebsocketControl extends MultiCursorController implements
 		m.setUuid(uuid);
 		assignedMouseCursors.put(uuid, m);
 		if (storage != null)
-			storage.setItem(
-					"ch.unifr.pai.mice.multicursor.assignedCursor."
-							+ m.getFileName(), uuid);
+			storage.setItem("ch.unifr.pai.mice.multicursor.assignedCursor." + m.getFileName(), uuid);
 		if (opened && websocket != null) {
 			send(websocket, UUID.get() + "@c@" + uuid + "@" + m.getColor());
 		}
 		return m;
 	}
 
+	/**
+	 * As soon as the web socket channel is opened, the component sends its screen dimensions to the server
+	 */
 	private void onOpen() {
 		this.opened = true;
-		send(websocket, UUID.get() + "@s@" + Window.getClientWidth() + "@"
-				+ Window.getClientHeight());
+		send(websocket, UUID.get() + "@s@" + Window.getClientWidth() + "@" + Window.getClientHeight());
 		// Window.alert("Multi cursor control started!");
 	}
 
+	/**
+	 * actions on close of the web socket server
+	 */
 	private void onClose() {
 		if (!opened) {
 			Window.alert("The websocket server is not reachable!");
-		} else {
+		}
+		else {
 			opened = false;
 			// Window.alert("Stopping multi cursor control!");
 		}
 	}
 
+	/**
+	 * If the screen of the shared device is resized, the component updates the information on the server side.
+	 * 
+	 * @see com.google.gwt.event.logical.shared.ResizeHandler#onResize(com.google.gwt.event.logical.shared.ResizeEvent)
+	 */
 	@Override
 	public void onResize(ResizeEvent event) {
 		if (opened && websocket != null) {
-			send(websocket, UUID.get() + "@r@" + Window.getClientWidth() + "@"
-					+ Window.getClientHeight());
+			send(websocket, UUID.get() + "@r@" + Window.getClientWidth() + "@" + Window.getClientHeight());
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.multipointer.client.MultiCursorController#notifyCursor(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void notifyCursor(String uuid, String action) {
 		send(websocket, UUID.get() + "@" + action + "@" + uuid);

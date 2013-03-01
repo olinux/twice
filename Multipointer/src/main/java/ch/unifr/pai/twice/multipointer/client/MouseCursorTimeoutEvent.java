@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.multipointer.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,32 +20,37 @@ import ch.unifr.pai.twice.multipointer.client.MouseCursorTimeoutEvent.Handler;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 
+/**
+ * An event notifying about timed out mouse pointers
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MouseCursorTimeoutEvent extends GwtEvent<Handler> {
 
-		boolean detached;
+	boolean detached;
 
-		/**
-		 * @return true if the cursor is detached from a uuid and therefore free
-		 *         to be used by another user or false if only the visibility
-		 *         timed out and the cursor is still assigned to the user.
-		 */
-		public boolean isDetached() {
-			return detached;
-		}
+	/**
+	 * @return true if the cursor is detached from a uuid and therefore free to be used by another user or false if only the visibility timed out and the cursor
+	 *         is still assigned to the user.
+	 */
+	public boolean isDetached() {
+		return detached;
+	}
 
-		public static interface Handler extends EventHandler {
-			public void onMouseCursorTimeout(MouseCursorTimeoutEvent event);
-		}
+	public static interface Handler extends EventHandler {
+		public void onMouseCursorTimeout(MouseCursorTimeoutEvent event);
+	}
 
-		public static final Type<Handler> TYPE = new Type<Handler>();
+	public static final Type<Handler> TYPE = new Type<Handler>();
 
-		@Override
-		public Type<Handler> getAssociatedType() {
-			return TYPE;
-		}
+	@Override
+	public Type<Handler> getAssociatedType() {
+		return TYPE;
+	}
 
-		@Override
-		protected void dispatch(Handler handler) {
-			handler.onMouseCursorTimeout(this);
-		}
+	@Override
+	protected void dispatch(Handler handler) {
+		handler.onMouseCursorTimeout(this);
+	}
 }

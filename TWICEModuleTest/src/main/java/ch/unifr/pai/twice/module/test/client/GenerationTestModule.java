@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.module.test.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +19,13 @@ import ch.unifr.pai.twice.module.client.TWICEModule;
 
 import com.google.gwt.user.client.Window;
 
-public class GenerationTestModule implements TWICEModule<SomeClass>{
+/**
+ * A simple module wrapper for {@link SomeClass}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class GenerationTestModule implements TWICEModule<SomeClass> {
 
 	@Override
 	public void start(SomeClass instance) {
@@ -28,7 +35,7 @@ public class GenerationTestModule implements TWICEModule<SomeClass>{
 	@Override
 	public void stop(SomeClass instance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

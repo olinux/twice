@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,14 @@ package ch.unifr.pai.twice.comm.serverPush.client;
 
 import com.google.web.bindery.event.shared.Event;
 
-public abstract class UndoableRemoteEventWrapper<H extends UndoableRemoteEventHandler<?>, L extends Event<?>> extends UndoableRemoteEvent<H>{
+/**
+ * A wrapper that transforms standard GWT events to {@link UndoableRemoteEvent}s
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <H>
+ * @param <L>
+ */
+public abstract class UndoableRemoteEventWrapper<H extends UndoableRemoteEventHandler<?>, L extends Event<?>> extends UndoableRemoteEvent<H> {
 	public abstract void wrap(L event);
 }

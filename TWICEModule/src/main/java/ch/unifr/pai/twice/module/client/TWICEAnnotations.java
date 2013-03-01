@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.module.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +20,25 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * A class collecting annotation interfaces for the TWICE toolkit
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class TWICEAnnotations {
-	
+
+	/**
+	 * Annotation interface for configurable fields.
+	 * 
+	 * @author Oliver Schmid
+	 * 
+	 */
 	@Documented
-	@Retention(value=RetentionPolicy.RUNTIME)
-	@Target(value=ElementType.FIELD)
-	public @interface Configurable{
+	@Retention(value = RetentionPolicy.RUNTIME)
+	@Target(value = ElementType.FIELD)
+	public @interface Configurable {
 		String value();
 	}
-	
+
 }

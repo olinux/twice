@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.multipointer.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +38,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+/**
+ * The represenation and logic of a mouse pointer
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MouseCursor extends SimplePanel {
 
 	private final static int VISIBILITYTIMEOUT = 2000;
@@ -47,21 +54,24 @@ public class MouseCursor extends SimplePanel {
 	private int x;
 	private int y;
 	private long lastUpdate;
-	private Image image = new Image();
+	private final Image image = new Image();
 	private Element oldElement;
 	private Element mouseDownElement;
 	private String uuid;
 	private boolean buttonDown = false;
 	private boolean rightButtonDown = false;
 	private Element focussedElement;
-	private Storage storage = Storage.getSessionStorageIfSupported();
-	private AbsolutePanel panel = new AbsolutePanel();
-	private Label l = new Label();
+	private final Storage storage = Storage.getSessionStorageIfSupported();
+	private final AbsolutePanel panel = new AbsolutePanel();
+	private final Label l = new Label();
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
+	/**
+	 * After the run out of this timer without updates, the mouse pointer is hidden
+	 */
 	private final Timer timeout = new Timer() {
 
 		@Override
@@ -73,6 +83,9 @@ public class MouseCursor extends SimplePanel {
 		}
 	};
 
+	/**
+	 * After the run out of this timer without updates, the assignment between the mouse pointer and the client device is released.
+	 */
 	private final Timer detachtimeout = new Timer() {
 
 		@Override
@@ -93,12 +106,8 @@ public class MouseCursor extends SimplePanel {
 		this.getElement().getStyle().setPosition(Position.FIXED);
 		this.getElement().getStyle().setZIndex(2000);
 		if (storage != null) {
-			String x = storage
-					.getItem("ch.unifr.pai.mice.multicursor.position."
-							+ fileName + ".x");
-			String y = storage
-					.getItem("ch.unifr.pai.mice.multicursor.position."
-							+ fileName + ".y");
+			String x = storage.getItem("ch.unifr.pai.mice.multicursor.position." + fileName + ".x");
+			String y = storage.getItem("ch.unifr.pai.mice.multicursor.position." + fileName + ".y");
 			if (x != null && y != null) {
 				move(Integer.parseInt(x), Integer.parseInt(y));
 				show();
@@ -106,8 +115,7 @@ public class MouseCursor extends SimplePanel {
 
 		}
 
-		image.setUrl(GWT.getModuleBaseURL() + "cursors/" + fileName
-				+ ".png");
+		image.setUrl(GWT.getModuleBaseURL() + "cursors/" + fileName + ".png");
 		panel.add(image);
 		image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 		panel.add(l);
@@ -120,23 +128,50 @@ public class MouseCursor extends SimplePanel {
 		setWidget(panel);
 	}
 
+	/**
+	 * @return the color of the mouse pointer
+	 */
 	public String getColor() {
 		return color;
 	}
 
+	/**
+	 * @return the filename of the image that represents the mouse pointer
+	 */
 	public String getFileName() {
 		return fileName;
 	}
 
-	private void fireMouseEvent(String event, String uuid, String color,
-			JavaScriptObject element, int x, int y) {
-		fireMouseEvent(event, uuid, color, element, x, y, false, false, false,
-				false);
+	/**
+	 * Fire a mouse event on the local browser window
+	 * 
+	 * @param event
+	 * @param uuid
+	 * @param color
+	 * @param element
+	 * @param x
+	 * @param y
+	 */
+	private void fireMouseEvent(String event, String uuid, String color, JavaScriptObject element, int x, int y) {
+		fireMouseEvent(event, uuid, color, element, x, y, false, false, false, false);
 	}
 
-	private native void fireKeyboardEvent(String eventType, String uuid,
-			String color, JavaScriptObject element, int keyCode, int charCode,
-			boolean ctrlKey, boolean altKey, boolean shiftKey, boolean metaKey)/*-{
+	/**
+	 * Fire a keyboard event on the local browser window
+	 * 
+	 * @param eventType
+	 * @param uuid
+	 * @param color
+	 * @param element
+	 * @param keyCode
+	 * @param charCode
+	 * @param ctrlKey
+	 * @param altKey
+	 * @param shiftKey
+	 * @param metaKey
+	 */
+	private native void fireKeyboardEvent(String eventType, String uuid, String color, JavaScriptObject element, int keyCode, int charCode, boolean ctrlKey,
+			boolean altKey, boolean shiftKey, boolean metaKey)/*-{
 		var frameDocument = element.ownerDocument;
 
 		var event = frameDocument.createEvent("Events");
@@ -154,9 +189,22 @@ public class MouseCursor extends SimplePanel {
 		element.dispatchEvent(event);
 	}-*/;
 
-	private native void fireMouseEvent(String event, String uuid, String color,
-			JavaScriptObject element, int x, int y, boolean ctrlKey,
-			boolean altKey, boolean shiftKey, boolean metaKey)/*-{
+	/**
+	 * Fire mouse event on the current browser window (with extended properties such as uuid and color)
+	 * 
+	 * @param event
+	 * @param uuid
+	 * @param color
+	 * @param element
+	 * @param x
+	 * @param y
+	 * @param ctrlKey
+	 * @param altKey
+	 * @param shiftKey
+	 * @param metaKey
+	 */
+	private native void fireMouseEvent(String event, String uuid, String color, JavaScriptObject element, int x, int y, boolean ctrlKey, boolean altKey,
+			boolean shiftKey, boolean metaKey)/*-{
 		var frameDocument = element.ownerDocument;
 
 		var mouseEvent = frameDocument.createEvent("MouseEvent");
@@ -173,6 +221,11 @@ public class MouseCursor extends SimplePanel {
 		element.dispatchEvent(mouseEvent);
 	}-*/;
 
+	/**
+	 * Fire a mouse down event
+	 * 
+	 * @param right
+	 */
 	private void down(boolean right) {
 		if (right)
 			this.rightButtonDown = true;
@@ -184,6 +237,11 @@ public class MouseCursor extends SimplePanel {
 		mouseDownElement = e;
 	}
 
+	/**
+	 * Fire a mouse up event
+	 * 
+	 * @param right
+	 */
 	private void up(boolean right) {
 		if (right)
 			this.rightButtonDown = false;
@@ -193,48 +251,78 @@ public class MouseCursor extends SimplePanel {
 		fireMouseEvent("mouseup", uuid, color, e, x, y);
 		if (e.equals(mouseDownElement)) {
 			fireMouseEvent("click", uuid, color, e, x, y);
-//			if (e.getClassName().contains("multiFocusWidget"))
-			if(focussedElement!=null && !focussedElement.equals(e))
+			// if (e.getClassName().contains("multiFocusWidget"))
+			if (focussedElement != null && !focussedElement.equals(e))
 				focussedElement.blur();
 			focussedElement = e;
 			e.focus();
-//			else
-//				focussedElement = null;
-//			e.focus();
+			// else
+			// focussedElement = null;
+			// e.focus();
 		}
 	}
 
+	/**
+	 * Fire a key down event
+	 * 
+	 * @param keyCode
+	 * @param charcode
+	 */
 	private void keyDown(int keyCode, int charcode) {
 		Element e = focussedElement;
 		if (e == null)
 			e = Document.get().getDocumentElement();
 		e.focus();
-		fireKeyboardEvent("keydown", uuid, color, e, keyCode, charcode, false,
-				false, false, false);
+		fireKeyboardEvent("keydown", uuid, color, e, keyCode, charcode, false, false, false, false);
 	}
 
+	/**
+	 * Fire a key up event
+	 * 
+	 * @param keyCode
+	 * @param charcode
+	 */
 	private void keyUp(int keyCode, int charcode) {
 		Element e = focussedElement;
 		if (e == null)
 			e = Document.get().getDocumentElement();
 		e.focus();
-		fireKeyboardEvent("keyup", uuid, color, e, keyCode, charcode, false,
-				false, false, false);
+		fireKeyboardEvent("keyup", uuid, color, e, keyCode, charcode, false, false, false, false);
 	}
 
+	/**
+	 * Fire a key press event
+	 * 
+	 * @param keyCode
+	 * @param charcode
+	 */
 	private void keyPress(int keyCode, int charcode) {
 		Element e = focussedElement;
 		if (e == null)
 			e = Document.get().getDocumentElement();
 		e.focus();
-		fireKeyboardEvent("keypress", uuid, color, e, keyCode, charcode, false,
-				false, false, false);
+		fireKeyboardEvent("keypress", uuid, color, e, keyCode, charcode, false, false, false, false);
 	}
 
+	/**
+	 * Get the element at a specific point
+	 * 
+	 * @param frameDocument
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private native Element elementFromPoint(Document frameDocument, int x, int y)/*-{
 		return frameDocument.elementFromPoint(x, y);
 	}-*/;
 
+	/**
+	 * Get the element at a specific point
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Element getElementFromPoint(int x, int y) {
 		Set<Element> hiddenCursors = new HashSet<Element>();
 		Element result = getElementFromPointRec(x, y, hiddenCursors);
@@ -244,9 +332,16 @@ public class MouseCursor extends SimplePanel {
 		return result == null ? Document.get().getDocumentElement() : result;
 	}
 
+	/**
+	 * Get the element within an embedded frame
+	 * 
+	 * @param e
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Element getElementInFrame(Element e, int x, int y) {
-		if (e != null && e.getTagName() != null
-				&& e.getTagName().equalsIgnoreCase("iframe")) {
+		if (e != null && e.getTagName() != null && e.getTagName().equalsIgnoreCase("iframe")) {
 			FrameElement frame = FrameElement.as(e);
 			Document doc = frame.getContentDocument();
 			if (doc == null)
@@ -255,17 +350,25 @@ public class MouseCursor extends SimplePanel {
 			y = y - frame.getAbsoluteTop();
 			e = elementFromPoint(doc, x, y);
 			return getElementInFrame(e, x, y);
-		} else
+		}
+		else
 			return e;
 	}
 
-	private Element getElementFromPointRec(int x, int y,
-			Set<Element> hiddenCursors) {
+	/**
+	 * Recursive method that hides the mouse pointer elements which are below the specific point until the first element is found which is not a mouse pointer.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param hiddenCursors
+	 *            - a set which is filled with references to all mouse pointers which had to be hidden to find the underlying element.
+	 * @return
+	 */
+	private Element getElementFromPointRec(int x, int y, Set<Element> hiddenCursors) {
 		Element e = elementFromPoint(Document.get(), x, y);
 		e = getElementInFrame(e, x, y);
 		Element tmpE = e;
-		if (e != null && e.getTagName().equalsIgnoreCase("img")
-				&& Document.get().getDocumentElement() != e)
+		if (e != null && e.getTagName().equalsIgnoreCase("img") && Document.get().getDocumentElement() != e)
 			tmpE = e.getParentElement().getParentElement();
 		if (tmpE != null && tmpE.getClassName().contains("multiCursor")) {
 			hiddenCursors.add(tmpE);
@@ -275,26 +378,25 @@ public class MouseCursor extends SimplePanel {
 		return e;
 	}
 
+	/**
+	 * Reposition the mouse pointer to x and y coordinates
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	private void move(int x, int y) {
 		this.x = x;
 		this.y = y;
 		Element e = getElementFromPoint(x, y);
-		int shrinkX = x + image.getOffsetWidth() - Window.getClientWidth()
-				- Window.getScrollLeft();
-		int shrinkY = y + image.getOffsetHeight() - Window.getClientHeight()
-				- Window.getScrollTop();
-		setWidth(Math.max(0, (image.getOffsetWidth() - (shrinkX > 0 ? shrinkX
-				: 0)))
-				+ "px");
-		setHeight(Math.max(0, (image.getOffsetHeight() - (shrinkY > 0 ? shrinkY
-				: 0)))
-				+ "px");
+		int shrinkX = x + image.getOffsetWidth() - Window.getClientWidth() - Window.getScrollLeft();
+		int shrinkY = y + image.getOffsetHeight() - Window.getClientHeight() - Window.getScrollTop();
+		setWidth(Math.max(0, (image.getOffsetWidth() - (shrinkX > 0 ? shrinkX : 0))) + "px");
+		setHeight(Math.max(0, (image.getOffsetHeight() - (shrinkY > 0 ? shrinkY : 0))) + "px");
 		int clientX = x + Window.getScrollLeft();
 		int clientY = y + Window.getScrollTop();
 		if (!e.equals(oldElement)) {
 			if (oldElement != null)
-				fireMouseEvent("mouseout", uuid, color, oldElement, clientX,
-						clientY);
+				fireMouseEvent("mouseout", uuid, color, oldElement, clientX, clientY);
 			fireMouseEvent("mouseover", uuid, color, e, clientX, clientY);
 		}
 		fireMouseEvent("mousemove", uuid, color, e, clientX, clientY);
@@ -302,54 +404,70 @@ public class MouseCursor extends SimplePanel {
 		getElement().getStyle().setLeft(x, Unit.PX);
 		getElement().getStyle().setTop(y, Unit.PX);
 		if (storage != null) {
-			storage.setItem("ch.unifr.pai.mice.multicursor.position."
-					+ fileName + ".x", String.valueOf(x));
-			storage.setItem("ch.unifr.pai.mice.multicursor.position."
-					+ fileName + ".y", String.valueOf(y));
+			storage.setItem("ch.unifr.pai.mice.multicursor.position." + fileName + ".x", String.valueOf(x));
+			storage.setItem("ch.unifr.pai.mice.multicursor.position." + fileName + ".y", String.valueOf(y));
 		}
 	}
 
+	/**
+	 * @return the timestamp in ms of the last update
+	 */
 	public long getLastUpdate() {
 		return lastUpdate;
 	}
 
+	/**
+	 * sets the timestamp of the last update
+	 * 
+	 * @param lastUpdate
+	 */
 	public void setLastUpdate(long lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
 
+	/**
+	 * Interpret the message of an event and trigger the appropriate methods.
+	 * 
+	 * @param action
+	 * @param params
+	 */
 	public void interpretMessage(String action, Map<String, String> params) {
 		timeout.cancel();
 		detachtimeout.cancel();
 		l.getElement().getStyle().setLeft(image.getOffsetWidth(), Unit.PX);
-		l.getElement().getStyle().setTop(image.getOffsetHeight()/2, Unit.PX);		
+		l.getElement().getStyle().setTop(image.getOffsetHeight() / 2, Unit.PX);
 		String user = params.get("user");
-		if(user!=null){
-			l.setText((user.length()>1 ? user.substring(0, 2) : user).toUpperCase());
+		if (user != null) {
+			l.setText((user.length() > 1 ? user.substring(0, 2) : user).toUpperCase());
 		}
 		else
 			l.setText("");
 		if (action.equals("m")) {
-			move(Integer.parseInt(params.get("x")),
-					Integer.parseInt(params.get("y")));
+			move(Integer.parseInt(params.get("x")), Integer.parseInt(params.get("y")));
 			show();
-		} else if (action.equals("d")) {
+		}
+		else if (action.equals("d")) {
 			down(params.get("b") != null && params.get("b").equals("r"));
 			show();
-		} else if (action.equals("u")) {
+		}
+		else if (action.equals("u")) {
 			up(params.get("b") != null && params.get("b").equals("r"));
 			show();
-		} else if (action.equals("kd")) {
-			keyDown(Integer.parseInt(params.get("kc")),
-					Integer.parseInt(params.get("cc")));
-		} else if (action.equals("ku")) {
-			keyUp(Integer.parseInt(params.get("kc")),
-					Integer.parseInt(params.get("cc")));
-		} else if (action.equals("kp")) {
-			keyPress(Integer.parseInt(params.get("kc")),
-					Integer.parseInt(params.get("cc")));
+		}
+		else if (action.equals("kd")) {
+			keyDown(Integer.parseInt(params.get("kc")), Integer.parseInt(params.get("cc")));
+		}
+		else if (action.equals("ku")) {
+			keyUp(Integer.parseInt(params.get("kc")), Integer.parseInt(params.get("cc")));
+		}
+		else if (action.equals("kp")) {
+			keyPress(Integer.parseInt(params.get("kc")), Integer.parseInt(params.get("cc")));
 		}
 	}
 
+	/**
+	 * Show the mouse pointer on the screen and fire a mouseover event
+	 */
 	public void show() {
 		Element e = getElementFromPoint(x, y);
 		fireMouseEvent("mouseover", uuid, color, e, x, y);
@@ -359,6 +477,9 @@ public class MouseCursor extends SimplePanel {
 		detachtimeout.schedule(DETACHMENTTIMEOUT);
 	}
 
+	/**
+	 * Hide the mouse pointer on the screen and fire a mouseout event
+	 */
 	public void hide() {
 		if (oldElement != null) {
 			fireMouseEvent("mouseout", uuid, color, oldElement, x, y);
@@ -371,11 +492,14 @@ public class MouseCursor extends SimplePanel {
 		oldElement = null;
 	}
 
-	public HandlerRegistration addMouseCursorEventHandler(
-			MouseCursorTimeoutEvent.Handler handler) {
+	/**
+	 * Adds a handler for a {@link MouseCursorTimeoutEvent}
+	 * 
+	 * @param handler
+	 * @return
+	 */
+	public HandlerRegistration addMouseCursorEventHandler(MouseCursorTimeoutEvent.Handler handler) {
 		return addHandler(handler, MouseCursorTimeoutEvent.TYPE);
 	}
-
-	
 
 }

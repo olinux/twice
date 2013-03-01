@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.multipointer.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,8 +36,14 @@ import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class WebsocketControl extends MultiCursorController implements
-		ResizeHandler {
+/**
+ * Use {@link ExtendedWebsocketControl} instead
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+@Deprecated
+public class WebsocketControl extends MultiCursorController implements ResizeHandler {
 
 	private boolean opened = false;
 
@@ -52,7 +59,7 @@ public class WebsocketControl extends MultiCursorController implements
 
 	private final Storage storage = Storage.getLocalStorageIfSupported();
 
-	private int maxCursorsOnScreen = 5;
+	private final int maxCursorsOnScreen = 5;
 
 	private void initializeCursorList() {
 		cursors.clear();
@@ -66,14 +73,14 @@ public class WebsocketControl extends MultiCursorController implements
 		cursors.add(defineMouseCursor("purple", "#cb2c7a"));
 
 	}
-	
-	private MouseCursor getCursorByColor(String color){
-		for(MouseCursor c : activeCursorsCounter){
-			if(c.getColor().equals(color))
+
+	private MouseCursor getCursorByColor(String color) {
+		for (MouseCursor c : activeCursorsCounter) {
+			if (c.getColor().equals(color))
 				return c;
 		}
 		return null;
-		
+
 	}
 
 	private MouseCursor defineMouseCursor(String cursor, String color) {
@@ -94,33 +101,25 @@ public class WebsocketControl extends MultiCursorController implements
 					if (uuid != null) {
 						assignedMouseCursors.remove(uuid);
 						if (storage != null)
-							storage.removeItem("ch.unifr.pai.mice.multicursor.assignedCursor."
-									+ c.getFileName());
+							storage.removeItem("ch.unifr.pai.mice.multicursor.assignedCursor." + c.getFileName());
 					}
 					if (!cursors.contains(c))
 						cursors.add(c);
 				}
 				activeCursorsCounter.remove(c);
 				if (storage != null)
-					storage.removeItem("ch.unifr.pai.mice.multicursor.activeCursor."
-							+ c.getFileName());
+					storage.removeItem("ch.unifr.pai.mice.multicursor.activeCursor." + c.getFileName());
 
 			}
 		});
 		if (storage != null) {
-			String assigneduuid = storage
-					.getItem("ch.unifr.pai.mice.multicursor.assignedCursor."
-							+ cursor);
+			String assigneduuid = storage.getItem("ch.unifr.pai.mice.multicursor.assignedCursor." + cursor);
 			if (assigneduuid != null)
 				assignedMouseCursors.put(assigneduuid, c);
-			String preferreduuid = storage
-					.getItem("ch.unifr.pai.mice.multicursor.preferredCursor."
-							+ cursor);
+			String preferreduuid = storage.getItem("ch.unifr.pai.mice.multicursor.preferredCursor." + cursor);
 			if (preferreduuid != null)
 				preferredMouseCursors.put(preferreduuid, c);
-			String activeCursor = storage
-					.getItem("ch.unifr.pai.mice.multicursor.activeCursor."
-							+ cursor);
+			String activeCursor = storage.getItem("ch.unifr.pai.mice.multicursor.activeCursor." + cursor);
 			if (activeCursor != null)
 				activeCursorsCounter.add(c);
 		}
@@ -153,7 +152,8 @@ public class WebsocketControl extends MultiCursorController implements
 			Integer port;
 			try {
 				port = p != null ? Integer.parseInt(p) : 8080;
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				port = 8080;
 			}
 			b.setPort(port + 1);
@@ -165,39 +165,34 @@ public class WebsocketControl extends MultiCursorController implements
 				createOnBeforeUnloadHandler(websocket);
 		}
 	}
-	
-	
 
 	@Override
 	public void stop() {
 		super.stop();
 		stopWebsocket(websocket);
-		for(MouseCursor c : activeCursorsCounter){
+		for (MouseCursor c : activeCursorsCounter) {
 			c.hide();
 		}
-	
+
 	}
 
 	private native void send(JavaScriptObject websocket, String message)/*-{
-		if(websocket!=null)
+		if (websocket != null)
 			websocket.send(message);
 	}-*/;
 
-	private native JavaScriptObject createOnBeforeUnloadHandler(
-			JavaScriptObject websocket)/*-{
+	private native JavaScriptObject createOnBeforeUnloadHandler(JavaScriptObject websocket)/*-{
 		$wnd.onbeforeunload = function() {
 			//$wnd.alert("CLOSE WEBSOCKET: "+websocket);
 			websocket.close();
 		}
 	}-*/;
-	
-	private native JavaScriptObject stopWebsocket(
-			JavaScriptObject websocket)/*-{
-			websocket.close();
+
+	private native JavaScriptObject stopWebsocket(JavaScriptObject websocket)/*-{
+		websocket.close();
 	}-*/;
 
-	private native JavaScriptObject createWebsocket(WebsocketControl w,
-			String url)/*-{
+	private native JavaScriptObject createWebsocket(WebsocketControl w, String url)/*-{
 		if ("WebSocket" in $wnd) {
 			// Let us open a web socket
 			var ws = new WebSocket(url);
@@ -234,14 +229,11 @@ public class WebsocketControl extends MultiCursorController implements
 				MouseCursor m = getOrCreateCursor(uuid);
 				if (m != null) {
 					boolean isActive = activeCursorsCounter.contains(m);
-					if (activeCursorsCounter.size() < maxCursorsOnScreen
-							|| isActive) {
+					if (activeCursorsCounter.size() < maxCursorsOnScreen || isActive) {
 						if (!isActive) {
 							activeCursorsCounter.add(m);
 							if (storage != null) {
-								storage.setItem(
-										"ch.unifr.pai.mice.multicursor.activeCursor."
-												+ m.getFileName(), "true");
+								storage.setItem("ch.unifr.pai.mice.multicursor.activeCursor." + m.getFileName(), "true");
 							}
 						}
 						if (values.length > 1) {
@@ -277,16 +269,13 @@ public class WebsocketControl extends MultiCursorController implements
 				m = cursors.get(0);
 				preferredMouseCursors.put(uuid, m);
 				if (storage != null)
-					storage.setItem(
-							"ch.unifr.pai.mice.multicursor.preferredCursor."
-									+ m.getFileName(), uuid);
+					storage.setItem("ch.unifr.pai.mice.multicursor.preferredCursor." + m.getFileName(), uuid);
 			}
 			m.setUuid(uuid);
 			cursors.remove(m);
 			assignedMouseCursors.put(uuid, m);
 			if (storage != null)
-				storage.setItem("ch.unifr.pai.mice.multicursor.assignedCursor."
-						+ m.getFileName(), uuid);
+				storage.setItem("ch.unifr.pai.mice.multicursor.assignedCursor." + m.getFileName(), uuid);
 			if (opened && websocket != null) {
 				send(websocket, UUID.get() + "@c@" + uuid + "@" + m.getColor());
 			}
@@ -297,15 +286,15 @@ public class WebsocketControl extends MultiCursorController implements
 
 	private void onOpen() {
 		this.opened = true;
-		send(websocket, UUID.get() + "@s@" + Window.getClientWidth() + "@"
-				+ Window.getClientHeight());
+		send(websocket, UUID.get() + "@s@" + Window.getClientWidth() + "@" + Window.getClientHeight());
 		// Window.alert("Multi cursor control started!");
 	}
 
 	private void onClose() {
 		if (!opened) {
 			Window.alert("The websocket server is not reachable!");
-		} else {
+		}
+		else {
 			opened = false;
 			// Window.alert("Stopping multi cursor control!");
 		}
@@ -314,15 +303,13 @@ public class WebsocketControl extends MultiCursorController implements
 	@Override
 	public void onResize(ResizeEvent event) {
 		if (opened && websocket != null) {
-			send(websocket, UUID.get() + "@r@" + Window.getClientWidth() + "@"
-					+ Window.getClientHeight());
+			send(websocket, UUID.get() + "@r@" + Window.getClientWidth() + "@" + Window.getClientHeight());
 		}
 	}
 
 	@Override
 	public void notifyCursor(String uuid, String action) {
-		send(websocket, UUID.get()+"@"+action+"@"+uuid);
+		send(websocket, UUID.get() + "@" + action + "@" + uuid);
 	}
-	
-	
+
 }

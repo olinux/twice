@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.module.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,41 +19,72 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unifr.pai.twice.module.client.TWICEAnnotations.Configurable;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Controller for {@link TWICEModule}s that provides the necessary functionality to manage the lifecycle of a component. The controller logic also handles the
+ * lazy initialization of the elements.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class TWICEModuleController {
 
 	Set<TWICEModule<? extends Widget>> modules = new HashSet<TWICEModule<? extends Widget>>();
-	private static Map<Widget, TWICEModuleInstantiator<Widget>> instantiatorMap = new HashMap<Widget, TWICEModuleInstantiator<Widget>>();	
-	
-	public static void start(Widget widget){
+	private static Map<Widget, TWICEModuleInstantiator<Widget>> instantiatorMap = new HashMap<Widget, TWICEModuleInstantiator<Widget>>();
+
+	/**
+	 * Starts the given component
+	 * 
+	 * @param widget
+	 *            - the actual component widget
+	 */
+	public static void start(Widget widget) {
 		TWICEModuleInstantiator<Widget> instantiator = instantiatorMap.get(widget);
-		if(instantiator!=null){
+		if (instantiator != null) {
 			instantiator.start(widget);
 		}
 	}
-	
-	public static void stop(Widget widget){
+
+	/**
+	 * Stops the given component
+	 * 
+	 * @param widget
+	 *            - the actual component widget
+	 */
+	public static void stop(Widget widget) {
 		TWICEModuleInstantiator<Widget> instantiator = instantiatorMap.get(widget);
-		if(instantiator!=null){
+		if (instantiator != null) {
 			instantiator.stop(widget);
 		}
 	}
-	
-	public static TWICEModule<?> getTWICEModule(Widget w){
+
+	/**
+	 * @param w
+	 *            - the actual component widget
+	 * @return the corresponding {@link TWICEModule} if available, null otherwise
+	 */
+	public static TWICEModule<?> getTWICEModule(Widget w) {
 		TWICEModuleInstantiator<Widget> instantiator = instantiatorMap.get(w);
-		if (instantiator instanceof TWICEModule){
-			return ((TWICEModule)instantiator);
+		if (instantiator instanceof TWICEModule) {
+			return (instantiator);
 		}
 		return null;
 	}
-	
-	
-	public static void instantiateModule(final TWICEModule<? extends Widget> module,
-			final AsyncCallback<Widget> callback) {
+
+	/**
+	 * Instantiates the component based on the {@link TWICEModule} implementation
+	 * 
+	 * @param module
+	 *            - the {@link TWICEModule} with the instantiation logic
+	 * @param callback
+	 *            - the callback invoked after the instantiation handing over the actual component widget
+	 */
+	public static void instantiateModule(final TWICEModule<? extends Widget> module, final AsyncCallback<Widget> callback) {
 		if (module instanceof TWICEModuleInstantiator) {
 			@SuppressWarnings("unchecked")
 			final TWICEModuleInstantiator<Widget> instantiator = ((TWICEModuleInstantiator<Widget>) module);
@@ -71,22 +103,37 @@ public class TWICEModuleController {
 			}));
 		}
 	}
-	
-	public static void restart(Widget w){
+
+	/**
+	 * Restarts the widget (call to stop and start)
+	 * 
+	 * @param w
+	 */
+	public static void restart(Widget w) {
 		TWICEModuleInstantiator<Widget> instantiator = instantiatorMap.get(w);
-		if (instantiator instanceof TWICEModule){
-			((TWICEModule)instantiator).stop(w);
-			((TWICEModule)instantiator).start(w);
+		if (instantiator instanceof TWICEModule) {
+			((TWICEModule) instantiator).stop(w);
+			((TWICEModule) instantiator).start(w);
 		}
 	}
 
+	/**
+	 * @param w
+	 * @return a map of configurable fields (annotated with {@link Configurable}) of a {@link TWICEModule}
+	 */
 	public static Map<String, Object> getConfigurationForWidget(Widget w) {
 		TWICEModuleInstantiator<Widget> instantiator = instantiatorMap.get(w);
 		if (instantiator != null)
 			return instantiator.getConfigurableFields(w);
 		return null;
 	}
-	
+
+	/**
+	 * Configure the widget with the given properties.
+	 * 
+	 * @param properties
+	 * @param w
+	 */
 	public static void configure(Map<String, String> properties, Widget w) {
 		TWICEModuleInstantiator<Widget> instantiator = instantiatorMap.get(w);
 		if (instantiator != null)

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,15 @@ package ch.unifr.pai.twice.comm.serverPush.client;
  * limitations under the License.
  */
 
-public interface UndoableRemoteEventHandler<E extends UndoableRemoteEvent<?>> extends RemoteEventHandler<E>{
+/**
+ * The {@link RemoteEventHandler} for {@link UndoableRemoteEvent}s
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <E>
+ */
+public interface UndoableRemoteEventHandler<E extends UndoableRemoteEvent<?>> extends RemoteEventHandler<E> {
 	void undo(E event);
+
 	void saveState(E event);
 }

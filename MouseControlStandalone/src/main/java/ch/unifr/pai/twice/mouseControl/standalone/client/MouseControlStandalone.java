@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.mouseControl.standalone.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +22,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+/**
+ * An example application for the mouse control functionality.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MouseControlStandalone implements EntryPoint {
 
 	@Override
@@ -31,13 +38,13 @@ public class MouseControlStandalone implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onSuccess(TouchPadWidget result) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		w.initialize(UUID.get(), null, null);

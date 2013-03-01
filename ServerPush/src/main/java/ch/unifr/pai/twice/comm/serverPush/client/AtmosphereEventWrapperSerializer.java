@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +17,13 @@ package ch.unifr.pai.twice.comm.serverPush.client;
 import org.atmosphere.gwt.client.AtmosphereGWTSerializer;
 import org.atmosphere.gwt.client.SerialTypes;
 
-@SerialTypes(value = {AtmosphereEventWrapper.class})
-public abstract class AtmosphereEventWrapperSerializer extends AtmosphereGWTSerializer{
-	
+/**
+ * Serializer for the atmosphere framework
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+@SerialTypes(value = { AtmosphereEventWrapper.class })
+public abstract class AtmosphereEventWrapperSerializer extends AtmosphereGWTSerializer {
+
 }

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,15 +19,20 @@ import ch.unifr.pai.twice.authentication.client.security.TWICESecurityManager;
 
 import com.google.gwt.json.client.JSONObject;
 
+/**
+ * The deserializer for remote events. For convenience, we are using JSON as a message format - this could be replaced with more compact and compressed message
+ * formats
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public abstract class RemoteEventDeserializer {
 
 	public final RemoteEvent<?> deserialize(String string, TWICESecurityManager security) throws MessagingException {
-		com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser
-				.parseStrict(string);
+		com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser.parseStrict(string);
 		com.google.gwt.json.client.JSONObject o = value.isObject();
 		if (o != null) {
-			com.google.gwt.json.client.JSONValue type = o
-					.get(ch.unifr.pai.twice.comm.serverPush.client.RemoteEvent.EVENTTYPEKEY);
+			com.google.gwt.json.client.JSONValue type = o.get(ch.unifr.pai.twice.comm.serverPush.client.RemoteEvent.EVENTTYPEKEY);
 			String t = null;
 			if (type != null && type.isString() != null) {
 				t = type.isString().stringValue();

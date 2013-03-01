@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.mousecontrol.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +16,8 @@ package ch.unifr.pai.twice.mousecontrol.client;
  */
 import java.util.Date;
 
-import ch.unifr.pai.twice.module.client.TWICEModule;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Touch;
-import com.google.gwt.event.dom.client.TouchCancelHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.event.dom.client.TouchMoveEvent;
@@ -36,32 +34,41 @@ import com.google.gwt.user.client.ui.HTML;
  * @author oli
  * 
  */
-public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHandler, TouchEndHandler, TouchMoveHandler {	
+public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHandler, TouchEndHandler, TouchMoveHandler {
 
 	private int x;
 	private int y;
 	private boolean move;
 	private boolean dragging = false;
 
-	private Timer mouseDownTimer = new Timer() {
+	/**
+	 * Timer for recognizing a switch to drag mode
+	 */
+	private final Timer mouseDownTimer = new Timer() {
 		@Override
 		public void run() {
 			down(true);
 			downSent = true;
 			dragging = true;
-			if(isDoLog())
-				addToLog("startDrag", "cursorX=\""+x+"\" cursorY=\""+y+"\"", null);
+			if (isDoLog())
+				addToLog("startDrag", "cursorX=\"" + x + "\" cursorY=\"" + y + "\"", null);
 			widget.getElement().setInnerHTML("<p>Your device is in dragging mode.</p><p> Tap on the screen to release.</p>");
 		}
 	};
 
+	/**
+	 * Transform relative movements to absolute x- and y-coordinates
+	 * 
+	 * @param dX
+	 * @param dY
+	 */
 	private void updatePos(int dX, int dY) {
 		if (dX != 0) {
-			int changeX = (int) Math.floor(((double) dX * MOVEFACTOR));
+			int changeX = (int) Math.floor((dX * MOVEFACTOR));
 			x = Math.max(Math.min(x + changeX, screenWidth), 0);
 		}
 		if (dY != 0) {
-			int changeY = (int) Math.floor(((double) dY * MOVEFACTOR));
+			int changeY = (int) Math.floor((dY * MOVEFACTOR));
 			y = Math.max(Math.min(y + changeY, screenHeight), 0);
 		}
 
@@ -74,12 +81,11 @@ public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHa
 	private boolean downSent;
 
 	DockLayoutPanel p = new DockLayoutPanel(Unit.PCT);
-//	private MobileKeyboard keyboardButton = new MobileKeyboard("Keyboard", "Done");
+	// private MobileKeyboard keyboardButton = new MobileKeyboard("Keyboard", "Done");
 	HTML widget = new HTML();
-	
 
 	public TouchPadMobileWidget() {
-		super(false);		
+		super(false);
 		widget.getElement().getStyle().setProperty("userSelect", "none");
 		widget.addTouchStartHandler(this);
 		widget.addTouchEndHandler(this);
@@ -87,26 +93,43 @@ public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHa
 		widget.getElement().getStyle().setFontSize(20, Unit.PX);
 		add(p);
 		widget.setHeight("100%");
-//		p.addSouth(keyboardButton, 10);
+		// p.addSouth(keyboardButton, 10);
 		p.add(widget);
-//		setWidgetTopBottom(widget, 0, Unit.PX, 0, Unit.PX);
-//		setWidgetLeftRight(widget, 0, Unit.PX, 0, Unit.PX);
+		// setWidgetTopBottom(widget, 0, Unit.PX, 0, Unit.PX);
+		// setWidgetLeftRight(widget, 0, Unit.PX, 0, Unit.PX);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#updateScreenDimensions()
+	 */
 	@Override
 	protected void updateScreenDimensions() {
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#getX()
+	 */
 	@Override
 	protected int getX() {
 		return x;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#getY()
+	 */
 	@Override
 	protected int getY() {
 		return y;
 	}
 
+	/**
+	 * On movement, calculate the new position of the mouse pointer on the shared screen
+	 * 
+	 * @see com.google.gwt.event.dom.client.TouchMoveHandler#onTouchMove(com.google.gwt.event.dom.client.TouchMoveEvent)
+	 */
 	@Override
 	public void onTouchMove(TouchMoveEvent event) {
 		event.preventDefault();
@@ -117,8 +140,7 @@ public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHa
 			int y = t.getClientY();
 			int dX = x - lastX;
 			int dY = y - lastY;
-			if (Math.abs(dX) > MOVEMENTTHRESHOLD
-					|| Math.abs(dY) > MOVEMENTTHRESHOLD) {
+			if (Math.abs(dX) > MOVEMENTTHRESHOLD || Math.abs(dY) > MOVEMENTTHRESHOLD) {
 				mouseDownTimer.cancel();
 				lastX = x;
 				lastY = y;
@@ -128,12 +150,17 @@ public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHa
 		}
 	}
 
+	/**
+	 * On touch end - stop dragging
+	 * 
+	 * @see com.google.gwt.event.dom.client.TouchEndHandler#onTouchEnd(com.google.gwt.event.dom.client.TouchEndEvent)
+	 */
 	@Override
 	public void onTouchEnd(TouchEndEvent event) {
 		event.preventDefault();
 		event.stopPropagation();
-		if(isDoLog())
-			addToLog("endTouch", "cursorX=\""+x+"\" cursorY=\""+y+"\"", null);
+		if (isDoLog())
+			addToLog("endTouch", "cursorX=\"" + x + "\" cursorY=\"" + y + "\"", null);
 		if (fingerDownAt != -1) {
 			if (!move) {
 				stopDragging();
@@ -142,29 +169,41 @@ public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHa
 		fingerDownAt = -1;
 		move = false;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#stopDragging()
+	 */
 	@Override
-	protected void stopDragging(){
+	protected void stopDragging() {
 		if (!downSent) {
 			down(true);
 			mouseDownTimer.cancel();
 		}
 		up(true);
-		if(isDoLog())
-			addToLog("stopDrag", "cursorX=\""+x+"\" cursorY=\""+y+"\"", null);
+		if (isDoLog())
+			addToLog("stopDrag", "cursorX=\"" + x + "\" cursorY=\"" + y + "\"", null);
 		super.stopDragging();
 		widget.getElement().setInnerHTML("");
 	}
-	
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget#stop()
+	 */
 	@Override
 	public void stop() {
-		if(dragging){
+		if (dragging) {
 			stopDragging();
 		}
 		super.stop();
 	}
 
+	/**
+	 * On touch start, check if it is the begin of a drag.
+	 * 
+	 * @see com.google.gwt.event.dom.client.TouchStartHandler#onTouchStart(com.google.gwt.event.dom.client.TouchStartEvent)
+	 */
 	@Override
 	public void onTouchStart(TouchStartEvent event) {
 		event.preventDefault();
@@ -174,16 +213,15 @@ public class TouchPadMobileWidget extends TouchPadWidget implements TouchStartHa
 			lastX = t.getClientX();
 			lastY = t.getClientY();
 			fingerDownAt = new Date().getTime();
-			if(isDoLog())
-				addToLog("startTouch", "cursorX=\""+x+"\" cursorY=\""+y+"\"", null);
-			if(!move){
+			if (isDoLog())
+				addToLog("startTouch", "cursorX=\"" + x + "\" cursorY=\"" + y + "\"", null);
+			if (!move) {
 				downSent = false;
-				if(dragModeEnabled)
+				if (dragModeEnabled)
 					mouseDownTimer.schedule(MOUSEDOWNTHRESHOLD);
 			}
-			
+
 		}
 	}
 
-	
 }

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.comm.serverPush.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,18 @@ package ch.unifr.pai.twice.comm.serverPush.client;
  */
 import com.google.gwt.event.shared.EventHandler;
 
+/**
+ * The handler for {@link RemoteEvent}s
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <T>
+ */
 public interface RemoteEventHandler<T extends RemoteEvent<?>> extends EventHandler {
+	/**
+	 * Invoked on the fire of an event.
+	 * 
+	 * @param event
+	 */
 	public void onEvent(T event);
 }
