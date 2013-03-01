@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.commons;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,86 +29,87 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
-public class MiceDialogCaption extends HorizontalPanel implements Caption{
+/**
+ * The caption of the dialog for the eclipse layout (including fullscreen and close button)
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class MiceDialogCaption extends HorizontalPanel implements Caption {
 
-		private HTML title = new HTML();
-		private Image close = new Image(GWT.getModuleBaseURL()
-				+ "images/close_hover.png");
+	private final HTML title = new HTML();
+	private final Image close = new Image(GWT.getModuleBaseURL() + "images/close_hover.png");
 
-		private Image fullscreen = new Image(GWT.getModuleBaseURL()
-				+ "images/fullscreen.png");
+	private final Image fullscreen = new Image(GWT.getModuleBaseURL() + "images/fullscreen.png");
 
-		public void setHandlers(ClickHandler fullscreenHandler, ClickHandler closeHandler){
+	public void setHandlers(ClickHandler fullscreenHandler, ClickHandler closeHandler) {
 
-			fullscreen.addClickHandler(fullscreenHandler);
+		fullscreen.addClickHandler(fullscreenHandler);
 
+		close.addClickHandler(closeHandler);
+	}
 
-			close.addClickHandler(closeHandler);
-		}
-		
-		
-		public MiceDialogCaption() {
-			super();
-			add(title);
-			setCellWidth(title, "100%");
-//			add(fullscreen);
-			add(close);
-			this.setStyleName("Caption");
-		}
+	public MiceDialogCaption() {
+		super();
+		add(title);
+		setCellWidth(title, "100%");
+		// add(fullscreen);
+		add(close);
+		this.setStyleName("Caption");
+	}
 
-		@Override
-		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-			return title.addMouseDownHandler(handler);
-		}
+	@Override
+	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+		return title.addMouseDownHandler(handler);
+	}
 
-		@Override
-		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-			return title.addMouseUpHandler(handler);
-		}
+	@Override
+	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+		return title.addMouseUpHandler(handler);
+	}
 
-		@Override
-		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-			return title.addMouseOutHandler(handler);
-		}
+	@Override
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return title.addMouseOutHandler(handler);
+	}
 
-		@Override
-		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-			return title.addMouseOverHandler(handler);
-		}
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return title.addMouseOverHandler(handler);
+	}
 
-		@Override
-		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-			return title.addMouseMoveHandler(handler);
-		}
+	@Override
+	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+		return title.addMouseMoveHandler(handler);
+	}
 
-		@Override
-		public HandlerRegistration addMouseWheelHandler(
-				MouseWheelHandler handler) {
-			return title.addMouseWheelHandler(handler);
-		}
+	@Override
+	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+		return title.addMouseWheelHandler(handler);
+	}
 
-		@Override
-		public String getHTML() {
-			return title.getHTML();
-		}
+	@Override
+	public String getHTML() {
+		return title.getHTML();
+	}
 
-		@Override
-		public void setHTML(String html) {
-			title.setHTML(html);
-		}
+	@Override
+	public void setHTML(String html) {
+		title.setHTML(html);
+	}
 
-		@Override
-		public String getText() {
-			return title.getText();
-		}
+	@Override
+	public String getText() {
+		return title.getText();
+	}
 
-		@Override
-		public void setText(String text) {
-			title.setText(text);
-		}
+	@Override
+	public void setText(String text) {
+		title.setText(text);
+	}
 
-		@Override
-		public void setHTML(SafeHtml html) {
-			title.setHTML(html);
-		}
+	@Override
+	public void setHTML(SafeHtml html) {
+		title.setHTML(html);
+	}
 }

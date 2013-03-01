@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.eclipseLayout;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +17,34 @@ package ch.unifr.pai.twice.layout.client.eclipseLayout;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface MiceResourceBundle extends ClientBundle{
+/**
+ * Resource bundle for the styles of the cursor layout
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public interface MiceResourceBundle extends ClientBundle {
+	/**
+	 * @return the css style
+	 */
 	@Source("MiceLayout.css")
 	MiceLayoutStyle miceLayoutStyle();
-	
+
+	/**
+	 * @return the close button of a tab
+	 */
 	@Source("close.png")
 	ImageResource closeButton();
-	
+
+	/**
+	 * @return the fullscreen button
+	 */
 	@Source("fullscreen.png")
 	ImageResource fullscreenButton();
-	
+
+	/**
+	 * @return the button to lave the fullscreen mode
+	 */
 	@Source("nofullscreen.png")
 	ImageResource nofullscreenButton();
 }
-

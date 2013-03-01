@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.commons;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,27 +18,34 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 
-public class ResizableDecoratorPanel extends DecoratorPanel implements
-		RequiresResize {
+/**
+ * The resizable decorator panel used to manage the resizing of the different split layout panels in the eclipse layout
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class ResizableDecoratorPanel extends DecoratorPanel implements RequiresResize {
 
-	private int splitterSize;
-	
-	public ResizableDecoratorPanel(){
+	private final int splitterSize;
+
+	public ResizableDecoratorPanel() {
 		this(10);
 	}
-	public ResizableDecoratorPanel(int splitterSize){
+
+	public ResizableDecoratorPanel(int splitterSize) {
 		super();
 		this.splitterSize = splitterSize;
 	}
-	
-	
+
 	@Override
 	public void onResize() {
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
-				ResizableDecoratorPanel.this.getWidget().setWidth(Math.max(ResizableDecoratorPanel.this.getElement().getParentElement().getOffsetWidth()-splitterSize, 0)+"px");
-				ResizableDecoratorPanel.this.getWidget().setHeight(Math.max(ResizableDecoratorPanel.this.getElement().getParentElement().getOffsetHeight()-splitterSize, 0)+"px");
+				ResizableDecoratorPanel.this.getWidget().setWidth(
+						Math.max(ResizableDecoratorPanel.this.getElement().getParentElement().getOffsetWidth() - splitterSize, 0) + "px");
+				ResizableDecoratorPanel.this.getWidget().setHeight(
+						Math.max(ResizableDecoratorPanel.this.getElement().getParentElement().getOffsetHeight() - splitterSize, 0) + "px");
 			}
 		});
 	}
@@ -47,7 +55,5 @@ public class ResizableDecoratorPanel extends DecoratorPanel implements
 		super.onAttach();
 		onResize();
 	}
-	
-	
 
 }

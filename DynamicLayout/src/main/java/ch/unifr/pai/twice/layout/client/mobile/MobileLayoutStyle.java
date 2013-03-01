@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.mobile;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +17,19 @@ package ch.unifr.pai.twice.layout.client.mobile;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.CssResource.ImportedWithPrefix;
 
+/**
+ * The style resource for the mobile layout
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 @ImportedWithPrefix("mobileLayout")
 public interface MobileLayoutStyle extends CssResource {
- 
-	 String selectedMenuEntry();
-	 String menu();
-	 String menuButton();
-	 
+
+	String selectedMenuEntry();
+
+	String menu();
+
+	String menuButton();
+
 }

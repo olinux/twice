@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.eclipseLayout;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +17,23 @@ package ch.unifr.pai.twice.layout.client.eclipseLayout;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.CssResource.ImportedWithPrefix;
 
+/**
+ * The CSS resource bundle for the mice layout stylesheet
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 @ImportedWithPrefix("miceLayout")
 public interface MiceLayoutStyle extends CssResource {
- 
-	 String hoverTabBar();
-	 
-	 String hoverGhostTab();
-	 
-	 String hoverAddPanel();
-	 
-	 String tabButton();
-	 
-	 String tabPanelButton();
-	 
+
+	String hoverTabBar();
+
+	String hoverGhostTab();
+
+	String hoverAddPanel();
+
+	String tabButton();
+
+	String tabPanelButton();
+
 }

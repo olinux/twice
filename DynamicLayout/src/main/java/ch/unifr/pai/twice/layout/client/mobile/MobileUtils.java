@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.mobile;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +27,20 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
+/**
+ * Utility functionalities for mobile use
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MobileUtils {
 
+	/**
+	 * Add necessary html tags to ensure unified initial zoom levels of the web page, fullscreen establishment and add proprietary tags (e.g.
+	 * "apple-mobile-web-app-capable" for extended functionalities).
+	 * 
+	 * The main purpose is to establish a "native" look of the application even within the boundaries of the web browser.
+	 */
 	public static void preparePage() {
 		RootPanel.getBodyElement().getStyle().setHeight(100, Unit.PCT);
 		RootPanel.getBodyElement().getStyle().setOverflow(Overflow.HIDDEN);
@@ -39,35 +52,36 @@ public class MobileUtils {
 		Element head;
 		if (tags.getLength() > 0) {
 			head = tags.getItem(0);
-		} else {
+		}
+		else {
 			head = DOM.createElement("head");
 			Document.get().insertFirst(head);
 		}
 		Element meta = DOM.createElement("meta");
 		meta.setAttribute("name", "viewport");
-		meta.setAttribute("content",
-				"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0");
+		meta.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0");
 		head.appendChild(meta);
 		LinkElement e = Document.get().createLinkElement();
 		e.setRel("stylesheet");
-		e.setHref(GWT.getModuleBaseURL()+"master.css");
+		e.setHref(GWT.getModuleBaseURL() + "master.css");
 		head.appendChild(e);
-		
+
 		Element iphoneFullscreen = DOM.createElement("meta");
 		iphoneFullscreen.setAttribute("name", "apple-touch-fullscreen");
 		iphoneFullscreen.setAttribute("content", "yes");
 		head.appendChild(iphoneFullscreen);
-		
+
 		Element iphoneWebAppCapable = DOM.createElement("meta");
 		iphoneWebAppCapable.setAttribute("name", "apple-mobile-web-app-capable");
-		iphoneWebAppCapable.setAttribute("content", "yes");  
-		head.appendChild(iphoneWebAppCapable);		
-		
-		Scheduler.get().scheduleDeferred(new ScheduledCommand(){
+		iphoneWebAppCapable.setAttribute("content", "yes");
+		head.appendChild(iphoneWebAppCapable);
+
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
 			@Override
 			public void execute() {
 				Window.scrollTo(0, 1);
-			}});
+			}
+		});
 	}
 }

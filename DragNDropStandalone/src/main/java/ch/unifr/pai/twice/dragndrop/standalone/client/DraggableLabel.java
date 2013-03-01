@@ -19,6 +19,12 @@ import ch.unifr.pai.twice.dragndrop.client.intf.Draggable;
 
 import com.google.gwt.user.client.ui.Label;
 
+/**
+ * A draggable {@link Label}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class DraggableLabel extends Label implements Draggable {
 
 	@Override

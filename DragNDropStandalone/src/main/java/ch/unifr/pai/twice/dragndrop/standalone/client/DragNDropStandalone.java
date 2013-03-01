@@ -34,16 +34,22 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * An example application showing the drag and drop functionality with multiple pointer support
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class DragNDropStandalone implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
+
+		// Enable multicursor support
 		MultiCursorController c = GWT.create(MultiCursorController.class);
 		c.start();
+
 		DockLayoutPanel mainpanel = new DockLayoutPanel(Unit.PX);
-//		Widget mpInfo = MultiPointerUtils.getMultiPointerSupportInfo();
-//		if(mpInfo!=null)
-//			mainpanel.addNorth(mpInfo, 30);	
 		final AbsolutePanel p = new AbsolutePanel();
 		DraggableLabel l = new DraggableLabel();
 		l.setText("DRAG ME");
@@ -56,57 +62,54 @@ public class DragNDropStandalone implements EntryPoint {
 		drop.getElement().getStyle().setBackgroundColor("green");
 		p.add(drop);
 		p.setWidgetPosition(drop, 400, 200);
+
+		// define the green focus panel to be a drop target handler
 		DragNDrop.setDropHandler(drop, new DropTargetHandler() {
-			
+
 			@Override
-			public void onHoverEnd(String deviceId, Widget widget, Element dragProxy,
-					Event event) {
+			public void onHoverEnd(String deviceId, Widget widget, Element dragProxy, Event event) {
 				drop.getElement().getStyle().setBackgroundColor("yellow");
-				
+
 			}
-			
+
 			@Override
-			public void onHover(String deviceId, Widget widget, Element dragProxy,
-					Event event, Double intersectionPercentage,
+			public void onHover(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage,
 					Double intersectionPercentageWithTarget) {
 				drop.getElement().getStyle().setBackgroundColor("red");
 			}
-			
+
 			@Override
-			public boolean onDrop(String deviceId, Widget widget, Element dragProxy,
-					Event event, Double intersectionPercentage,
+			public boolean onDrop(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage,
 					Double intersectionPercentageWithTarget) {
 				Window.alert("Dropped");
 				return false;
 			}
-			
+
 			@Override
 			public Priority getPriority() {
 				return Priority.NORMAL;
 			}
 		}, true);
-		
-		
+
+		// Make the label draggable
 		DragNDrop.makeDraggable(l, DragConfiguration.withProxy(new DragNDropHandler() {
-			
+
 			@Override
 			public void onStartDrag(String deviceId, Widget draggedWidget) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public void onEndOfDrop(String deviceId, Widget draggedWidget,
-					int dragProxyLeft, int dragProxyTop, Event event) {
+			public void onEndOfDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop, Event event) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public boolean onDrop(String deviceId, Widget draggedWidget,
-					int dragProxyLeft, int dragProxyTop, Event event,
-					DropTargetHandler dropTarget, boolean outOfBox) {
-				p.setWidgetPosition(draggedWidget, dragProxyLeft-p.getAbsoluteLeft(), dragProxyTop-p.getAbsoluteTop());
+			public boolean onDrop(String deviceId, Widget draggedWidget, int dragProxyLeft, int dragProxyTop, Event event, DropTargetHandler dropTarget,
+					boolean outOfBox) {
+				p.setWidgetPosition(draggedWidget, dragProxyLeft - p.getAbsoluteLeft(), dragProxyTop - p.getAbsoluteTop());
 				return true;
 			}
 		}));

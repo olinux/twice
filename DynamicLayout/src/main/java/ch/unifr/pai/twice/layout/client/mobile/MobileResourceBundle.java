@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.mobile;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +17,16 @@ package ch.unifr.pai.twice.layout.client.mobile;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface MobileResourceBundle extends ClientBundle{
+/**
+ * The resource bundle for the mobile layout
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public interface MobileResourceBundle extends ClientBundle {
 	@Source("MobileLayout.css")
 	MobileLayoutStyle mobileLayoutStyle();
-	
+
 	@Source("media_playlist.png")
 	ImageResource menuBtn();
 }
-

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.layout.client.eclipseLayout;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,22 +23,34 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MiceTabLabel extends FocusPanel implements Draggable{
+/**
+ * The tab label which implements the {@link Draggable} interface including a close button to remove the component from the layout as well as a reference to the
+ * actual component widget
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class MiceTabLabel extends FocusPanel implements Draggable {
 
-	private Widget widget;
+	private final Widget widget;
 	private MiceLayoutTabPanel currentParent;
 	private boolean initializedAsDraggable;
 	private boolean selected;
-	private HorizontalPanel flowPanel = new HorizontalPanel();
-	private HTML html = new HTML();
-	
-	private MiceResourceBundle resource = GWT.create(MiceResourceBundle.class);
+	private final HorizontalPanel flowPanel = new HorizontalPanel();
+	private final HTML html = new HTML();
 
+	private final MiceResourceBundle resource = GWT.create(MiceResourceBundle.class);
+
+	/**
+	 * @param text
+	 *            - the label used to mark the tab (html allowed)
+	 * @param widget
+	 *            - the actual component widget
+	 */
 	public MiceTabLabel(String text, Widget widget) {
-		super();		
+		super();
 		resource.miceLayoutStyle().ensureInjected();
 		this.widget = widget;
 		setWidget(flowPanel);
@@ -45,50 +58,81 @@ public class MiceTabLabel extends FocusPanel implements Draggable{
 		html.setHTML(text);
 		Image close = new Image(resource.closeButton());
 		close.addStyleName(resource.miceLayoutStyle().tabButton());
-		close.addClickHandler(new ClickHandler(){
+		close.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				currentParent.remove(MiceTabLabel.this);
-			}});
+			}
+		});
 		flowPanel.add(close);
 	}
-	
-	public void setText(String html){
+
+	/**
+	 * Sets the label of the tab (html allowed)
+	 * 
+	 * @param html
+	 */
+	public void setText(String html) {
 		this.html.setHTML(html);
 	}
 
-	public Widget getWidget(){
+	@Override
+	public Widget getWidget() {
 		return widget;
 	}
-	
-	
-	public MiceLayoutTabPanel getCurrentParent() {
+
+	/**
+	 * @return
+	 */
+	MiceLayoutTabPanel getCurrentParent() {
 		return currentParent;
 	}
 
-	public void setCurrentParent(MiceLayoutTabPanel currentParent) {
+	/**
+	 * sets the parent {@link MiceLayoutTabPanel}
+	 * 
+	 * @param currentParent
+	 */
+	void setCurrentParent(MiceLayoutTabPanel currentParent) {
 		this.currentParent = currentParent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.dragndrop.client.intf.Draggable#isDraggable()
+	 */
 	@Override
 	public boolean isDraggable() {
 		return true;
 	}
-	
-	public void initializeAsDraggable(){
+
+	/**
+	 * set the property "initializedAsDraggable" to true
+	 */
+	void initializeAsDraggable() {
 		this.initializedAsDraggable = true;
 	}
-	
-	public boolean isInitializedAsDraggable(){
+
+	/**
+	 * @return if the label is initialized already
+	 */
+	boolean isInitializedAsDraggable() {
 		return this.initializedAsDraggable;
 	}
-	
-	public void setSelected(boolean selected){
+
+	/**
+	 * @param selected
+	 *            sets the property "selected" this is for internal state holding only and does not affect the actual visualization of the tab
+	 */
+	void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
-	public boolean isSelected(){
+
+	/**
+	 * @return true if the tab is actually active (selected)
+	 */
+	boolean isSelected() {
 		return selected;
 	}
-	
+
 }
