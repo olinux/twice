@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.rpc;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,44 +19,82 @@ import ch.unifr.pai.twice.comm.serverPush.client.UndoableRemoteEvent;
 import ch.unifr.pai.twice.comm.serverPush.client.UndoableRemoteEventHandler;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.GwtEvent.Type;
 
-public abstract class UpdateMindmapNoteEvent extends UndoableRemoteEvent<UpdateMindmapNoteHandler>{
-	
+/**
+ * An application specific remote event which provides the information about an updated note within the mindmap session
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public abstract class UpdateMindmapNoteEvent extends UndoableRemoteEvent<UpdateMindmapNoteHandler> {
+
 	public static final Type<UpdateMindmapNoteHandler> TYPE = new Type<UpdateMindmapNoteHandler>();
 
-	public static interface UpdateMindmapNoteHandler extends UndoableRemoteEventHandler<UpdateMindmapNoteEvent>{
+	public static interface UpdateMindmapNoteHandler extends UndoableRemoteEventHandler<UpdateMindmapNoteEvent> {
 	}
-	
+
 	public String uuid;
 	public String content;
 	public Integer x;
 	public Integer y;
 	public Boolean blocked;
-	
-	public static UpdateMindmapNoteEvent block(String uuid, boolean blocked){
+
+	/**
+	 * Factory method to conveniently create an event for blocking/unblocking a note.
+	 * 
+	 * @param uuid
+	 * @param blocked
+	 * @return
+	 */
+	public static UpdateMindmapNoteEvent block(String uuid, boolean blocked) {
 		UpdateMindmapNoteEvent event = GWT.create(UpdateMindmapNoteEvent.class);
 		event.uuid = uuid;
-		event.blocked  = blocked;
+		event.blocked = blocked;
 		return event;
 	}
-	
-	public static UpdateMindmapNoteEvent move(String uuid, int x, int y){
+
+	/**
+	 * Factory method to conveniently create an event for repositioning of a note
+	 * 
+	 * @param uuid
+	 *            - a unique id for the event
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public static UpdateMindmapNoteEvent move(String uuid, int x, int y) {
 		UpdateMindmapNoteEvent event = GWT.create(UpdateMindmapNoteEvent.class);
 		event.uuid = uuid;
 		event.x = x;
 		event.y = y;
 		return event;
 	}
-	
-	public static UpdateMindmapNoteEvent changeValue(String uuid, String value){
+
+	/**
+	 * Factory method to conveniently create an event for a changed value of a note
+	 * 
+	 * @param uuid
+	 *            - a unique id for the event
+	 * @param value
+	 * @return
+	 */
+	public static UpdateMindmapNoteEvent changeValue(String uuid, String value) {
 		UpdateMindmapNoteEvent event = GWT.create(UpdateMindmapNoteEvent.class);
 		event.uuid = uuid;
 		event.content = value;
 		return event;
 	}
-	
-	public static UpdateMindmapNoteEvent createChangeValueAndBlock(String uuid, String value, boolean blocked){
+
+	/**
+	 * Factory method to conveniently create an event for a changed value and a blocking/unblocking of a note
+	 * 
+	 * @param uuid
+	 *            - a unique id for the event
+	 * @param value
+	 * @param blocked
+	 * @return
+	 */
+	public static UpdateMindmapNoteEvent createChangeValueAndBlock(String uuid, String value, boolean blocked) {
 		UpdateMindmapNoteEvent event = GWT.create(UpdateMindmapNoteEvent.class);
 		event.uuid = uuid;
 		event.content = value;

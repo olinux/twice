@@ -15,21 +15,30 @@ package ch.unifr.pai.twice.dragndrop.client.utils;
  * limitations under the License.
  */
 
-public class Triple<First, Second, Third> extends Tuple<First, Second>{
+/**
+ * A container to return three independent objects from a method
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <First>
+ * @param <Second>
+ * @param <Third>
+ */
+public class Triple<First, Second, Third> extends Tuple<First, Second> {
 	private static final long serialVersionUID = 1L;
 	private Third third;
-	
-	private Triple(){
+
+	private Triple() {
 		super(null, null);
 	}
-	
-	public Triple(First first, Second second, Third third){
+
+	public Triple(First first, Second second, Third third) {
 		super(first, second);
 		this.third = third;
 	}
-	
-	public Third getThird(){
+
+	public Third getThird() {
 		return third;
 	}
-	
+
 }

@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +16,24 @@ package ch.unifr.pai.mindmap.client.mindmap;
  */
 import ch.unifr.pai.twice.module.client.TWICEModule;
 
+/**
+ * The {@link TWICEModule} wrapper for the {@link MindMapComponent}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MindMapModule implements TWICEModule<MindMapComponent> {
 
 	@Override
 	public void start(MindMapComponent instance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void stop(MindMapComponent instance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

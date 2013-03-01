@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.components;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,28 +20,40 @@ import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
 
-public class ImageUploadEditWidget extends FormPanel implements TWICEModule<ImageUploadEditWidget>{
+/**
+ * A component that allows to upload files (e.g. images) to the server and making them available as notes.
+ * 
+ * Notice: This is a very simple module that doesn't make use of a lot of resources. Therefore, the component implements the interface {@link TWICEModule} by
+ * itself. Nevertheless, for more complex modules, this is not a recommended way of implementation since the benefits of lazy loading are evicted.
+ * 
+ * 
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+// TODO finish implementation (upload functionality)
+public class ImageUploadEditWidget extends FormPanel implements TWICEModule<ImageUploadEditWidget> {
 
-	private FlowPanel fp = new FlowPanel();
-	
-	private FileUpload fileUpload = new FileUpload();
-	
-	public ImageUploadEditWidget(){
+	private final FlowPanel fp = new FlowPanel();
+
+	private final FileUpload fileUpload = new FileUpload();
+
+	public ImageUploadEditWidget() {
 		super();
 		setWidget(fp);
 		fp.add(fileUpload);
 	}
-	
+
 	@Override
 	public void start(ImageUploadEditWidget instance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void stop(ImageUploadEditWidget instance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

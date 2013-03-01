@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.utils.experiment.workflow.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,33 +17,65 @@ package ch.unifr.pai.twice.utils.experiment.workflow.client;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class Task<W extends Widget> extends SimpleLayoutPanel implements HasLog, HasStartAndStop{	
+/**
+ * A task that can be registered in the {@link ExperimentWorkflow} for execution.
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <W>
+ */
+public abstract class Task<W extends Widget> extends SimpleLayoutPanel implements HasLog, HasStartAndStop {
 	Long timeout;
 	boolean nextButton;
-	
-	public Task(W rootWidget){
+
+	/**
+	 * @param rootWidget
+	 *            - the widget that contains the visualization of the task and that shall be attached to the application
+	 */
+	public Task(W rootWidget) {
 		setWidget(rootWidget);
 	}
-	
-	public W getRootWidget(){
-		return (W)getWidget();
+
+	/**
+	 * @return the root widget (wrapping all elements of the task)
+	 */
+	public W getRootWidget() {
+		return (W) getWidget();
 	}
-	
-	public boolean hasNextButton(){
+
+	/**
+	 * @return true if this task has a next button available for the user to skip the execution
+	 */
+	public boolean hasNextButton() {
 		return nextButton;
 	}
-	
-	public Task<W> addNextButton(){
+
+	/**
+	 * sets the property "nextButton" to true
+	 * 
+	 * @return this task
+	 */
+	public Task<W> addNextButton() {
 		nextButton = true;
 		return this;
 	}
-	
-	public Task<W> setTimeout(long timeout){
+
+	/**
+	 * Sets a timeout for the task after which it shall automatically be stopped.
+	 * 
+	 * @param timeout
+	 *            in ms
+	 * @return this task
+	 */
+	public Task<W> setTimeout(long timeout) {
 		this.timeout = timeout;
 		return this;
 	}
-	
-	public Long getTimeout(){
+
+	/**
+	 * @return the defined timeout if it is defined, otherwise null
+	 */
+	public Long getTimeout() {
 		return timeout;
 	}
 

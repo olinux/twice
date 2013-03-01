@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,78 +26,88 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 
+/**
+ * The main logic of the controller, setting up the application
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MindMapController extends Composite {
 
 	private static String mindmapId;
 
+	/**
+	 * @return a unique id for the current mindmap
+	 */
 	public static String getMindmapId() {
 		return mindmapId;
 	}
 
 	private MindMapComponent c;
 
+	/**
+	 * Clears the layout, registers the widgets and presents them (initial load mechanism)
+	 */
 	public void load() {
 		DynamicLayout.get().clear();
 		registerWidgets();
 		DynamicLayout.get().show();
 	}
 
+	/**
+	 * Registers the different components which shall be added depending on the device type. Please notice, that the distinction between the device types only
+	 * defines if a component shall be added to the application or not. The actual distinction between the different implementations of the components is
+	 * provided through deferred binding.
+	 */
 	protected void registerWidgets() {
 		if (DeviceType.getDeviceType() == DeviceType.MULTICURSOR) {
-			DynamicLayout.get().addComponent("QR", GWT.create(QRUrl.class),
-					new AsyncCallback<QRUrl>() {
+			DynamicLayout.get().addComponent("QR", GWT.create(QRUrl.class), new AsyncCallback<QRUrl>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-						}
+				@Override
+				public void onFailure(Throwable caught) {
+				}
 
-						@Override
-						public void onSuccess(QRUrl result) {
-						}
-					});
+				@Override
+				public void onSuccess(QRUrl result) {
+				}
+			});
 		}
 		if (DeviceType.getDeviceType() != DeviceType.MULTICURSOR) {
-			
-			DynamicLayout.get().addComponent("TouchPad",
-					GWT.create(TouchPadModule.class),
-					new AsyncCallback<TouchPadWidget>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-						}
+			DynamicLayout.get().addComponent("TouchPad", GWT.create(TouchPadModule.class), new AsyncCallback<TouchPadWidget>() {
 
-						@Override
-						public void onSuccess(TouchPadWidget result) {
-						}
-					});
-			DynamicLayout.get().addComponent("Edit",
-					GWT.create(MindmapCreateEditWidget.class),
-					new AsyncCallback<MindmapCreateEditWidget>() {
+				@Override
+				public void onFailure(Throwable caught) {
+				}
 
-						@Override
-						public void onFailure(Throwable caught) {
-						}
+				@Override
+				public void onSuccess(TouchPadWidget result) {
+				}
+			});
+			DynamicLayout.get().addComponent("Edit", GWT.create(MindmapCreateEditWidget.class), new AsyncCallback<MindmapCreateEditWidget>() {
 
-						@Override
-						public void onSuccess(MindmapCreateEditWidget result) {
-						}
-					});
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+
+				@Override
+				public void onSuccess(MindmapCreateEditWidget result) {
+				}
+			});
 		}
 		if (DeviceType.getDeviceType() == DeviceType.MULTICURSOR) {
-			DynamicLayout.get().addComponent("Mindmap",
-					GWT.create(MindMapModule.class),
-					new AsyncCallback<MindMapComponent>() {
+			DynamicLayout.get().addComponent("Mindmap", GWT.create(MindMapModule.class), new AsyncCallback<MindMapComponent>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-						}
+				@Override
+				public void onFailure(Throwable caught) {
+				}
 
-						@Override
-						public void onSuccess(MindMapComponent result) {
-							c = result;
-							c.initialize(mindmapId);
-						}
-					});
+				@Override
+				public void onSuccess(MindMapComponent result) {
+					c = result;
+					c.initialize(mindmapId);
+				}
+			});
 		}
 	}
 }

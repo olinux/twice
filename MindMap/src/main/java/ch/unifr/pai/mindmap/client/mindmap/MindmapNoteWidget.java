@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,12 +32,28 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
 
+/**
+ * The widget representing an actual note instance in the {@link MindMapCanvas} visualization
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MindmapNoteWidget extends FocusPanel implements Draggable {
 
+	/**
+	 * The event that has lead to the creation of the note
+	 */
 	private final CreateMindmapNoteEvent note;
+
 	private final HTML view = new HTML();
+	/**
+	 * Current disclosure state
+	 */
 	private boolean disclosed = true;
 
+	/**
+	 * A timeout in ms after which a note shall be unblocked even if no such event arises (e.g. if the blocking instance does not respond anymore)
+	 */
 	public static final int BLOCKTIMEOUT = 2000;
 	private final Timer blockTimeout = new Timer() {
 
@@ -68,8 +85,7 @@ public class MindmapNoteWidget extends FocusPanel implements Draggable {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (MultiCursorController.isDefaultCursor(event
-						.getNativeEvent())) {
+				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					toggleDisclosure(!disclosed);
 				}
 			}
@@ -77,6 +93,9 @@ public class MindmapNoteWidget extends FocusPanel implements Draggable {
 		render();
 	}
 
+	/**
+	 * The actual rendering of the HTML representation of the note widget. This method resets the previous rendering when called repeatedly.
+	 */
 	private void render() {
 
 		if (disclosed) {
@@ -84,16 +103,13 @@ public class MindmapNoteWidget extends FocusPanel implements Draggable {
 			sb.append("<span class=\"noteUserName\">");
 			sb.append(SafeHtmlUtils.htmlEscape(note.getUserName()));
 			sb.append("</span><span class=\"noteContent\" style=\"visibility:hidden;\">");
-			sb.append(SafeHtmlUtils.htmlEscape(note.content).replaceAll("\n",
-					"<br/>"));
+			sb.append(SafeHtmlUtils.htmlEscape(note.content).replaceAll("\n", "<br/>"));
 			sb.append("</span>");
 			view.setHTML(sb.toString());
-		} else {
-			view.setHTML("<span class=\"noteUserName\">"
-					+ SafeHtmlUtils.htmlEscape(note.getUserName())
-					+ "</span><span class=\"noteContent\">"
-					+ SafeHtmlUtils.htmlEscape(note.content).replaceAll("\n",
-							"<br/>") + "</span>");
+		}
+		else {
+			view.setHTML("<span class=\"noteUserName\">" + SafeHtmlUtils.htmlEscape(note.getUserName()) + "</span><span class=\"noteContent\">"
+					+ SafeHtmlUtils.htmlEscape(note.content).replaceAll("\n", "<br/>") + "</span>");
 		}
 		if (note.blocked != null && note.blocked)
 			this.addStyleName("remotelyBlocked");
@@ -105,6 +121,12 @@ public class MindmapNoteWidget extends FocusPanel implements Draggable {
 			getElement().getStyle().setTop(note.y, Unit.PX);
 	}
 
+	/**
+	 * Handles the update of the note
+	 * 
+	 * @param n
+	 *            - the update event
+	 */
 	public void update(UpdateMindmapNoteEvent n) {
 		if (n.blocked != null)
 			note.blocked = n.blocked;
@@ -126,18 +148,33 @@ public class MindmapNoteWidget extends FocusPanel implements Draggable {
 		render();
 	}
 
+	/**
+	 * Defines that the note is not draggable while it is blocked.
+	 * 
+	 * @see ch.unifr.pai.twice.dragndrop.client.intf.Draggable#isDraggable()
+	 */
 	@Override
 	public boolean isDraggable() {
 		return note.blocked == null || !note.blocked;
 	}
 
+	/**
+	 * Toggles the visibility of the note's content
+	 * 
+	 * @param disclose
+	 */
 	public void toggleDisclosure(boolean disclose) {
 		this.disclosed = disclose;
 		render();
 	}
 
+	/**
+	 * Resets the font-size of the note to the given amount of pixels
+	 * 
+	 * @param px
+	 */
 	public void setFontSize(int px) {
-		view.getElement().getStyle().setFontSize((double) px, Unit.PX);
+		view.getElement().getStyle().setFontSize(px, Unit.PX);
 	}
 
 }

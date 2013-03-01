@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,51 +33,69 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * The toolbar displayed on the shared screen at the bottom that allows the native cursor of the shared screen device to enable/disable functionalities and
+ * gives it some extra power
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class Toolbar extends VerticalPanel {
 
-	private FlowPanel masterToolbox = new FlowPanel();
+	private final FlowPanel masterToolbox = new FlowPanel();
 	MultiCursorController controller = GWT.create(MultiCursorController.class);
-	private ListBox lb = new ListBox();
+	private final ListBox lb = new ListBox();
+	/**
+	 * A textbox for the definition of the maximum number of mouse pointers on the screen
+	 */
 	TextBox maxCursorsOnScreen = new TextBox();
-	final ToggleButton discloseNotes = new ToggleButton(new Image(
-			GWT.getModuleBaseURL() + "images/notesvisible.png"), new Image(
-			GWT.getModuleBaseURL() + "images/noteshidden.png")){
-				@Override
-				public void onBrowserEvent(Event event) {
-					if (MultiCursorController.isDefaultCursor(event)) {
-						super.onBrowserEvent(event);						
-					}
-				}		
-	};
-	final ToggleButton enableTextInput = new ToggleButton(new Image(
-			GWT.getModuleBaseURL() + "images/texteditenabled.png"), new Image(
-			GWT.getModuleBaseURL() + "images/texteditdisabled.png")){
+	/**
+	 * button to toggle the visibility of the content of the notes
+	 */
+	final ToggleButton discloseNotes = new ToggleButton(new Image(GWT.getModuleBaseURL() + "images/notesvisible.png"), new Image(GWT.getModuleBaseURL()
+			+ "images/noteshidden.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
 			if (MultiCursorController.isDefaultCursor(event)) {
-				super.onBrowserEvent(event);						
+				super.onBrowserEvent(event);
 			}
-		}		
+		}
 	};
-	final ToggleButton enableMultiCursor = new ToggleButton(new Image(GWT.getModuleBaseURL()+"images/cursorenabled.png"), new Image(GWT.getModuleBaseURL()+"images/cursordisabled.png")){
+	/**
+	 * button to enable / disable the text input functionality from remote devices
+	 */
+	final ToggleButton enableTextInput = new ToggleButton(new Image(GWT.getModuleBaseURL() + "images/texteditenabled.png"), new Image(GWT.getModuleBaseURL()
+			+ "images/texteditdisabled.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
 			if (MultiCursorController.isDefaultCursor(event)) {
-				super.onBrowserEvent(event);						
+				super.onBrowserEvent(event);
 			}
-		}		
+		}
+	};
+	final ToggleButton enableMultiCursor = new ToggleButton(new Image(GWT.getModuleBaseURL() + "images/cursorenabled.png"), new Image(GWT.getModuleBaseURL()
+			+ "images/cursordisabled.png")) {
+		@Override
+		public void onBrowserEvent(Event event) {
+			if (MultiCursorController.isDefaultCursor(event)) {
+				super.onBrowserEvent(event);
+			}
+		}
 	};
 	final TextSize textSize;
-	
 
+	/**
+	 * @param the
+	 *            assigned canvas
+	 */
 	public Toolbar(final MindMapCanvas canvas) {
-		textSize =  new TextSize(new AsyncCallback<Integer>() {
-			
+		textSize = new TextSize(new AsyncCallback<Integer>() {
+
 			@Override
 			public void onSuccess(Integer result) {
 				canvas.setFontSizeOfNotes(result);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 			}
@@ -90,26 +109,27 @@ public class Toolbar extends VerticalPanel {
 
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
-				if(event.getValue()!=null){
+				if (event.getValue() != null) {
 					try {
 						controller.setMaxCursorsOnScreen(Integer.parseInt(event.getValue().trim()));
-					} catch (NumberFormatException e) {
+					}
+					catch (NumberFormatException e) {
 						maxCursorsOnScreen.setText(String.valueOf(controller.getMaxCursorsOnScreen()));
 					}
 				}
-				else{
+				else {
 					maxCursorsOnScreen.setText(String.valueOf(controller.getMaxCursorsOnScreen()));
 				}
-				
+
 			}
-			
+
 		});
 		maxCursorsOnScreen.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
-					event.preventDefault();					
+					event.preventDefault();
 				}
 			}
 		});
@@ -136,33 +156,32 @@ public class Toolbar extends VerticalPanel {
 			}
 		});
 
-
-//		lb.addItem("10px", "10");
-//		lb.addItem("12px", "12");
-//		lb.addItem("14px", "14");
-//		lb.addItem("16px", "16");
-//		lb.addItem("18px", "18");
-//		lb.addItem("20px", "20");
-//		lb.addItem("22px", "22");
-//		lb.setItemSelected(2, true);
-//		lb.addMouseDownHandler(new MouseDownHandler() {
-//
-//			@Override
-//			public void onMouseDown(MouseDownEvent event) {
-//				if (!MultiCursorController.isDefaultCursor(event
-//						.getNativeEvent())) {
-//					event.preventDefault();
-//				}
-//			}
-//		});
-//		lb.addChangeHandler(new ChangeHandler() {
-//
-//			@Override
-//			public void onChange(ChangeEvent event) {
-//				canvas.setFontSizeOfNotes(Integer.parseInt(lb.getValue(lb
-//						.getSelectedIndex())));
-//			}
-//		});
+		// lb.addItem("10px", "10");
+		// lb.addItem("12px", "12");
+		// lb.addItem("14px", "14");
+		// lb.addItem("16px", "16");
+		// lb.addItem("18px", "18");
+		// lb.addItem("20px", "20");
+		// lb.addItem("22px", "22");
+		// lb.setItemSelected(2, true);
+		// lb.addMouseDownHandler(new MouseDownHandler() {
+		//
+		// @Override
+		// public void onMouseDown(MouseDownEvent event) {
+		// if (!MultiCursorController.isDefaultCursor(event
+		// .getNativeEvent())) {
+		// event.preventDefault();
+		// }
+		// }
+		// });
+		// lb.addChangeHandler(new ChangeHandler() {
+		//
+		// @Override
+		// public void onChange(ChangeEvent event) {
+		// canvas.setFontSizeOfNotes(Integer.parseInt(lb.getValue(lb
+		// .getSelectedIndex())));
+		// }
+		// });
 
 		final BackgroundImgRepo repo = new BackgroundImgRepo(canvas.getBGImage());
 		repo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -175,14 +194,14 @@ public class Toolbar extends VerticalPanel {
 		repo.addButton(enableMultiCursor);
 		repo.addButton(discloseNotes);
 		add(masterToolbox);
-//		masterToolbox.add(discloseNotes);
-//		masterToolbox.add(textSize.getDecreaseButton());
-//		masterToolbox.add(textSize.getIncreaseButton());
-//		masterToolbox.add(enableTextInput);
-//		masterToolbox.add(enableMultiCursor);
+		// masterToolbox.add(discloseNotes);
+		// masterToolbox.add(textSize.getDecreaseButton());
+		// masterToolbox.add(textSize.getIncreaseButton());
+		// masterToolbox.add(enableTextInput);
+		// masterToolbox.add(enableMultiCursor);
 
 		discloseNotes.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-			
+
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				canvas.toggleDisclosureOfNotes(event.getValue());
@@ -196,14 +215,23 @@ public class Toolbar extends VerticalPanel {
 
 	}
 
+	/**
+	 * @return true if the notes are disclosed false otherwise (also used for newly created notes to define their initial state)
+	 */
 	public boolean isDiscloseNotes() {
 		return discloseNotes.getValue();
 	}
 
+	/**
+	 * @return the current font size of the notes
+	 */
 	public int getFontSize() {
 		return textSize.getTextSize();
 	}
 
+	/**
+	 * @return true if remote users can create new notes / enter text, false otherwise.
+	 */
 	public boolean isTextInputEnabled() {
 		return !enableTextInput.getValue();
 	}

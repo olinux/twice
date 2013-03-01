@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,31 +34,44 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * A visualization of the {@link MindMapComponent} on a canvas by arranging the different notes according to their coordinates
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MindMapCanvas extends MindMapComponent {
-	private FocusPanel canvas = new FocusPanel();
-	private AbsolutePanel panel = new AbsolutePanel();
+	private final FocusPanel canvas = new FocusPanel();
+	private final AbsolutePanel panel = new AbsolutePanel();
 	private Toolbar toolbar;
-	
-	private Image trashBin = new Image(GWT.getModuleBaseURL()+"images/trashbin.png");
 
-	private Image bgimg = new Image();
+	/**
+	 * The trash bin, the notes can be dragged at to remove the note
+	 */
+	private final Image trashBin = new Image(GWT.getModuleBaseURL() + "images/trashbin.png");
 
+	private final Image bgimg = new Image();
+
+	/**
+	 * @return the background image for the canvas
+	 */
 	public Image getBGImage() {
 		return bgimg;
 	}
 
-	//
+	/**
+	 * The set up for the canvas with its base structure and the registration of the drop handler for the trash bin
+	 */
 	public MindMapCanvas() {
 		super();
 		initWidget(panel);
-		toolbar =  new Toolbar(this);
+		toolbar = new Toolbar(this);
 		bgimg.getElement().getStyle().setProperty("maxHeight", "100%");
 		bgimg.getElement().getStyle().setProperty("maxWidth", "100%");
 		SimplePanel bgpanel = new SimplePanel();
@@ -84,30 +98,27 @@ public class MindMapCanvas extends MindMapComponent {
 		panel.add(toolbar);
 		panel.add(trashBin);
 		DragNDrop.setDropHandler(trashBin, new DropTargetHandler() {
-			
+
 			@Override
-			public void onHoverEnd(String deviceId, Widget widget, Element dragProxy,
-					Event event) {
-				trashBin.setUrl(GWT.getModuleBaseURL()+"images/trashbin.png");
+			public void onHoverEnd(String deviceId, Widget widget, Element dragProxy, Event event) {
+				trashBin.setUrl(GWT.getModuleBaseURL() + "images/trashbin.png");
 			}
-			
+
 			@Override
-			public void onHover(String deviceId, Widget widget, Element dragProxy,
-					Event event, Double intersectionPercentage,
+			public void onHover(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage,
 					Double intersectionPercentageWithTarget) {
-				trashBin.setUrl(GWT.getModuleBaseURL()+"images/trashbinhover.png");
-				
+				trashBin.setUrl(GWT.getModuleBaseURL() + "images/trashbinhover.png");
+
 			}
-			
+
 			@Override
-			public boolean onDrop(String deviceId, Widget widget, Element dragProxy,
-					Event event, Double intersectionPercentage,
+			public boolean onDrop(String deviceId, Widget widget, Element dragProxy, Event event, Double intersectionPercentage,
 					Double intersectionPercentageWithTarget) {
 				removeNoteWidget(widget);
 				widget.removeFromParent();
 				return false;
 			}
-			
+
 			@Override
 			public Priority getPriority() {
 				return Priority.NORMAL;
@@ -121,36 +132,62 @@ public class MindMapCanvas extends MindMapComponent {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				String deviceId = MultiCursorController.getUUID(event
-						.getNativeEvent());
+				String deviceId = MultiCursorController.getUUID(event.getNativeEvent());
 				String selected = selectedElements.get(deviceId);
 				if (selectedElements.get(deviceId) != null) {
-					eventBus.fireEvent(UpdateMindmapNoteEvent.block(selected,
-							false));
+					eventBus.fireEvent(UpdateMindmapNoteEvent.block(selected, false));
 				}
 			}
 		});
 	}
 
+	/**
+	 * Attach the note widget to the canvas panel
+	 * 
+	 * @param w
+	 */
 	public void addWidgetToCanvas(Widget w) {
 		panel.add(w);
 	}
 
+	/**
+	 * Get the left position of a dragged widget relative to the canvas
+	 * 
+	 * @param draggedWidget
+	 * @param proxyLeft
+	 * @return
+	 */
 	protected int getLeft(Widget draggedWidget, int proxyLeft) {
-		return proxyLeft
-				- draggedWidget.getElement().getOffsetParent()
-						.getAbsoluteLeft();
+		return proxyLeft - draggedWidget.getElement().getOffsetParent().getAbsoluteLeft();
 	}
 
+	/**
+	 * Get the left position of a dragged widget relative to the canvas
+	 * 
+	 * @param draggedWidget
+	 * @param proxyTop
+	 * @return
+	 */
 	protected int getTop(Widget draggedWidget, int proxyTop) {
-		return proxyTop
-				- draggedWidget.getElement().getOffsetParent().getAbsoluteTop();
+		return proxyTop - draggedWidget.getElement().getOffsetParent().getAbsoluteTop();
 	}
 
-	private List<String> noteStack = new ArrayList<String>();
+	/**
+	 * A list holding the user names of those users that have added notes already
+	 */
+	private final List<String> noteStack = new ArrayList<String>();
 
-	private List<Integer> offset = new ArrayList<Integer>();
+	/**
+	 * The vertical offset for the stack of a specific user (mapped through the index between this list and {@link MindMapCanvas#noteStack}
+	 */
+	private final List<Integer> offset = new ArrayList<Integer>();
 
+	/**
+	 * Adds the note to the canvas. makes it draggable and registers it in the component. If the event does not provide initial coordinates, this method
+	 * arranges them in a grid while stacking notes originated by the same users.
+	 * 
+	 * @see ch.unifr.pai.mindmap.client.mindmap.MindMapComponent#addMindmapNote(ch.unifr.pai.mindmap.client.rpc.CreateMindmapNoteEvent)
+	 */
 	@Override
 	protected void addMindmapNote(CreateMindmapNoteEvent event) {
 		if (toolbar.isTextInputEnabled()) {
@@ -163,50 +200,40 @@ public class MindMapCanvas extends MindMapComponent {
 			Integer o = offset.get(index);
 			o++;
 			offset.set(index, o);
-			int numberOfElementsPerRow = canvas.getOffsetWidth()/170;	
-			int row = index/numberOfElementsPerRow;
-			int col = index - (row*numberOfElementsPerRow);
+			int numberOfElementsPerRow = canvas.getOffsetWidth() / 170;
+			int row = index / numberOfElementsPerRow;
+			int col = index - (row * numberOfElementsPerRow);
 			if (event.x == null) {
-				event.x = col * 170 + (o * 2);				
+				event.x = col * 170 + (o * 2);
 				// event.x = (int) ((canvas.getOffsetWidth() - 100) *
 				// Math.random());
 			}
 			if (event.y == null) {
-				event.y = row * 200 + (int) ((o * 4));
+				event.y = row * 200 + ((o * 4));
 			}
 			final MindmapNoteWidget note = new MindmapNoteWidget(event);
 			note.toggleDisclosure(toolbar.isDiscloseNotes());
 			note.setFontSize(toolbar.getFontSize());
 			addWidgetToCanvas(note);
-			DragNDrop.makeDraggable(note,
-					DragConfiguration.withProxy(new DragNDropHandler() {
-						@Override
-						public boolean onDrop(String deviceId,
-								Widget draggedWidget, int proxyLeft,
-								int proxyTop, Event event,
-								DropTargetHandler dropTarget, boolean outOfBox) {
-							eventBus.fireEvent(UpdateMindmapNoteEvent.move(
-									draggedWidget.getElement().getId(),
-									getLeft(draggedWidget, proxyLeft),
-									getTop(draggedWidget, proxyTop)));
-							eventBus.fireEvent(UpdateMindmapNoteEvent.block(
-									draggedWidget.getElement().getId(), false));
-							return true;
-						}
+			DragNDrop.makeDraggable(note, DragConfiguration.withProxy(new DragNDropHandler() {
+				@Override
+				public boolean onDrop(String deviceId, Widget draggedWidget, int proxyLeft, int proxyTop, Event event, DropTargetHandler dropTarget,
+						boolean outOfBox) {
+					eventBus.fireEvent(UpdateMindmapNoteEvent.move(draggedWidget.getElement().getId(), getLeft(draggedWidget, proxyLeft),
+							getTop(draggedWidget, proxyTop)));
+					eventBus.fireEvent(UpdateMindmapNoteEvent.block(draggedWidget.getElement().getId(), false));
+					return true;
+				}
 
-						@Override
-						public void onEndOfDrop(String deviceId,
-								Widget draggedWidget, int proxyLeft,
-								int proxyTop, Event event) {
-						}
+				@Override
+				public void onEndOfDrop(String deviceId, Widget draggedWidget, int proxyLeft, int proxyTop, Event event) {
+				}
 
-						@Override
-						public void onStartDrag(String deviceId,
-								Widget draggedWidget) {
-							eventBus.fireEvent(UpdateMindmapNoteEvent.block(
-									draggedWidget.getElement().getId(), true));
-						}
-					}, canvas));
+				@Override
+				public void onStartDrag(String deviceId, Widget draggedWidget) {
+					eventBus.fireEvent(UpdateMindmapNoteEvent.block(draggedWidget.getElement().getId(), true));
+				}
+			}, canvas));
 			// note.addClickHandler(new ClickHandler() {
 			//
 			// @Override

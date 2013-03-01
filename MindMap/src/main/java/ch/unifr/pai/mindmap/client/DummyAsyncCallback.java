@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +17,23 @@ package ch.unifr.pai.mindmap.client;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+/**
+ * An asynchronous callback which does nothing when it is successful but displays an alert if there was a failure.
+ * 
+ * @author Oliver Schmid
+ * 
+ * @param <T>
+ */
 public class DummyAsyncCallback<T> implements AsyncCallback<T> {
 
 	@Override
 	public void onFailure(Throwable caught) {
-		Window.alert("Failure: "+caught.getMessage());
+		Window.alert("Failure: " + caught.getMessage());
 	}
 
 	@Override
 	public void onSuccess(T result) {
-		
+
 	}
 
 }

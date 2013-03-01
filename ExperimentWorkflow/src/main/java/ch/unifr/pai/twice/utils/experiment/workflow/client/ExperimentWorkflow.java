@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.utils.experiment.workflow.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,22 +24,33 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.Frame;
-import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ExperimentWorkflow extends DockLayoutPanel implements
-		HasStartAndStop {
-	
-	private static final int ENABLENEXTBUTTONINMS=2000;
-	
-	private Button nextButton = new Button("Next", new ClickHandler() {
-		
+/**
+ * An experiment workflow executing specific tasks / components sequentially.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class ExperimentWorkflow extends DockLayoutPanel implements HasStartAndStop {
+
+	private static final int ENABLENEXTBUTTONINMS = 2000;
+
+	/**
+	 * The next button to continue to the next task
+	 */
+	private final Button nextButton = new Button("Next", new ClickHandler() {
+
 		@Override
 		public void onClick(ClickEvent event) {
 			switchToNextTask();
 		}
 	});
 
+	/**
+	 * @param loopExecution
+	 *            if the task execution shall be started over again if all tasks have been executed.
+	 */
 	public ExperimentWorkflow(boolean loopExecution) {
 		super(Unit.PX);
 		addSouth(nextButton, 20);
@@ -49,34 +61,43 @@ public class ExperimentWorkflow extends DockLayoutPanel implements
 		this.loopExecution = loopExecution;
 	}
 
-	private boolean loopExecution;
-	private Frame frame = new Frame();
-	private List<Task<?>> experiments = new ArrayList<Task<?>>();
+	private final boolean loopExecution;
+	private final Frame frame = new Frame();
+	private final List<Task<?>> experiments = new ArrayList<Task<?>>();
 	private int currentTaskIndex = -1;
 	private Task<?> currentTask;
 	private Timer taskTimer;
 
+	/**
+	 * Register a task
+	 * 
+	 * @param task
+	 */
 	public void addTask(Task<?> task) {
 		experiments.add(task);
 	}
 
+	/**
+	 * stops the current task, disables the "next" button (to prevent users skipping the current tasks) for a short moment and show the next task if available.
+	 * Also start the timer if the task has a specified timeout that interrupts the execution
+	 */
 	private void switchToNextTask() {
 		int nextTaskIndex;
 		if (taskTimer != null) {
 			taskTimer.cancel();
 			taskTimer = null;
 		}
-		if(currentTaskIndex>=experiments.size()-1){
-			if(loopExecution){
+		if (currentTaskIndex >= experiments.size() - 1) {
+			if (loopExecution) {
 				nextTaskIndex = 0;
 			}
-			else{
+			else {
 				stop();
 				return;
-			}			
+			}
 		}
-		else{
-			nextTaskIndex = currentTaskIndex+1;
+		else {
+			nextTaskIndex = currentTaskIndex + 1;
 		}
 		Task<?> newTask = experiments.get(nextTaskIndex);
 		if (currentTask instanceof HasStartAndStop)
@@ -87,21 +108,21 @@ public class ExperimentWorkflow extends DockLayoutPanel implements
 		if (newTask != null) {
 			currentTask = newTask;
 			if (newTask instanceof Widget) {
-//				taskContainerPanel.setWidget(((Widget) newTask));
+				// taskContainerPanel.setWidget(((Widget) newTask));
 			}
 		}
-		if(newTask.hasNextButton()){
+		if (newTask.hasNextButton()) {
 			nextButton.setVisible(true);
 			nextButton.setEnabled(false);
-			Timer t = new Timer(){
+			Timer t = new Timer() {
 				@Override
 				public void run() {
 					nextButton.setEnabled(true);
-				}				
+				}
 			};
 			t.schedule(ENABLENEXTBUTTONINMS);
 		}
-		else{
+		else {
 			nextButton.setVisible(false);
 		}
 		//
@@ -123,11 +144,19 @@ public class ExperimentWorkflow extends DockLayoutPanel implements
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.utils.experiment.workflow.client.HasStartAndStop#start()
+	 */
 	@Override
 	public void start() {
 		switchToNextTask();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.twice.utils.experiment.workflow.client.HasStartAndStop#stop()
+	 */
 	@Override
 	public void stop() {
 		currentTaskIndex = -1;

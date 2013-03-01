@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.interaction.longclick;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,16 +30,21 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Mouse gesture handler for separating long clicks from standard clicks.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public abstract class LongClick {
-	private Map<String, LongClickInfo> infoByDeviceId = new HashMap<String, LongClickInfo>();
+	private final Map<String, LongClickInfo> infoByDeviceId = new HashMap<String, LongClickInfo>();
 	private HasMouseDownHandlers originator;
 
 	public LongClick(HasMouseDownHandlers originator) {
 		this(originator, 500);
 	}
 
-	public LongClick(HasMouseDownHandlers originator,
-			final int longClickThreshold) {
+	public LongClick(HasMouseDownHandlers originator, final int longClickThreshold) {
 		if (originator != null) {
 			this.originator = originator;
 
@@ -46,45 +52,40 @@ public abstract class LongClick {
 				@Override
 				public void onMouseDown(MouseDownEvent event) {
 					String deviceId = MultiCursorController.getUUID(event.getNativeEvent());
-					if (Element.as(event.getNativeEvent().getEventTarget()) == ((Widget) LongClick.this.originator)
-							.getElement()) {
-						LongClickInfo info =new LongClickInfo(
-								LongClick.this.originator, deviceId, event
-								.getClientX(), event.getClientY());
-						infoByDeviceId.put(
-								MultiCursorController.getUUID(event.getNativeEvent()), info);
+					if (Element.as(event.getNativeEvent().getEventTarget()) == ((Widget) LongClick.this.originator).getElement()) {
+						LongClickInfo info = new LongClickInfo(LongClick.this.originator, deviceId, event.getClientX(), event.getClientY());
+						infoByDeviceId.put(MultiCursorController.getUUID(event.getNativeEvent()), info);
 						onStartClick(info);
 					}
 				}
 			});
 
-			((HasMouseUpHandlers) originator)
-					.addMouseUpHandler(new MouseUpHandler() {
+			((HasMouseUpHandlers) originator).addMouseUpHandler(new MouseUpHandler() {
 
-						@Override
-						public void onMouseUp(MouseUpEvent event) {
-							LongClickInfo info = infoByDeviceId.get(MultiCursorController.getUUID(event.getNativeEvent()));
-							if(info!=null){
-								if(new Date().getTime()-info.getTime()>longClickThreshold && info.getMouseDownX()==event.getClientX() && info.getMouseDownY()==event.getClientY()){
-									onLongClick(info);
-									event.preventDefault();
-									event.stopPropagation();
-								}
-							}
+				@Override
+				public void onMouseUp(MouseUpEvent event) {
+					LongClickInfo info = infoByDeviceId.get(MultiCursorController.getUUID(event.getNativeEvent()));
+					if (info != null) {
+						if (new Date().getTime() - info.getTime() > longClickThreshold && info.getMouseDownX() == event.getClientX()
+								&& info.getMouseDownY() == event.getClientY()) {
+							onLongClick(info);
+							event.preventDefault();
+							event.stopPropagation();
 						}
-					});
+					}
+				}
+			});
 		}
 	}
 
 	protected class LongClickInfo {
 		private final HasMouseDownHandlers originator;
-		private String deviceId;
+		private final String deviceId;
 		private int mouseDownX = 0;
 		private int mouseDownY = 0;
-		private long time = new Date().getTime();
+		private final long time = new Date().getTime();
 
-		public LongClickInfo(HasMouseDownHandlers originator, String deviceId,
-				int mouseDownX, int mouseDownY) {
+		public LongClickInfo(HasMouseDownHandlers originator, String deviceId, int mouseDownX, int mouseDownY) {
 			super();
 			this.originator = originator;
 			this.deviceId = deviceId;
@@ -124,5 +125,6 @@ public abstract class LongClick {
 
 	protected abstract void onLongClick(LongClickInfo info);
 
-	protected void onStartClick(LongClickInfo info){};
+	protected void onStartClick(LongClickInfo info) {
+	};
 }

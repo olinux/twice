@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,47 +25,63 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 
-public class TextSize{
+/**
+ * A helper class that provides the widgets which allow to manipulate the overall font size.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class TextSize {
 
 	private int pixels = 14;
-	
-	private PushButton increase = new PushButton(new Image(GWT.getModuleBaseURL()+"images/textincrease.png")){
+
+	/**
+	 * A button to increase the font size that reacts only if it is pushed by the default (native) mouse pointer
+	 */
+	private final PushButton increase = new PushButton(new Image(GWT.getModuleBaseURL() + "images/textincrease.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
 			if (MultiCursorController.isDefaultCursor(event)) {
-				super.onBrowserEvent(event);						
+				super.onBrowserEvent(event);
 			}
-		}	
+		}
 	};
-	private PushButton decrease = new PushButton(new Image(GWT.getModuleBaseURL()+"images/textdecrease.png")){
+	/**
+	 * A button to decrease the font size that reacts only if it is pushed by the default (native) mouse pointer
+	 */
+	private final PushButton decrease = new PushButton(new Image(GWT.getModuleBaseURL() + "images/textdecrease.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
 			if (MultiCursorController.isDefaultCursor(event)) {
-				super.onBrowserEvent(event);						
+				super.onBrowserEvent(event);
 			}
-		}	
+		}
 	};
-	
-	public TextSize(final AsyncCallback<Integer> listener){
-		increase.addClickHandler(new ClickHandler(){
+
+	/**
+	 * @param listener
+	 *            - a callback which is called if the text size has changed
+	 */
+	public TextSize(final AsyncCallback<Integer> listener) {
+		increase.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
-					pixels = Math.min(60, pixels+2);
+					pixels = Math.min(60, pixels + 2);
 					listener.onSuccess(pixels);
 				}
 			}
 		});
 		increase.setWidth("70px");
 		increase.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-		
-		decrease.addClickHandler(new ClickHandler(){
+
+		decrease.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
-					pixels = Math.max(2, pixels-2);
+					pixels = Math.max(2, pixels - 2);
 					listener.onSuccess(pixels);
 				}
 			}
@@ -72,16 +89,26 @@ public class TextSize{
 		decrease.setWidth("70px");
 		decrease.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 	}
-	
-	public int getTextSize(){
+
+	/**
+	 * @return the current text size
+	 */
+	public int getTextSize() {
 		return pixels;
 	}
-	
-	public PushButton getIncreaseButton(){
+
+	/**
+	 * @return the increase button
+	 */
+	public PushButton getIncreaseButton() {
 		return increase;
 	}
-	public PushButton getDecreaseButton(){
+
+	/**
+	 * @return the decrease button
+	 */
+	public PushButton getDecreaseButton() {
 		return decrease;
 	}
-	
+
 }

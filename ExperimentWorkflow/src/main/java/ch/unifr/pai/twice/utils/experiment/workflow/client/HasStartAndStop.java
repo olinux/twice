@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.utils.experiment.workflow.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,14 @@ package ch.unifr.pai.twice.utils.experiment.workflow.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Interface for the definition of the start and stop {@link Task}s.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public interface HasStartAndStop {
 	void start();
+
 	void stop();
 }

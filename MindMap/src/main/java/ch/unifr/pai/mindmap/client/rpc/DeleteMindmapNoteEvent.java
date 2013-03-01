@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.rpc;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +18,19 @@ import ch.unifr.pai.mindmap.client.rpc.DeleteMindmapNoteEvent.DeleteMindmapNoteH
 import ch.unifr.pai.twice.comm.serverPush.client.UndoableRemoteEvent;
 import ch.unifr.pai.twice.comm.serverPush.client.UndoableRemoteEventHandler;
 
-public abstract class DeleteMindmapNoteEvent extends UndoableRemoteEvent<DeleteMindmapNoteHandler>{
-	
+/**
+ * An application specific remote event which provides the information about a removed note within the mindmap session
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public abstract class DeleteMindmapNoteEvent extends UndoableRemoteEvent<DeleteMindmapNoteHandler> {
+
 	public static final Type<DeleteMindmapNoteHandler> TYPE = new Type<DeleteMindmapNoteHandler>();
 
-	public static interface DeleteMindmapNoteHandler extends UndoableRemoteEventHandler<DeleteMindmapNoteEvent>{
+	public static interface DeleteMindmapNoteHandler extends UndoableRemoteEventHandler<DeleteMindmapNoteEvent> {
 	}
-	
+
 	public String uuid;
-	
+
 }

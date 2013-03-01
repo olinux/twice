@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.rpc;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,20 +20,34 @@ import ch.unifr.pai.twice.comm.serverPush.client.UndoableRemoteEventHandler;
 
 import com.google.gwt.core.client.GWT;
 
-public abstract class CreateMindmapNoteEvent extends UndoableRemoteEvent<CreateMindmapNoteHandler>{
-	
+/**
+ * An application specific remote event which provides the information about a newly created note within the mindmap session
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public abstract class CreateMindmapNoteEvent extends UndoableRemoteEvent<CreateMindmapNoteHandler> {
+
 	public static final Type<CreateMindmapNoteHandler> TYPE = new Type<CreateMindmapNoteHandler>();
 
-	public static interface CreateMindmapNoteHandler extends UndoableRemoteEventHandler<CreateMindmapNoteEvent>{
+	public static interface CreateMindmapNoteHandler extends UndoableRemoteEventHandler<CreateMindmapNoteEvent> {
 	}
-	
+
 	public String uuid;
 	public String content;
 	public Integer x;
 	public Integer y;
 	public Boolean blocked;
-	
-	public static CreateMindmapNoteEvent create(String content, Integer x, Integer y){
+
+	/**
+	 * Factory method for convenient creation of a {@link CreateMindmapNoteEvent}
+	 * 
+	 * @param content
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public static CreateMindmapNoteEvent create(String content, Integer x, Integer y) {
 		CreateMindmapNoteEvent event = GWT.create(CreateMindmapNoteEvent.class);
 		event.uuid = ch.unifr.pai.twice.utils.device.client.UUID.createNew();
 		event.content = content;
@@ -42,5 +57,4 @@ public abstract class CreateMindmapNoteEvent extends UndoableRemoteEvent<CreateM
 		return event;
 	}
 
-	
 }

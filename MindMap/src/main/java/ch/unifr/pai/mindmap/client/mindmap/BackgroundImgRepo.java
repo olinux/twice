@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,22 +40,39 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * A widget which allows (by the means of HTML5 drag and drop functionalities) to drag images from external sources (e.g. a file browser) on top of this panel.
+ * On drop, it stores the image as a data-url and offers it as a thumbnail to be used for the background of the canvas
+ * 
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class BackgroundImgRepo extends AbsolutePanel {
 
-	private FocusPanel fp = new FocusPanel();
-	private FlowPanel hp = new FlowPanel();
+	private final FocusPanel fp = new FocusPanel();
+	private final FlowPanel hp = new FlowPanel();
 
-	private native JsArray<JavaScriptObject> getDataTransferFiles(
-			JavaScriptObject dataTransfer)/*-{											
-											return  dataTransfer.files;
-											}-*/;
+	/**
+	 * Read the data transfer files from the native transfer object
+	 * 
+	 * @param dataTransfer
+	 * @return
+	 */
+	private native JsArray<JavaScriptObject> getDataTransferFiles(JavaScriptObject dataTransfer)/*-{
+		return dataTransfer.files;
+	}-*/;
 
-	public native void addBackgroundImage(Element img,
-			JavaScriptObject file)
+	/**
+	 * Reads the provided file and fills the img element
+	 * 
+	 * @param img
+	 * @param file
+	 */
+	public native void addBackgroundImage(Element img, JavaScriptObject file)
 	/*-{
 		var readFileSize = 0;
 		readFileSize += file.fileSize;
@@ -73,13 +91,28 @@ public class BackgroundImgRepo extends AbsolutePanel {
 		//} 
 	}-*/;
 
+	/**
+	 * The background image object which is filled with the data-url if the background image changes
+	 */
 	private final Image bgImg;
+	/**
+	 * The preview image which is shown above the image-buttons if the native mouse hovers them
+	 */
 	private final Image previewImage = new Image();
 
+	/**
+	 * Add an image button to the panel with a background-image trigger button
+	 * 
+	 * @param w
+	 */
 	public void addButton(Widget w) {
 		hp.insert(w, 0);
 	}
 
+	/**
+	 * @param bgImg
+	 *            - the image object that shall be adapted accordingly to the chosen data-url
+	 */
 	public BackgroundImgRepo(Image bgImg) {
 		super();
 		add(fp);
@@ -102,12 +135,13 @@ public class BackgroundImgRepo extends AbsolutePanel {
 		previewImage.getElement().getStyle().setBorderColor("black");
 		previewImage.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
 		previewImage.getElement().getStyle().setDisplay(Display.NONE);
-		PushButton emptyBg = new PushButton(new Image(GWT.getModuleBaseURL()
-				+ "images/emptyscreen.png")){
+
+		// Add a button for cleaning the browser as well
+		PushButton emptyBg = new PushButton(new Image(GWT.getModuleBaseURL() + "images/emptyscreen.png")) {
 			@Override
 			public void onBrowserEvent(Event event) {
 				if (MultiCursorController.isDefaultCursor(event)) {
-					super.onBrowserEvent(event);						
+					super.onBrowserEvent(event);
 				}
 			}
 		};
@@ -117,8 +151,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (MultiCursorController.isDefaultCursor(event
-						.getNativeEvent())) {
+				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					BackgroundImgRepo.this.bgImg.setVisible(false);
 				}
 			}
@@ -126,83 +159,87 @@ public class BackgroundImgRepo extends AbsolutePanel {
 		hp.add(emptyBg);
 		fp.addDropHandler(new DropHandler() {
 
+			/**
+			 * Prevents the default behavior of the browser (otherwise, the browser would open the image in the current tab), reads the dragged files and adds
+			 * them as {@link PushButton} to the panel.
+			 * 
+			 * @see com.google.gwt.event.dom.client.DropHandler#onDrop(com.google.gwt.event.dom.client.DropEvent)
+			 */
+			/*
+			 * (non-Javadoc)
+			 * @see com.google.gwt.event.dom.client.DropHandler#onDrop(com.google.gwt.event.dom.client.DropEvent)
+			 */
 			@Override
 			public void onDrop(DropEvent event) {
 				event.stopPropagation();
 				event.preventDefault();
 				JsArray<JavaScriptObject> files = getDataTransferFiles(event.getDataTransfer());
-				for(int i=0; i<files.length(); i++){
+				for (int i = 0; i < files.length(); i++) {
 					final Image img = new Image();
-					PushButton button = new PushButton(img){
+					PushButton button = new PushButton(img) {
 						@Override
 						public void onBrowserEvent(Event event) {
 							if (MultiCursorController.isDefaultCursor(event)) {
-								super.onBrowserEvent(event);						
+								super.onBrowserEvent(event);
 							}
 						}
-						
+
 					};
 					button.setTitle("Set this image as background");
 					button.addClickHandler(new ClickHandler() {
 
+						/**
+						 * Set the image of the button as the current background image
+						 * 
+						 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
+						 */
 						@Override
 						public void onClick(ClickEvent event) {
-							if (MultiCursorController.isDefaultCursor(event
-									.getNativeEvent())) {
+							if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 								BackgroundImgRepo.this.bgImg.setVisible(true);
-								BackgroundImgRepo.this.bgImg.getElement()
-										.setAttribute(
-												"src",
-												img.getElement()
-														.getAttribute("src"));
+								BackgroundImgRepo.this.bgImg.getElement().setAttribute("src", img.getElement().getAttribute("src"));
 							}
 						}
 					});
 					button.addMouseOverHandler(new MouseOverHandler() {
 
+						/**
+						 * Show the preview image at the appropriate position and replace the data-url
+						 * 
+						 * @see com.google.gwt.event.dom.client.MouseOverHandler#onMouseOver(com.google.gwt.event.dom.client.MouseOverEvent)
+						 */
 						@Override
 						public void onMouseOver(MouseOverEvent event) {
-							if (MultiCursorController.isDefaultCursor(event
-									.getNativeEvent())) {
-								BackgroundImgRepo.this.previewImage.getElement()
-										.getStyle().setDisplay(Display.BLOCK);
-								BackgroundImgRepo.this.previewImage.getElement()
-										.setAttribute(
-												"src",
-												img.getElement()
-														.getAttribute("src"));
-								Scheduler.get().scheduleDeferred(
-										new ScheduledCommand() {
+							if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+								BackgroundImgRepo.this.previewImage.getElement().getStyle().setDisplay(Display.BLOCK);
+								BackgroundImgRepo.this.previewImage.getElement().setAttribute("src", img.getElement().getAttribute("src"));
+								Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-											@Override
-											public void execute() {
-												previewImage
-														.getElement()
-														.getStyle()
-														.setLeft(
-																img.getAbsoluteLeft()
-																		- BackgroundImgRepo.this
-																				.getAbsoluteLeft()
-																		- previewImage
-																				.getOffsetWidth()
-																		/ 2
-																		+ img.getOffsetWidth()
-																		/ 2,
-																Unit.PX);
-											}
-										});
+									@Override
+									public void execute() {
+										previewImage
+												.getElement()
+												.getStyle()
+												.setLeft(
+														img.getAbsoluteLeft() - BackgroundImgRepo.this.getAbsoluteLeft() - previewImage.getOffsetWidth() / 2
+																+ img.getOffsetWidth() / 2, Unit.PX);
+									}
+								});
 							}
 						}
 					});
 					button.addMouseOutHandler(new MouseOutHandler() {
 
+						/**
+						 * Hide the preview image
+						 * 
+						 * @see com.google.gwt.event.dom.client.MouseOutHandler#onMouseOut(com.google.gwt.event.dom.client.MouseOutEvent)
+						 */
 						@Override
 						public void onMouseOut(MouseOutEvent event) {
-							if (MultiCursorController.isDefaultCursor(event
-									.getNativeEvent())) {
+							if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 
-								BackgroundImgRepo.this.previewImage.getElement()
-										.getStyle().setDisplay(Display.NONE);
+								BackgroundImgRepo.this.previewImage.getElement().getStyle().setDisplay(Display.NONE);
 							}
 						}
 					});
@@ -213,9 +250,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 					hp.add(button);
 					addBackgroundImage(img.getElement(), files.get(i));
 				}
-				
-				
-			
+
 			}
 		});
 	}

@@ -1,4 +1,5 @@
 package ch.unifr.pai.mindmap.client.mindmap;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,45 +24,60 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class MindMapList extends MindMapComponent{
+/**
+ * A list representation of the mindmap entries (in contrast to the representation on a canvas)
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class MindMapList extends MindMapComponent {
 
-	private FlowPanel panel = new FlowPanel();
-	
-	public MindMapList(){
+	private final FlowPanel panel = new FlowPanel();
+
+	public MindMapList() {
 		super();
 		initWidget(panel);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see ch.unifr.pai.mindmap.client.mindmap.MindMapComponent#addMindmapNote(ch.unifr.pai.mindmap.client.rpc.CreateMindmapNoteEvent)
+	 */
 	@Override
 	protected void addMindmapNote(CreateMindmapNoteEvent event) {
 		ListElement el = new ListElement();
 		el.setValue(event.content, event.uuid);
 		panel.add(el);
 	}
-	
-	
-	private class ListElement extends TextBox{
+
+	/**
+	 * The representation of a note within the list of notes. This is an actual text box which fires an update note event as soon as it looses focus
+	 * 
+	 * @author Oliver Schmid
+	 * 
+	 */
+	private class ListElement extends TextBox {
 		String id;
-		
-		public ListElement(){
+
+		public ListElement() {
 			super();
 			getElement().getStyle().setDisplay(Display.BLOCK);
 			getElement().getStyle().setPadding(10, Unit.PX);
 			setWidth("100%");
-			addBlurHandler(new BlurHandler(){
+			addBlurHandler(new BlurHandler() {
 
 				@Override
 				public void onBlur(BlurEvent event) {
 					eventBus.fireEvent(UpdateMindmapNoteEvent.changeValue(id, getValue()));
-				}});
+				}
+			});
 		}
-		
-		public void setValue(String content, String id){
+
+		public void setValue(String content, String id) {
 			setValue(content);
 			this.id = id;
 		}
-		
+
 	}
-	
 
 }

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.utils.experiment.workflow.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,12 @@ package ch.unifr.pai.twice.utils.experiment.workflow.client;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+/**
+ * Interface for {@link Task}s which do provide log information.
+ * 
+ * @author Oliver Schmid
+ * 
  */
 public interface HasLog {
 
