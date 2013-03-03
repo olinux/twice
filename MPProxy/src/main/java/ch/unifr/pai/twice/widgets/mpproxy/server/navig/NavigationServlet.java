@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxy.server.navig;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,22 +25,26 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class NavigationServlet
+ * 
+ * @author Oliver Schmid
+ * 
  */
 @WebServlet("/navig")
 public class NavigationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public NavigationServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public NavigationServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		out.print("<div>This is the navigation</div>");

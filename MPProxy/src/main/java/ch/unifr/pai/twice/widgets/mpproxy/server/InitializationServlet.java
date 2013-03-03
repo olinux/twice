@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxy.server;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +24,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import ch.unifr.pai.twice.widgets.mpproxy.shared.Constants;
 
+/**
+ * @author Oliver Schmid
+ * 
+ *         Initializes the session with some client specific indicators
+ * 
+ */
 @WebServlet("/mice/init")
 public class InitializationServlet extends HttpServlet {
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getSession().setAttribute(Constants.miceManaged, req.getParameter("miceManaged"));
-		req.getSession().setAttribute(Constants.uuidCookie, req.getParameter("uuid"));		
+		req.getSession().setAttribute(Constants.uuidCookie, req.getParameter("uuid"));
 	}
-	
+
 }

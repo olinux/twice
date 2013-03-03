@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxy.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,12 @@ package ch.unifr.pai.twice.widgets.mpproxy.client;
  */
 import com.google.gwt.user.client.Event;
 
+/**
+ * A java interface whose implemetation is called when native JavaScript-DOMChangeEvents are fired (to trigger the processing of the client's DOM-structure
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public interface DOMChangeHandler {
 
 	void onDomChanged(Event evt);

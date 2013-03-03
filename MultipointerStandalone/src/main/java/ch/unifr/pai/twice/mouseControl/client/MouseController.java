@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.mouseControl.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +21,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
+/**
+ * The application launched by clients (the input devices which actually control the remote cursor
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MouseController implements EntryPoint {
 
 	@Override

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxy.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,12 @@ package ch.unifr.pai.twice.widgets.mpproxy.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 
+/**
+ * The entry point for the proxy
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class ProxyEntryPoint implements EntryPoint {
 
 	@Override

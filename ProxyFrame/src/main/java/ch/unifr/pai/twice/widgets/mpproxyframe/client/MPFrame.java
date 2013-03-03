@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxyframe.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +19,12 @@ import ch.unifr.pai.twice.utils.device.client.UUID;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.NamedFrame;
 
+/**
+ * A specific IFrame that provides multipointer browsing functionalities
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MPFrame extends NamedFrame {
 
 	public MPFrame() {
@@ -25,16 +32,32 @@ public class MPFrame extends NamedFrame {
 		this.setWidth("100%");
 		this.setHeight("100%");
 	}
-	
+
+	/**
+	 * Prefix the url with the proxy servlet pattern
+	 * 
+	 * @see com.google.gwt.user.client.ui.Frame#setUrl(java.lang.String)
+	 */
 	@Override
 	public void setUrl(String url) {
-		super.setUrl(Window.Location.getProtocol()+"//"+Window.Location.getHost()+"/"+url);
+		super.setUrl(Window.Location.getProtocol() + "//" + Window.Location.getHost() + "/" + url);
 	}
 
-	public void sendDataToFrame(String device,	String data){
+	/**
+	 * Send information to the web page running inside of the iFrame (if listeners are appropriately defined)
+	 * 
+	 * @param device
+	 * @param data
+	 */
+	public void sendDataToFrame(String device, String data) {
 		sendDataToFrameJSNI(getName(), device, data);
 	}
 
+	/**
+	 * Register the devices (by their UUID) which are allowed to interact with the proxy frame
+	 * 
+	 * @param devices
+	 */
 	public void setOwningDevices(String... devices) {
 		if (devices == null)
 			setOwningDevicesJSNI(getName(), null);
@@ -45,39 +68,73 @@ public class MPFrame extends NamedFrame {
 		}
 		setOwningDevicesJSNI(getName(), devices.length > 0 ? sb.substring(0, sb.length() - 1) : sb.toString());
 	}
-	
-	public void back(){
+
+	/**
+	 * Move backwards in the frame's history
+	 */
+	public void back() {
 		backJSNI(getName());
 	}
-	
-	public void forward(){
+
+	/**
+	 * Move forward in the frame's history
+	 */
+	public void forward() {
 		forwardJSNI(getName());
 	}
-	
-	public void reload(){
+
+	/**
+	 * Reload the page in the frame
+	 */
+	public void reload() {
 		reloadJSNI(getName());
 	}
 
-	// Set up the JS-callable signature as a global JS function.
+	/**
+	 * Set up the JS-callable signature as a global JS function.
+	 * 
+	 * @param frameName
+	 * @param devices
+	 */
 	private native void setOwningDevicesJSNI(String frameName, String devices) /*-{
-		$wnd.frames[frameName].miceSetOwningDevices(devices);
-	}-*/;
+																				$wnd.frames[frameName].miceSetOwningDevices(devices);
+																				}-*/;
 
-	// Set up the JS-callable signature as a global JS function.
-	private native void sendDataToFrameJSNI(String frameName, String device,
-			String data) /*-{
-		$wnd.frames[frameName].miceInput(device, data);
-	}-*/;
-	
+	/**
+	 * Set up the JS-callable signature as a global JS function.
+	 * 
+	 * @param frameName
+	 * @param device
+	 * @param data
+	 */
+	private native void sendDataToFrameJSNI(String frameName, String device, String data) /*-{
+																							$wnd.frames[frameName].miceInput(device, data);
+																							}-*/;
+
+	/**
+	 * Move backwards in the history of the frame
+	 * 
+	 * @param frameName
+	 */
 	private native void backJSNI(String frameName) /*-{
-	$wnd.frames[frameName].backInHistory();
-}-*/;
-	
+													$wnd.frames[frameName].backInHistory();
+													}-*/;
+
+	/**
+	 * Move forward in the history of the frame
+	 * 
+	 * @param frameName
+	 */
 	private native void forwardJSNI(String frameName) /*-{
-	$wnd.frames[frameName].forwardInHistory();
-}-*/;
-	
+														$wnd.frames[frameName].forwardInHistory();
+														}-*/;
+
+	/**
+	 * Reload the page in the frame
+	 * 
+	 * @param frameName
+	 */
 	private native void reloadJSNI(String frameName) /*-{
-	$wnd.frames[frameName].reloadFrame();
-}-*/;
+														$wnd.frames[frameName].reloadFrame();
+														}-*/;
 }

@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpbrowser.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,9 +37,16 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+/**
+ * This is a browser in a browser. It provides URL bars to enter standard URLs which then are translated to the proxy server URLs and the component provides
+ * back and forward buttons per frame as well as multi-cursor aware scroll bars
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class MPBrowser implements EntryPoint {
 
-	private WebsocketControl multiCursor = new WebsocketControl();
+	private final WebsocketControl multiCursor = new WebsocketControl();
 	HorizontalPanel navig = new HorizontalPanel();
 	HorizontalPanel navig2 = new HorizontalPanel();
 	Frame frame = new NamedFrame("mpFrame");
@@ -48,8 +56,7 @@ public class MPBrowser implements EntryPoint {
 	DockLayoutPanel scrollBar = new DockLayoutPanel(Unit.PX);
 	DockLayoutPanel scrollBar2 = new DockLayoutPanel(Unit.PX);
 	SplitLayoutPanel browserSplit = new SplitLayoutPanel();
-			
-	
+
 	Button forward = new Button("Forward", new ClickHandler() {
 
 		@Override
@@ -64,26 +71,28 @@ public class MPBrowser implements EntryPoint {
 			History.back();
 		}
 	});
-	
-	Button scrollDown = new Button("Down", new ClickHandler(){
+
+	Button scrollDown = new Button("Down", new ClickHandler() {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			Document d = IFrameElement.as(frame.getElement()).getContentDocument();
-			if(d!=null){
-				d.getBody().setScrollTop(Math.min(d.getBody().getScrollTop()+20, d.getBody().getScrollHeight()));
+			if (d != null) {
+				d.getBody().setScrollTop(Math.min(d.getBody().getScrollTop() + 20, d.getBody().getScrollHeight()));
 			}
-		}});
-	Button scrollUp = new Button("Up", new ClickHandler(){
+		}
+	});
+	Button scrollUp = new Button("Up", new ClickHandler() {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			Document d = IFrameElement.as(frame.getElement()).getContentDocument();
-			if(d!=null){
-				d.getBody().setScrollTop(Math.max(d.getBody().getScrollTop()-20, 0));
+			if (d != null) {
+				d.getBody().setScrollTop(Math.max(d.getBody().getScrollTop() - 20, 0));
 			}
-		}});
-	
+		}
+	});
+
 	Button forward2 = new Button("Forward", new ClickHandler() {
 
 		@Override
@@ -98,43 +107,45 @@ public class MPBrowser implements EntryPoint {
 			History.back();
 		}
 	});
-	
-	Button scrollDown2 = new Button("Down", new ClickHandler(){
+
+	Button scrollDown2 = new Button("Down", new ClickHandler() {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			Document d = IFrameElement.as(frame2.getElement()).getContentDocument();
-			if(d!=null){
-				d.getBody().setScrollTop(Math.min(d.getBody().getScrollTop()+20, d.getBody().getScrollHeight()));
+			if (d != null) {
+				d.getBody().setScrollTop(Math.min(d.getBody().getScrollTop() + 20, d.getBody().getScrollHeight()));
 			}
-		}});
-	Button scrollUp2 = new Button("Up", new ClickHandler(){
+		}
+	});
+	Button scrollUp2 = new Button("Up", new ClickHandler() {
 
 		@Override
 		public void onClick(ClickEvent event) {
 			Document d = IFrameElement.as(frame2.getElement()).getContentDocument();
-			if(d!=null){
-				d.getBody().setScrollTop(Math.max(d.getBody().getScrollTop()-20, 0));
+			if (d != null) {
+				d.getBody().setScrollTop(Math.max(d.getBody().getScrollTop() - 20, 0));
 			}
-		}});
-	
-	private void updateScrollBar(){
+		}
+	});
+
+	private void updateScrollBar() {
 		Document d = IFrameElement.as(frame.getElement()).getContentDocument();
-		boolean scrollVertical = d.getBody().getScrollHeight()>frame.getOffsetHeight();
-		boolean scrollHorizontal = d.getBody().getScrollWidth()>frame.getOffsetWidth();
+		boolean scrollVertical = d.getBody().getScrollHeight() > frame.getOffsetHeight();
+		boolean scrollHorizontal = d.getBody().getScrollWidth() > frame.getOffsetWidth();
 		scrollDown.setEnabled(scrollVertical);
 		scrollUp.setEnabled(scrollVertical);
 		scrollBar.getElement().getStyle().setBackgroundColor(scrollVertical ? "lightgrey" : "lightgrey");
 	}
-	private void updateScrollBar2(){
+
+	private void updateScrollBar2() {
 		Document d = IFrameElement.as(frame2.getElement()).getContentDocument();
-		boolean scrollVertical = d.getBody().getScrollHeight()>frame2.getOffsetHeight();
-		boolean scrollHorizontal = d.getBody().getScrollWidth()>frame2.getOffsetWidth();
+		boolean scrollVertical = d.getBody().getScrollHeight() > frame2.getOffsetHeight();
+		boolean scrollHorizontal = d.getBody().getScrollWidth() > frame2.getOffsetWidth();
 		scrollDown2.setEnabled(scrollVertical);
 		scrollUp2.setEnabled(scrollVertical);
 		scrollBar2.getElement().getStyle().setBackgroundColor(scrollVertical ? "lightgrey" : "lightgrey");
 	}
-	
 
 	@Override
 	public void onModuleLoad() {
@@ -142,7 +153,7 @@ public class MPBrowser implements EntryPoint {
 		scrollBar.getElement().getStyle().setBackgroundColor("lightgrey");
 		scrollBar.addNorth(scrollUp, 30);
 		scrollBar.addSouth(scrollDown, 30);
-		scrollBar.add(new HTML());		
+		scrollBar.add(new HTML());
 		textBox.setWidth("100%");
 		navig.add(backward);
 		navig.add(forward);
@@ -165,20 +176,18 @@ public class MPBrowser implements EntryPoint {
 
 			@Override
 			public void onLoad(LoadEvent event) {
-				if (frame.getUrl() != null
-						&& !frame.getUrl().startsWith(GWT.getHostPageBaseURL())) {
+				if (frame.getUrl() != null && !frame.getUrl().startsWith(GWT.getHostPageBaseURL())) {
 					frame.setUrl(GWT.getHostPageBaseURL() + frame.getUrl());
 					updateScrollBar();
 				}
-				Document d = IFrameElement.as(frame.getElement())
-						.getContentDocument();
+				Document d = IFrameElement.as(frame.getElement()).getContentDocument();
 				textBox.setValue(d.getURL());
 			}
 		});
 		scrollBar2.getElement().getStyle().setBackgroundColor("lightgrey");
 		scrollBar2.addNorth(scrollUp2, 30);
 		scrollBar2.addSouth(scrollDown2, 30);
-		scrollBar2.add(new HTML());		
+		scrollBar2.add(new HTML());
 		textBox2.setWidth("100%");
 		navig2.add(backward2);
 		navig2.add(forward2);
@@ -186,7 +195,7 @@ public class MPBrowser implements EntryPoint {
 		navig2.setCellWidth(forward2, "50px");
 		navig2.add(textBox2);
 		navig2.setWidth("100%");
-		
+
 		frame2.setUrl(GWT.getHostPageBaseURL() + "http://www.google.ch");
 		frame2.setHeight("100%");
 		frame2.setWidth("100%");
@@ -195,30 +204,27 @@ public class MPBrowser implements EntryPoint {
 
 			@Override
 			public void onLoad(LoadEvent event) {
-				if (frame2.getUrl() != null
-						&& !frame2.getUrl().startsWith(GWT.getHostPageBaseURL())) {
+				if (frame2.getUrl() != null && !frame2.getUrl().startsWith(GWT.getHostPageBaseURL())) {
 					frame2.setUrl(GWT.getHostPageBaseURL() + frame2.getUrl());
 					updateScrollBar2();
 				}
-				Document d = IFrameElement.as(frame2.getElement())
-						.getContentDocument();
+				Document d = IFrameElement.as(frame2.getElement()).getContentDocument();
 				textBox2.setValue(d.getURL());
 			}
 		});
-
 
 		DockLayoutPanel p = new DockLayoutPanel(Unit.PX);
 		p.addNorth(navig, 25);
 		p.addEast(scrollBar, 30);
 		p.add(frame);
 		browserSplit.addNorth(p, 500);
-		
+
 		DockLayoutPanel p2 = new DockLayoutPanel(Unit.PX);
 		p2.addNorth(navig2, 25);
 		p2.addEast(scrollBar2, 30);
 		p2.add(frame2);
 		browserSplit.add(p2);
-		
+
 		RootLayoutPanel.get().add(browserSplit);
 	}
 

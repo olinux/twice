@@ -46,34 +46,41 @@ public class ClientServerTimeOffset {
 	 */
 	public static void getServerTimeOffset(final AsyncCallback<Long> callback) {
 		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + "ping");
-		final long startTime = new Date().getTime();
+		final long startTime = getCurrentTime();
 		try {
-			rb.sendRequest(null, new RequestCallback() {
-
-				@Override
-				public void onResponseReceived(Request request, Response response) {
-					long endTime = new Date().getTime();
-					long duration = endTime - startTime;
-					String result = response.getText();
-					if (result != null) {
-						long serverTime = Long.parseLong(result);
-						// We assume that the upload and download for a very small request are the same (50% of the request duration for upload, 50% for
-						// download)
-						long difference = serverTime - (endTime - (duration / 2));
-						callback.onSuccess(difference);
-					}
-				}
-
-				@Override
-				public void onError(Request request, Throwable exception) {
-					callback.onFailure(exception);
-
-				}
-			});
+			rb.sendRequest(null, createServerTimeOffsetRequestCallback(callback, startTime));
 		}
 		catch (RequestException e) {
 			callback.onFailure(e);
 		}
 	}
 
+	static long getCurrentTime() {
+		return new Date().getTime();
+	}
+
+	static RequestCallback createServerTimeOffsetRequestCallback(final AsyncCallback<Long> callback, final long startTime) {
+		return new RequestCallback() {
+
+			@Override
+			public void onResponseReceived(Request request, Response response) {
+				long endTime = getCurrentTime();
+				long duration = endTime - startTime;
+				String result = response.getText();
+				if (result != null) {
+					long serverTime = Long.parseLong(result);
+					// We assume that the upload and download for a very small request are the same (50% of the request duration for upload, 50% for
+					// download)
+					long difference = serverTime - (endTime - (duration / 2));
+					callback.onSuccess(difference);
+				}
+			}
+
+			@Override
+			public void onError(Request request, Throwable exception) {
+				callback.onFailure(exception);
+
+			}
+		};
+	}
 }

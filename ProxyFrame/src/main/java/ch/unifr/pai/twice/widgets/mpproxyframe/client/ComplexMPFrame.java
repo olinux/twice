@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxyframe.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,15 +23,21 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class ComplexMPFrame extends SplitLayoutPanel{
+/**
+ * A more complex widget providing control mechanisms for a {@link MPFrame}
+ * 
+ * @author Oliver Schmid
+ * 
+ */
+public class ComplexMPFrame extends SplitLayoutPanel {
 
-	private Button back = new Button("back");
-	private Button forward = new Button("forward");
-	private Button reload = new Button("reload");
-	private TextBox url = new TextBox();
-	private MPFrame frame = new MPFrame();
-	private Controller controller = new Controller(frame);
-	
+	private final Button back = new Button("back");
+	private final Button forward = new Button("forward");
+	private final Button reload = new Button("reload");
+	private final TextBox url = new TextBox();
+	private final MPFrame frame = new MPFrame();
+	private final Controller controller = new Controller(frame);
+
 	public ComplexMPFrame() {
 		super();
 		HorizontalPanel p = new HorizontalPanel();
@@ -40,32 +47,31 @@ public class ComplexMPFrame extends SplitLayoutPanel{
 		p.add(reload);
 		p.setWidth("100%");
 		p.setHeight("100%");
-		
-		back.addClickHandler(new ClickHandler() {			
+
+		back.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
 				frame.back();
 			}
 		});
-		
-		forward.addClickHandler(new ClickHandler() {			
+
+		forward.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
 				frame.forward();
 			}
 		});
-		
-		reload.addClickHandler(new ClickHandler() {			
+
+		reload.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent arg0) {
 				frame.reload();
 			}
 		});
 		p.setCellWidth(url, "100%");
-		
-		
+
 		addNorth(p, 30);
-		url.addValueChangeHandler(new ValueChangeHandler<String>() {	
+		url.addValueChangeHandler(new ValueChangeHandler<String>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> arg0) {
 				frame.setUrl(arg0.getValue());
@@ -74,8 +80,8 @@ public class ComplexMPFrame extends SplitLayoutPanel{
 		addSouth(controller, 170);
 		add(frame);
 	}
-	
-	public MPFrame getFrame(){
+
+	public MPFrame getFrame() {
 		return frame;
 	}
 

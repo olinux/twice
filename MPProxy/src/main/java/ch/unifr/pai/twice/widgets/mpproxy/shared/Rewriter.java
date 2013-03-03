@@ -14,74 +14,97 @@ package ch.unifr.pai.twice.widgets.mpproxy.shared;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * The rewriting logic applicable by both - the client and the server side.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class Rewriter {
-	
-//	private static final String lookbehind = "(([=\\(])((')|(\")))(/|http)";
+
+	// private static final String lookbehind = "(([=\\(])((')|(\")))(/|http)";
 	private static final String lookbehind = "((([=\\[,?])[ ]*((')|(\")))|(URL=))(/|http)";
 	/**
 	 * A look behind would have been more appropriate, unfortunately javascript does not support this.
-	 */	
-	public static final String URLREWRITERREGEX = lookbehind+".*?(?=['\"])";
-	
-	public static String getServletPath(String requestUrl){
-		return URLParser.getServletPathForRequest(requestUrl);	
+	 */
+	public static final String URLREWRITERREGEX = lookbehind + ".*?(?=['\"])";
+
+	/**
+	 * @param requestUrl
+	 * @return the path to the proxy servlet extracted from the given request URL
+	 */
+	public static String getServletPath(String requestUrl) {
+		return URLParser.getServletPathForRequest(requestUrl);
 	}
-	
-	
-	public static String translateUrl(String replace, String servletHost, String proxyHost){
-		if(!servletHost.endsWith("/"))
+
+	/**
+	 * Translates the given URL to a proxy-prefixed URL
+	 * 
+	 * @param replace
+	 * @param servletHost
+	 * @param proxyHost
+	 * @return
+	 */
+	public static String translateUrl(String replace, String servletHost, String proxyHost) {
+		if (!servletHost.endsWith("/"))
 			servletHost += '/';
-		if(proxyHost!=null && proxyHost.endsWith("/"))
-			proxyHost = proxyHost.substring(0, proxyHost.length()-1);
-		if(replace.endsWith("\"")||replace.endsWith("'"))
-			replace = replace.substring(0, replace.length()-1);
-		if(replace.matches(lookbehind+".*")){
+		if (proxyHost != null && proxyHost.endsWith("/"))
+			proxyHost = proxyHost.substring(0, proxyHost.length() - 1);
+		if (replace.endsWith("\"") || replace.endsWith("'"))
+			replace = replace.substring(0, replace.length() - 1);
+		if (replace.matches(lookbehind + ".*")) {
 			int http = replace.indexOf("http");
 			int slash = replace.indexOf("/");
 			int index;
-			if(http==-1)
+			if (http == -1)
 				index = slash;
-			else if(slash == -1)
+			else if (slash == -1)
 				index = http;
 			else
-				index = Math.min(http, slash);	
-			if(index == slash){
-				if(index<replace.length()-1 && replace.charAt(slash+1) == '/'){
-					//Double slash
-					return replace.substring(0, index)+servletHost+"http:"+replace.substring(index);
+				index = Math.min(http, slash);
+			if (index == slash) {
+				if (index < replace.length() - 1 && replace.charAt(slash + 1) == '/') {
+					// Double slash
+					return replace.substring(0, index) + servletHost + "http:" + replace.substring(index);
 				}
-				else{
-					//Single slash
-					return replace.substring(0, index)+servletHost+(proxyHost !=null ? proxyHost : "")+replace.substring(index);
-				}				
+				else {
+					// Single slash
+					return replace.substring(0, index) + servletHost + (proxyHost != null ? proxyHost : "") + replace.substring(index);
+				}
 			}
-			else{
-				return replace.substring(0, index)+servletHost+replace.substring(index);				
+			else {
+				return replace.substring(0, index) + servletHost + replace.substring(index);
 			}
 		}
-		else{
+		else {
 			return replace;
 		}
 	}
-	
-	public static String translateCleanUrl(String cleanUrl, String servletHost, String proxyHost){
-		if(!servletHost.endsWith("/"))
+
+	/**
+	 * @param cleanUrl
+	 * @param servletHost
+	 * @param proxyHost
+	 * @return
+	 */
+	public static String translateCleanUrl(String cleanUrl, String servletHost, String proxyHost) {
+		if (!servletHost.endsWith("/"))
 			servletHost += '/';
-		
-		if(proxyHost!=null && proxyHost.endsWith("/"))
-			proxyHost = proxyHost.substring(0, proxyHost.length()-1);
-		
-		if(cleanUrl.startsWith("//"))
-			cleanUrl = "http:"+cleanUrl;
-		
-		if(cleanUrl.startsWith("/")){
-			return servletHost+proxyHost+cleanUrl;
+
+		if (proxyHost != null && proxyHost.endsWith("/"))
+			proxyHost = proxyHost.substring(0, proxyHost.length() - 1);
+
+		if (cleanUrl.startsWith("//"))
+			cleanUrl = "http:" + cleanUrl;
+
+		if (cleanUrl.startsWith("/")) {
+			return servletHost + proxyHost + cleanUrl;
 		}
-		else if(cleanUrl.startsWith("http")){
-			return servletHost+cleanUrl;
+		else if (cleanUrl.startsWith("http")) {
+			return servletHost + cleanUrl;
 		}
 		else
 			return cleanUrl;
-		
+
 	}
 }

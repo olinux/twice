@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxy.server;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,23 +21,34 @@ import java.util.regex.Pattern;
 import ch.unifr.pai.twice.widgets.mpproxy.shared.Rewriter;
 import ch.unifr.pai.twice.widgets.mpproxy.shared.URLParser;
 
+/**
+ * Logic to rewrite URLs at the server side while passing through the web site content
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class URLRewriterServer {
-	private final static Pattern URLREWRITERPATTERN = Pattern
-			.compile(Rewriter.URLREWRITERREGEX);
+	private final static Pattern URLREWRITERPATTERN = Pattern.compile(Rewriter.URLREWRITERREGEX);
 
+	/**
+	 * Apply the different filters to the content
+	 * 
+	 * @param content
+	 * @param currentUrl
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
 	public static String process(String content, String currentUrl) throws UnsupportedEncodingException {
-		URLParser parser = new URLParser(currentUrl,
-				Rewriter.getServletPath(currentUrl));
+		URLParser parser = new URLParser(currentUrl, Rewriter.getServletPath(currentUrl));
 		Matcher m = URLREWRITERPATTERN.matcher(content);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
 			String found = m.group();
-			String replacement = Rewriter.translateUrl(found,
-					parser.getServletPath(), parser.getProxyBasePath());
+			String replacement = Rewriter.translateUrl(found, parser.getServletPath(), parser.getProxyBasePath());
 			if (replacement != null) {
-				//Protect escaped values
+				// Protect escaped values
 				replacement = replacement.replace("\\", "\\\\");
-				//Since dollar signs are interpreted as special characters in the matcher, they have to be escaped
+				// Since dollar signs are interpreted as special characters in the matcher, they have to be escaped
 				replacement = replacement.replace("$", "\\$");
 				m.appendReplacement(sb, replacement);
 			}
@@ -44,11 +56,13 @@ public class URLRewriterServer {
 		return m.appendTail(sb).toString();
 	}
 
-	
-	public static String removeTopHref(String content){
-		//TODO really find the last frame before the mice frame (which is one beyond the window.top)
+	/**
+	 * @param content
+	 * @return
+	 */
+	public static String removeTopHref(String content) {
+		// TODO really find the last frame before the mice frame (which is one beyond the window.top)
 		return content.replaceAll("top\\.location", "document.location");
-		
-		
+
 	}
 }

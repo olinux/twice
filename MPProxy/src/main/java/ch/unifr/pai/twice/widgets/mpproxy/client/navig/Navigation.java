@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpproxy.client.navig;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +25,17 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.TextBox;
 
+/**
+ * The URL box allows to input standard URLs which are then prefixed with the proxy servlet path. Additionally, the value of the URL box is updated when
+ * following links within the frame.
+ * 
+ * @author Oliver Schmid
+ * 
+ */
 public class Navigation {
 
 	private TextBox urlBox;
-	private Element element;
+	private final Element element;
 
 	public Navigation() {
 		super();
@@ -49,9 +57,7 @@ public class Navigation {
 				@Override
 				public void onValueChange(ValueChangeEvent<String> event) {
 					// Window.alert(Window.Location.getProtocol()+"//"+Window.Location.getHost()+"/"+event.getValue());
-					Window.Location.replace(Window.Location.getProtocol()
-							+ "//" + Window.Location.getHost() + "/"
-							+ event.getValue());
+					Window.Location.replace(Window.Location.getProtocol() + "//" + Window.Location.getHost() + "/" + event.getValue());
 					// TODO Auto-generated method stub
 
 				}
@@ -65,11 +71,12 @@ public class Navigation {
 		}
 	}
 
+	/**
+	 * Set the value of the URL bar to the current URL without the proxy prefix
+	 */
 	private void updateAddressBar() {
-		String proxyServlet = Window.Location.getProtocol() + "//"
-				+ Window.Location.getHost() + "/";
-		urlBox.setValue(Window.Location.getHref().substring(
-				proxyServlet.length()));
+		String proxyServlet = Window.Location.getProtocol() + "//" + Window.Location.getHost() + "/";
+		urlBox.setValue(Window.Location.getHref().substring(proxyServlet.length()));
 	}
 
 }
