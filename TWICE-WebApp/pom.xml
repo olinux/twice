@@ -79,6 +79,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Parent</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Parent</relativePath>
 	</parent>
 	<description>A parent project for web applications (such which have HTML interfaces) to generalize the build process.</description>
 </project>

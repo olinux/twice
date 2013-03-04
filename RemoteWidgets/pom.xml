@@ -26,6 +26,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Lib</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Lib</relativePath>
 	</parent>
 	<version>${twice.version}</version>
 	<description>A collection of remote widgets. Remote widgets can be controlled  by remote pointers and therefore include multi-pointer and multi-focus capabilities. Usually, remote widgets are replacements of well-known standard widgets.</description>

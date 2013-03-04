@@ -36,6 +36,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Lib</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Lib</relativePath>
 	</parent>
 	<version>${twice.version}</version>
 	<description>This module provides the multi-pointer functionalities on a shared screen. It provides the graphical representations of the mouse pointers and defines the interfaces for controlling the pointers from remote. It additionally takes care of the firing of native mouse events as well as their extension with additional informations.</description>

@@ -21,6 +21,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Lib</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Lib</relativePath>
 	</parent>
 	<version>${twice.version}</version>
 	<description>This module provides the structures for the lifecycle and lazy-loading management of TWICE components.</description>

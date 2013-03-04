@@ -1,3 +1,4 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 <!-- 
  Copyright 2013 Oliver Schmid
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +13,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.unifr.pai.twice.dragndrop</groupId>
 	<artifactId>DragNDrop</artifactId>
@@ -29,6 +28,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Lib</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Lib</relativePath>
 	</parent>
 	<version>${twice.version}</version>
 </project>

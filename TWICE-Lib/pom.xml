@@ -51,6 +51,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Parent</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-Parent</relativePath>
 	</parent>
 	<modules>
 		<module>../Authentication</module>

@@ -29,6 +29,7 @@
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-WebApp</artifactId>
 		<version>1.0.0-FIXED</version>
+		<relativePath>../TWICE-WebApp</relativePath>
 	</parent>
 	<version>${twice.version}</version>
 	<description>This module is the test application for the TWICEModule component</description>
