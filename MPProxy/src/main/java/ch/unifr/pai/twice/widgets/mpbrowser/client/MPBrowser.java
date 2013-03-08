@@ -164,7 +164,7 @@ public class MPBrowser implements EntryPoint {
 		Storage s = Storage.getSessionStorageIfSupported();
 		if (s != null) {
 			String type = s.getItem("ch.unifr.pai.mice.deviceType");
-			if (!type.equals("multicursor")) {
+			if (type == null || !type.equals("multicursor")) {
 				s.setItem("ch.unifr.pai.mice.deviceType", "multicursor");
 			}
 		}

@@ -21,7 +21,7 @@
 
 	<source path="client" />
 	<source path="shared" />
-	<entry-point class="ch.unifr.twice.widgets.mpproxy.client.ProxyEntryPoint" />
+	<entry-point class="ch.unifr.pai.twice.widgets.mpproxy.client.ProxyEntryPoint" />
 	<replace-with class="ch.unifr.pai.twice.widgets.mpproxy.client.MPProxyBody">
 		<when-type-is class="ch.unifr.pai.twice.widgets.mpproxy.client.ProxyBody" />
 		<when-property-is name="deviceType" value="multicursor" />

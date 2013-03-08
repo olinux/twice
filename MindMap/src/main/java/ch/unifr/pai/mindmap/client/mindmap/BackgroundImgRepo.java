@@ -29,6 +29,10 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DragLeaveEvent;
+import com.google.gwt.event.dom.client.DragLeaveHandler;
+import com.google.gwt.event.dom.client.DragOverEvent;
+import com.google.gwt.event.dom.client.DragOverHandler;
 import com.google.gwt.event.dom.client.DropEvent;
 import com.google.gwt.event.dom.client.DropHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -157,6 +161,21 @@ public class BackgroundImgRepo extends AbsolutePanel {
 			}
 		});
 		hp.add(emptyBg);
+		fp.addDragOverHandler(new DragOverHandler() {
+
+			@Override
+			public void onDragOver(DragOverEvent event) {
+				fp.getElement().getStyle().setBackgroundColor("darkgrey");
+			}
+		});
+		fp.addDragLeaveHandler(new DragLeaveHandler() {
+
+			@Override
+			public void onDragLeave(DragLeaveEvent event) {
+				fp.getElement().getStyle().setBackgroundColor("grey");
+			}
+
+		});
 		fp.addDropHandler(new DropHandler() {
 
 			/**
@@ -171,8 +190,9 @@ public class BackgroundImgRepo extends AbsolutePanel {
 			 */
 			@Override
 			public void onDrop(DropEvent event) {
-				event.stopPropagation();
+				// event.stopPropagation();
 				event.preventDefault();
+				fp.getElement().getStyle().setBackgroundColor("grey");
 				JsArray<JavaScriptObject> files = getDataTransferFiles(event.getDataTransfer());
 				for (int i = 0; i < files.length(); i++) {
 					final Image img = new Image();

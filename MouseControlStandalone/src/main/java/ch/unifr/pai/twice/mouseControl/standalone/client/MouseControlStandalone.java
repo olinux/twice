@@ -14,13 +14,15 @@ package ch.unifr.pai.twice.mouseControl.standalone.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.layout.client.DynamicLayout;
+import ch.unifr.pai.twice.mousecontrol.client.MobileKeyboard;
 import ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget;
 import ch.unifr.pai.twice.utils.device.client.UUID;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 /**
  * An example application for the mouse control functionality.
@@ -33,22 +35,29 @@ public class MouseControlStandalone implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		TouchPadWidget w = GWT.create(TouchPadWidget.class);
-		DynamicLayout.get().addComponent("touchpad", w, new AsyncCallback<TouchPadWidget>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onSuccess(TouchPadWidget result) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		// DynamicLayout.get().addComponent("touchpad", w, new AsyncCallback<TouchPadWidget>() {
+		//
+		// @Override
+		// public void onFailure(Throwable caught) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// @Override
+		// public void onSuccess(TouchPadWidget result) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// });
 		w.initialize(UUID.get(), null, null);
 		w.start();
-	}
+		//
+		// DynamicLayout.get().show();
+		MobileKeyboard keyboard = new MobileKeyboard();
+		DockLayoutPanel p = new DockLayoutPanel(Unit.PX);
+		p.addNorth(keyboard, 100);
+		p.add(w);
 
+		RootLayoutPanel.get().add(p);
+	}
 }
