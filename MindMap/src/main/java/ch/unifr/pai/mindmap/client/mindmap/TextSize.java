@@ -14,7 +14,7 @@ package ch.unifr.pai.mindmap.client.mindmap;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -41,7 +41,7 @@ public class TextSize {
 	private final PushButton increase = new PushButton(new Image(GWT.getModuleBaseURL() + "images/textincrease.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
-			if (MultiCursorController.isDefaultCursor(event)) {
+			if (NoMultiCursorController.isDefaultCursor(event)) {
 				super.onBrowserEvent(event);
 			}
 		}
@@ -52,7 +52,7 @@ public class TextSize {
 	private final PushButton decrease = new PushButton(new Image(GWT.getModuleBaseURL() + "images/textdecrease.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
-			if (MultiCursorController.isDefaultCursor(event)) {
+			if (NoMultiCursorController.isDefaultCursor(event)) {
 				super.onBrowserEvent(event);
 			}
 		}
@@ -67,7 +67,7 @@ public class TextSize {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+				if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					pixels = Math.min(60, pixels + 2);
 					listener.onSuccess(pixels);
 				}
@@ -80,7 +80,7 @@ public class TextSize {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+				if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					pixels = Math.max(2, pixels - 2);
 					listener.onSuccess(pixels);
 				}

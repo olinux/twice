@@ -1,4 +1,4 @@
-package ch.unifr.pai.twice.mousecontrol.client;
+package ch.unifr.pai.twice.multipointer.controller.client;
 
 /*
  * Copyright 2013 Oliver Schmid
@@ -14,7 +14,6 @@ package ch.unifr.pai.twice.mousecontrol.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.NativeEvent;
@@ -22,13 +21,8 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HTML;
 
 /**
@@ -80,29 +74,29 @@ public class TouchPadCursorWidget extends TouchPadWidget {
 			}
 		});
 
-		dragArea.addMouseOverHandler(new MouseOverHandler() {
-
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				if (keyboardHandler == null) {
-
-					GWT.log("ADD KEYBOARD HANDLER");
-					keyboardHandler = Event.addNativePreviewHandler(keyboardPreviewHandler);
-				}
-			}
-		});
-
-		dragArea.addMouseOutHandler(new MouseOutHandler() {
-
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				if (keyboardHandler != null) {
-					GWT.log("REMOVE KEYBOARD HANDLER");
-					keyboardHandler.removeHandler();
-					keyboardHandler = null;
-				}
-			}
-		});
+		// dragArea.addMouseOverHandler(new MouseOverHandler() {
+		//
+		// @Override
+		// public void onMouseOver(MouseOverEvent event) {
+		// if (keyboardHandler == null) {
+		//
+		// GWT.log("ADD KEYBOARD HANDLER");
+		// keyboardHandler = Event.addNativePreviewHandler(keyboardPreviewHandler);
+		// }
+		// }
+		// });
+		//
+		// dragArea.addMouseOutHandler(new MouseOutHandler() {
+		//
+		// @Override
+		// public void onMouseOut(MouseOutEvent event) {
+		// if (keyboardHandler != null) {
+		// GWT.log("REMOVE KEYBOARD HANDLER");
+		// keyboardHandler.removeHandler();
+		// keyboardHandler = null;
+		// }
+		// }
+		// });
 	}
 
 	/*

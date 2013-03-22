@@ -21,7 +21,7 @@ import java.util.Map;
 import ch.unifr.pai.twice.layout.client.DynamicLayout;
 import ch.unifr.pai.twice.module.client.TWICEModule;
 import ch.unifr.pai.twice.module.client.TWICEModuleController;
-import ch.unifr.pai.twice.mousecontrol.client.MobileKeyboard;
+import ch.unifr.pai.twice.multipointer.controller.client.MobileKeyboard;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;

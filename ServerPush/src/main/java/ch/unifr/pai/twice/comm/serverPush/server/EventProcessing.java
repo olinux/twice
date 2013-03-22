@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -38,9 +39,26 @@ import ch.unifr.pai.twice.comm.serverPush.shared.PingEvent;
  */
 public class EventProcessing {
 
+	private static Map<String, Set<EventFilter>> eventfilter = Collections.synchronizedMap(new HashMap<String, Set<EventFilter>>());
 	private static Map<AtmosphereResource, Long> lastEventOfAtmosphereResource = Collections.synchronizedMap(new HashMap<AtmosphereResource, Long>());
 	private static Map<ServerRemoteEvent, Broadcaster> waitingBlockingEvents = Collections.synchronizedMap(new HashMap<ServerRemoteEvent, Broadcaster>());
 	private static Map<String, AtmosphereResource> uuidToResource = Collections.synchronizedMap(new HashMap<String, AtmosphereResource>());
+
+	/**
+	 * @return the {@link AtmosphereResource} currently associated to a UUID or null if no AtmosphereResource exists
+	 */
+	public static AtmosphereResource getAtmosphereResourceByUUID(String uuid) {
+		return uuidToResource.get(uuid);
+	}
+
+	public static void addEventFilter(String eventType, EventFilter filter) {
+		Set<EventFilter> filters = eventfilter.get(eventType);
+		if (filters == null) {
+			filters = Collections.synchronizedSet(new LinkedHashSet<EventFilter>());
+			eventfilter.put(eventType, filters);
+		}
+		filters.add(filter);
+	}
 
 	private static int waitForEventsInMs = 0;
 
@@ -74,6 +92,14 @@ public class EventProcessing {
 		processBlockingEvents();
 		// Do not process ping events
 		if (e.getType() == null || !e.getType().equals(PingEvent.class.getName())) {
+			if (eventfilter.containsKey(e.getType())) {
+				Set<EventFilter> filters = eventfilter.get(e.getType());
+				if (filters != null) {
+					for (EventFilter filter : filters) {
+						filter.processEvent(e);
+					}
+				}
+			}
 			long executeInMs = waitForEventsInMs - e.getDelay();
 			if (executeInMs < 0)
 				executeInMs = 0;

@@ -13,11 +13,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<module rename-to='mouseControl'>
+<module rename-to='multipointerController'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="ch.unifr.pai.twice.module.TWICEModule" />
 	<inherits name='ch.unifr.pai.twice.utils.device.DeviceUtils' />
+	<inherits name='ch.unifr.pai.twice.multipointer.commons.MultipointerCommons'/>
 	
 	<inherits name="ch.unifr.pai.twice.authentication.Authentication"/>
 	<!-- Determine if we are in a mobile browser. -->
@@ -46,40 +47,40 @@
   ]]>
 	</property-provider>
 	<replace-with
-		class="ch.unifr.pai.twice.mousecontrol.client.TouchPadCursorWidget">
+		class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadCursorWidget">
 		<when-type-is
-			class="ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget" />
+			class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget" />
 	</replace-with>
 
 	<replace-with
-		class="ch.unifr.pai.twice.mousecontrol.client.TouchPadMobileWidget">
+		class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadMobileWidget">
 		<when-type-is
-			class="ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget" />
+			class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget" />
 		<when-property-is name="deviceType" value="touch" />
 	</replace-with>
-	<!-- <replace-with class="ch.unifr.pai.twice.mouseControl.client.TouchPadNintendoDS"> 
-		<when-type-is class="ch.unifr.pai.twice.mouseControl.client.TouchPadWidget" 
+	<!-- <replace-with class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadNintendoDS"> 
+		<when-type-is class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget" 
 		/> <when-property-is name="specialDevice" value="nintendods" /> </replace-with> -->
 
 
 	<replace-with
-		class="ch.unifr.pai.twice.mousecontrol.client.TouchPadMobileWidget">
+		class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadMobileWidget">
 		<when-type-is
-			class="ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget" />
+			class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget" />
 		<when-property-is name="mouseControlImpl" value="touch" />
 	</replace-with>
 	
 	<replace-with
-		class="ch.unifr.pai.twice.mousecontrol.client.TouchPadScrollWidget">
+		class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadScrollWidget">
 		<when-type-is
-			class="ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget" />
+			class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget" />
 		<when-property-is name="mouseControlImpl" value="scroll" />
 	</replace-with>
 
 	<replace-with
-		class="ch.unifr.pai.twice.mousecontrol.client.TouchPadNintendoDS">
+		class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadNintendoDS">
 		<when-type-is
-			class="ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget" />
+			class="ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget" />
 		<when-property-is name="mouseControlImpl" value="nintendods" />
 	</replace-with>
 

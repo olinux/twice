@@ -16,7 +16,7 @@
 -->
 <module rename-to="micebrowser">
 	<inherits name="com.google.gwt.user.User" />
-	<inherits name="ch.unifr.pai.twice.multipointer.Multipointer" />
+	<inherits name="ch.unifr.pai.twice.multipointer.provider.MultipointerProvider" />
 	<source path="client" />
 	<entry-point class="ch.unifr.pai.twice.widgets.mpbrowser.client.MPBrowser" />
 	

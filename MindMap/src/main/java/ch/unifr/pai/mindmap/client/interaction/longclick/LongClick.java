@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
@@ -51,10 +51,10 @@ public abstract class LongClick {
 			originator.addMouseDownHandler(new MouseDownHandler() {
 				@Override
 				public void onMouseDown(MouseDownEvent event) {
-					String deviceId = MultiCursorController.getUUID(event.getNativeEvent());
+					String deviceId = NoMultiCursorController.getUUID(event.getNativeEvent());
 					if (Element.as(event.getNativeEvent().getEventTarget()) == ((Widget) LongClick.this.originator).getElement()) {
 						LongClickInfo info = new LongClickInfo(LongClick.this.originator, deviceId, event.getClientX(), event.getClientY());
-						infoByDeviceId.put(MultiCursorController.getUUID(event.getNativeEvent()), info);
+						infoByDeviceId.put(NoMultiCursorController.getUUID(event.getNativeEvent()), info);
 						onStartClick(info);
 					}
 				}
@@ -64,7 +64,7 @@ public abstract class LongClick {
 
 				@Override
 				public void onMouseUp(MouseUpEvent event) {
-					LongClickInfo info = infoByDeviceId.get(MultiCursorController.getUUID(event.getNativeEvent()));
+					LongClickInfo info = infoByDeviceId.get(NoMultiCursorController.getUUID(event.getNativeEvent()));
 					if (info != null) {
 						if (new Date().getTime() - info.getTime() > longClickThreshold && info.getMouseDownX() == event.getClientX()
 								&& info.getMouseDownY() == event.getClientY()) {

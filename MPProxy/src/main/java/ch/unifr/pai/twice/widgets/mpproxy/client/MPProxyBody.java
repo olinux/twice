@@ -19,9 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
-import ch.unifr.pai.twice.multipointer.client.WebsocketControl;
-import ch.unifr.pai.twice.multipointer.client.widgets.MultiFocusTextBox;
+import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
 
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.NodeList;
@@ -45,7 +44,7 @@ public class MPProxyBody extends ProxyBody {
 	private final int currentColorIndex = -1;
 	private static Map<String, TextBoxBase> focusedElement = new HashMap<String, TextBoxBase>();
 	private static Set<String> owningDevices = new HashSet<String>();
-	private final MultiCursorController multiCursor = new WebsocketControl();
+	private final MultiCursorController multiCursor = new MultiCursorController();
 
 	/**
 	 * Replace all textboxes with multi focus text boxes

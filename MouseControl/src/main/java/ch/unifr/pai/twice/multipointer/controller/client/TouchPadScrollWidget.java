@@ -1,4 +1,4 @@
-package ch.unifr.pai.twice.mousecontrol.client;
+package ch.unifr.pai.twice.multipointer.controller.client;
 
 /*
  * Copyright 2013 Oliver Schmid

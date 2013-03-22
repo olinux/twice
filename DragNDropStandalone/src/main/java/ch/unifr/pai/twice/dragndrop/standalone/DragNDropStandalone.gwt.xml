@@ -17,7 +17,6 @@
 <module rename-to="dragNdrop">
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="ch.unifr.pai.twice.dragndrop.DragNDrop"/>
-	<inherits name="ch.unifr.pai.twice.multipointer.Multipointer"/>
 	<source path="client" />
 	<entry-point class="ch.unifr.pai.twice.dragndrop.standalone.client.DragNDropStandalone" />
 </module>

@@ -20,7 +20,7 @@
 	<inherits name="ch.unifr.pai.twice.utils.device.DeviceUtils" />
 	<inherits name="com.google.web.bindery.autobean.AutoBean"/>
 	<inherits name="com.google.gwt.user.theme.clean.Clean"/>
-	<inherits name="ch.unifr.pai.twice.mousecontrol.MouseControl"/>
+	<inherits name="ch.unifr.pai.twice.multipointer.controller.MultipointerController"/>
 	<inherits name="ch.unifr.pai.twice.module.TWICEModule"/>
 	<inherits name='ch.unifr.pai.twice.comm.serverPush.ServerPush' />
 	<source path="client"/>

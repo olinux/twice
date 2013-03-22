@@ -1,4 +1,4 @@
-package ch.unifr.pai.twice.mousecontrol.client;
+package ch.unifr.pai.twice.multipointer.controller.client;
 
 /*
  * Copyright 2013 Oliver Schmid
@@ -15,26 +15,22 @@ package ch.unifr.pai.twice.mousecontrol.client;
  * limitations under the License.
  */
 import java.util.Date;
+import java.util.List;
 
-import ch.unifr.pai.twice.authentication.client.Authentication;
+import ch.unifr.pai.twice.comm.serverPush.client.CommunicationManager;
 import ch.unifr.pai.twice.module.client.TWICEAnnotations.Configurable;
+import ch.unifr.pai.twice.multipointer.commons.client.events.InformationUpdateEvent;
+import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseDownEvent;
+import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseMoveEvent;
+import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseUpEvent;
+import ch.unifr.pai.twice.multipointer.commons.client.rpc.MouseControllerService;
+import ch.unifr.pai.twice.multipointer.commons.client.rpc.MouseControllerServiceAsync;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.regexp.shared.MatchResult;
-import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -77,14 +73,12 @@ public abstract class TouchPadWidget extends LayoutPanel {
 	private String host;
 	private Integer port;
 	private String currentColor;
-	private String screenDimension;
 	protected int screenWidth;
 	protected int screenHeight;
 	private boolean active = true;
 	private int currentX = -1;
 	private int currentY = -1;
 	private boolean running;
-	private boolean downLastAction = false;
 	private boolean doLog = false;
 	private StringBuilder log = new StringBuilder();
 	private String header;
@@ -208,14 +202,14 @@ public abstract class TouchPadWidget extends LayoutPanel {
 		return availableClients != null && availableClients.length > 0 ? availableClients[availableClients.length - 1] : null;
 	}
 
-	/**
-	 * if no cursor is available on the shared screen, try to gather one with the given interval
-	 */
-	private void noCursorAvailable() {
-		setActive(false);
-		if (lookForCursor != null)
-			lookForCursor.schedule(LOOKFORCURSORINTERVAL);
-	}
+	// /**
+	// * if no cursor is available on the shared screen, try to gather one with the given interval
+	// */
+	// private void noCursorAvailable() {
+	// setActive(false);
+	// if (lookForCursor != null)
+	// lookForCursor.schedule(LOOKFORCURSORINTERVAL);
+	// }
 
 	/**
 	 * If a cursor is assigned, start to fire events
@@ -227,37 +221,37 @@ public abstract class TouchPadWidget extends LayoutPanel {
 		if (updateInterval != null)
 			MOVEMENTUPDATEINTERVAL = Integer.parseInt(updateInterval);
 		movement.scheduleRepeating(MOVEMENTUPDATEINTERVAL);
-		keyboardHandler = Event.addNativePreviewHandler(keyboardPreviewHandler);
+		// keyboardHandler = Event.addNativePreviewHandler(keyboardPreviewHandler);
 	}
 
-	/**
-	 * Handler for keyboard events and invocation of the key events on the shared screen
-	 */
-	protected NativePreviewHandler keyboardPreviewHandler = new NativePreviewHandler() {
+	// /**
+	// * Handler for keyboard events and invocation of the key events on the shared screen
+	// */
+	// protected NativePreviewHandler keyboardPreviewHandler = new NativePreviewHandler() {
+	//
+	// @Override
+	// public void onPreviewNativeEvent(NativePreviewEvent event) {
+	// switch (event.getTypeInt()) {
+	// case Event.ONKEYDOWN:
+	// // if (handleFocus)
+	// // focusTextBox.setFocus(true);
+	// send("a=kd&kc=" + event.getNativeEvent().getKeyCode() + "&cc=" + event.getNativeEvent().getCharCode());
+	// break;
+	// case Event.ONKEYUP:
+	// // if (handleFocus)
+	// // focusTextBox.setFocus(true);
+	// send("a=ku&kc=" + event.getNativeEvent().getKeyCode() + "&cc=" + event.getNativeEvent().getCharCode());
+	// break;
+	// case Event.ONKEYPRESS:
+	// // if (handleFocus)
+	// // focusTextBox.setFocus(true);
+	// send("a=kp&kc=" + event.getNativeEvent().getKeyCode() + "&cc=" + event.getNativeEvent().getCharCode());
+	// break;
+	// }
+	// }
+	// };
 
-		@Override
-		public void onPreviewNativeEvent(NativePreviewEvent event) {
-			switch (event.getTypeInt()) {
-				case Event.ONKEYDOWN:
-					// if (handleFocus)
-					// focusTextBox.setFocus(true);
-					send("a=kd&kc=" + event.getNativeEvent().getKeyCode() + "&cc=" + event.getNativeEvent().getCharCode());
-					break;
-				case Event.ONKEYUP:
-					// if (handleFocus)
-					// focusTextBox.setFocus(true);
-					send("a=ku&kc=" + event.getNativeEvent().getKeyCode() + "&cc=" + event.getNativeEvent().getCharCode());
-					break;
-				case Event.ONKEYPRESS:
-					// if (handleFocus)
-					// focusTextBox.setFocus(true);
-					send("a=kp&kc=" + event.getNativeEvent().getKeyCode() + "&cc=" + event.getNativeEvent().getCharCode());
-					break;
-			}
-		}
-	};
-
-	protected HandlerRegistration keyboardHandler;
+	// protected HandlerRegistration keyboardHandler;
 
 	private Timer lookForCursor;
 
@@ -282,72 +276,49 @@ public abstract class TouchPadWidget extends LayoutPanel {
 		dragging = false;
 	}
 
+	private HandlerRegistration informationUpdateHandler;
+
 	/**
 	 * starts the execution of the component
 	 */
 	public void start() {
 		if (!running) {
+			informationUpdateHandler = CommunicationManager.getBidirectionalEventBus().addHandler(InformationUpdateEvent.TYPE,
+					new InformationUpdateEvent.Handler() {
+
+						@Override
+						public void onEvent(InformationUpdateEvent event) {
+							if (event.getOriginatingDevice().equals(currentClient)) {
+								setScreenDimension(event.width, event.height);
+								setColor(event.color);
+							}
+						}
+					});
 			label.setText("looking for available remote-clients");
 			getAvailableClients(new Command() {
 
 				@Override
 				public void execute() {
 					label.setText((availableClients == null ? "0" : availableClients.length) + " clients found");
-					if (getCurrentClient() != null) {
-						label.setText("looking for cursor on client " + getCurrentClient());
-						lookForCursor = new Timer() {
-
-							@Override
-							public void run() {
-								try {
-									new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + controlServlet + "?a=x"
-											+ (getCurrentClient() != null ? "&targetUUID=" + getCurrentClient() : "") + (uuid != null ? "&uuid=" + uuid : "")
-											+ (host != null ? "&host=" + host : "") + (port != null ? "&port=" + port : "")).sendRequest(null,
-											new RequestCallback() {
-
-												@Override
-												public void onResponseReceived(Request request, Response response) {
-													if (response.getStatusCode() > 400)
-														onError(request, null);
-													label.setText("GOT DATA: " + response.getText());
-													String color = extractColor(response);
-													if (color == null || color.isEmpty() || color.equals("#null"))
-														color = null;
-													extractLastAction(response);
-
-													setScreenDimension(extractScreenDimensions(response));
-													if (color != null) {
-														setColor(color);
-														cursorAssigned();
-													}
-													else {
-														noCursorAvailable();
-													}
-												}
-
-												@Override
-												public void onError(Request request, Throwable exception) {
-													noCursorAvailable();
-												}
-											});
-								}
-								catch (RequestException e) {
-									noCursorAvailable();
-								}
-							}
-						};
-						lookForCursor.run();
+					currentClient = getCurrentClient();
+					if (currentClient != null) {
+						cursorAssigned();
 					}
 				}
 			});
 		}
 	}
 
+	private String currentClient;
+
 	/**
 	 * stops the execution of the component (also interrupts the sending of events).
 	 */
 	public void stop() {
 		if (running) {
+			informationUpdateHandler.removeHandler();
+			informationUpdateHandler = null;
+
 			running = false;
 			movement.cancel();
 		}
@@ -373,8 +344,9 @@ public abstract class TouchPadWidget extends LayoutPanel {
 	 * @param leftButton
 	 */
 	protected void down(boolean leftButton) {
-		send("a=d&b=" + (leftButton ? "l" : "r"));
-		downLastAction = true;
+		RemoteMouseDownEvent event = GWT.create(RemoteMouseDownEvent.class);
+		event.rightButton = !leftButton;
+		CommunicationManager.getBidirectionalEventBus().fireEvent(event);
 	}
 
 	/**
@@ -383,21 +355,22 @@ public abstract class TouchPadWidget extends LayoutPanel {
 	 * @param leftButton
 	 */
 	protected void up(boolean leftButton) {
-		send("a=u&b=" + (leftButton ? "l" : "r"));
-		downLastAction = false;
+		RemoteMouseUpEvent event = GWT.create(RemoteMouseUpEvent.class);
+		event.rightButton = !leftButton;
+		CommunicationManager.getBidirectionalEventBus().fireEvent(event);
 	}
 
 	/**
 	 * send a hide request to the mouse control servlet that lets the mouse pointer disappear on the shared screen
 	 */
 	protected void hide() {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-			@Override
-			public void execute() {
-				send("a=h");
-			}
-		});
+		// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+		//
+		// @Override
+		// public void execute() {
+		// send("a=h");
+		// }
+		// });
 	}
 
 	/**
@@ -417,83 +390,83 @@ public abstract class TouchPadWidget extends LayoutPanel {
 	 * @param y
 	 */
 	protected void move(int x, int y) {
-		if (screenDimension == null)
-			send(null);
-		else
-			send("a=m&x=" + x + "&y=" + y);
+		RemoteMouseMoveEvent evt = GWT.create(RemoteMouseMoveEvent.class);
+		evt.x = x;
+		evt.y = y;
+		CommunicationManager.getBidirectionalEventBus().fireEvent(evt);
 	}
 
-	/**
-	 * Delegator method to send a query to the mouse control servlet without callback
-	 * 
-	 * @param query
-	 */
-	protected void send(String query) {
-		send(query, null);
-	}
+	// /**
+	// * Delegator method to send a query to the mouse control servlet without callback
+	// *
+	// * @param query
+	// */
+	// protected void send(String query) {
+	// send(query, null);
+	// }
 
-	/**
-	 * Sends a request to the server to get the current status
-	 * 
-	 * @param callback
-	 */
-	protected void getStatus(Command callback) {
-		send(null, callback);
-	}
+	// /**
+	// * Sends a request to the server to get the current status
+	// *
+	// * @param callback
+	// */
+	// protected void getStatus(Command callback) {
+	// send(null, callback);
+	// }
 
-	private boolean noConnection;
+	// private boolean noConnection;
 
-	/**
-	 * Sends the given query to the mouse pointer controller servlet
-	 * 
-	 * @param query
-	 * @param callback
-	 */
-	protected void send(String query, final Command callback) {
-		try {
-			if (active) {
-
-				new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + controlServlet + "?" + (query != null ? query : "a=x")
-						+ (getCurrentClient() != null ? "&targetUUID=" + getCurrentClient() : "") + (uuid != null ? "&uuid=" + uuid : "")
-						+ (host != null ? "&host=" + host : "") + (port != null ? "&port=" + port : "") + ("&user=" + Authentication.getUserName()))
-						.sendRequest(null, new RequestCallback() {
-
-							@Override
-							public void onResponseReceived(Request request, Response response) {
-								if (response.getStatusCode() > 400)
-									onError(request, null);
-								String color = extractColor(response);
-								if (response.getText().trim().isEmpty()) {
-									label.setText("No connection available");
-									noConnection = true;
-								}
-								else {
-									if (noConnection) {
-										label.setText("");
-										noConnection = false;
-									}
-
-									if (color == null || color.isEmpty() || color.equals("#null"))
-										color = null;
-									extractLastAction(response);
-									setColor(color);
-									setScreenDimension(extractScreenDimensions(response));
-									if (callback != null)
-										callback.execute();
-								}
-							}
-
-							@Override
-							public void onError(Request request, Throwable exception) {
-								setActive(false);
-							}
-						});
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	// /**
+	// * Sends the given query to the mouse pointer controller servlet
+	// *
+	// * @param query
+	// * @param callback
+	// */
+	// protected void send(String query, final Command callback) {
+	// try {
+	// if (active) {
+	//
+	// new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + controlServlet + "?" + (query != null ? query : "a=x")
+	// + (getCurrentClient() != null ? "&targetUUID=" + getCurrentClient() : "") + (uuid != null ? "&uuid=" + uuid : "")
+	// + (host != null ? "&host=" + host : "") + (port != null ? "&port=" + port : "") + ("&user=" + Authentication.getUserName()))
+	// .sendRequest(null, new RequestCallback() {
+	//
+	// @Override
+	// public void onResponseReceived(Request request, Response response) {
+	// if (response.getStatusCode() > 400)
+	// onError(request, null);
+	// String color = extractColor(response);
+	// if (response.getText().trim().isEmpty()) {
+	// label.setText("No connection available");
+	// noConnection = true;
+	// }
+	// else {
+	// if (noConnection) {
+	// label.setText("");
+	// noConnection = false;
+	// }
+	//
+	// if (color == null || color.isEmpty() || color.equals("#null"))
+	// color = null;
+	// extractLastAction(response);
+	// setColor(color);
+	// setScreenDimension(extractScreenDimensions(response));
+	// if (callback != null)
+	// callback.execute();
+	// }
+	// }
+	//
+	// @Override
+	// public void onError(Request request, Throwable exception) {
+	// setActive(false);
+	// }
+	// });
+	// }
+	// }
+	// catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	/**
 	 * sets the mouse control active or inactive
@@ -521,63 +494,15 @@ public abstract class TouchPadWidget extends LayoutPanel {
 	 * 
 	 * @param dimension
 	 */
-	private void setScreenDimension(String dimension) {
-		if (dimension != null && (screenDimension == null || !screenDimension.equals(dimension))) {
-			String[] values = dimension.split("x");
-			if (values.length == 2) {
-				screenWidth = Integer.parseInt(values[0]);
-				screenHeight = Integer.parseInt(values[1]);
-				updateScreenDimensions();
-				screenDimension = dimension;
-			}
+	private void setScreenDimension(Integer width, Integer height) {
+		if (width != null && height != null && (!width.equals(screenWidth) || !height.equals(screenHeight))) {
+			screenWidth = width;
+			screenHeight = height;
+			updateScreenDimensions();
 		}
-	}
-
-	/**
-	 * @param resp
-	 * @return the screen dimensions of the shared screen separated by a "x"
-	 */
-	private static String extractScreenDimensions(Response resp) {
-		return extractByRegex(resp, "[0-9]*x[0-9]*");
-	}
-
-	/**
-	 * @param resp
-	 * @return the color of the assigned the mouse pointer
-	 */
-	private static String extractColor(Response resp) {
-		return extractByRegex(resp, "#.{6}");
 	}
 
 	protected String lastAction = null;
-
-	/**
-	 * @param response
-	 *            - the last action that has been applied
-	 */
-	private void extractLastAction(Response response) {
-		String[] split = response.getText().split("@");
-		if (split.length > 2) {
-			if (!split[2].equals(lastAction)) {
-				lastAction = split[2];
-				onActionChanged(lastAction);
-				GWT.log("Action changed: " + lastAction);
-			}
-		}
-	}
-
-	/**
-	 * Helper method to extract values from the HTTP-response by the given regular expression
-	 * 
-	 * @param response
-	 * @param regex
-	 * @return
-	 */
-	private static String extractByRegex(Response response, String regex) {
-		RegExp re = RegExp.compile(regex);
-		MatchResult result = re.exec(response.getText());
-		return result.getGroup(0);
-	}
 
 	/**
 	 * Sets the color of the font based on the brightness of the background color either to black or to white
@@ -625,32 +550,27 @@ public abstract class TouchPadWidget extends LayoutPanel {
 	 * @param callback
 	 */
 	private void getAvailableClients(final Command callback) {
-		try {
-			new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + controlServlet + "?a=g").sendRequest(null, new RequestCallback() {
+		MouseControllerServiceAsync controller = GWT.create(MouseControllerService.class);
+		controller.getMPProviders(new AsyncCallback<List<String>>() {
 
-				@Override
-				public void onResponseReceived(Request request, Response response) {
-					if (response.getText() != null && !response.getText().isEmpty()) {
-						availableClients = response.getText().split("\n");
-					}
-					if (callback != null)
-						callback.execute();
+			@Override
+			public void onSuccess(List<String> result) {
+				if (result != null) {
+					availableClients = result.toArray(new String[0]);
 				}
-
-				@Override
-				public void onError(Request request, Throwable exception) {
-					GWT.log("Available clients request", exception);
-					if (callback != null)
-						callback.execute();
+				else {
+					availableClients = new String[0];
 				}
-			});
-		}
-		catch (RequestException e) {
-			GWT.log("Request Exception", e);
-			if (callback != null)
-				callback.execute();
+				if (callback != null)
+					callback.execute();
 
-		}
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("SERVICE NOT FOUND");
+			}
+		});
 	}
 
 	/**

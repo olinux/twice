@@ -67,7 +67,6 @@
 		<module>../QRCodeGenerator</module>
 		<module>../RemoteWidgets</module>
 		<module>../ExperimentWorkflow</module>
-		<module>../Multipointer</module>
 	</modules>
 	<description>A parent project for all TWICE libraries for simple dependency resolution.</description>
 </project>

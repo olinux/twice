@@ -17,7 +17,7 @@
 <module rename-to="miceproxy">
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name='ch.unifr.pai.twice.utils.device.DeviceUtils'/>
-	<inherits name="ch.unifr.pai.twice.multipointer.Multipointer" />
+	<inherits name="ch.unifr.pai.twice.multipointer.provider.MultipointerProvider" />
 
 	<source path="client" />
 	<source path="shared" />

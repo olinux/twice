@@ -14,8 +14,8 @@ package ch.unifr.pai.twice.mouseControl.standalone.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.mousecontrol.client.MobileKeyboard;
-import ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget;
+import ch.unifr.pai.twice.multipointer.controller.client.MobileKeyboard;
+import ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget;
 import ch.unifr.pai.twice.utils.device.client.UUID;
 
 import com.google.gwt.core.client.EntryPoint;

@@ -14,7 +14,7 @@ package ch.unifr.pai.mindmap.client.mindmap;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class Toolbar extends VerticalPanel {
 
 	private final FlowPanel masterToolbox = new FlowPanel();
-	MultiCursorController controller = GWT.create(MultiCursorController.class);
+	NoMultiCursorController controller = GWT.create(NoMultiCursorController.class);
 	private final ListBox lb = new ListBox();
 	/**
 	 * A textbox for the definition of the maximum number of mouse pointers on the screen
@@ -56,7 +56,7 @@ public class Toolbar extends VerticalPanel {
 			+ "images/noteshidden.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
-			if (MultiCursorController.isDefaultCursor(event)) {
+			if (NoMultiCursorController.isDefaultCursor(event)) {
 				super.onBrowserEvent(event);
 			}
 		}
@@ -68,7 +68,7 @@ public class Toolbar extends VerticalPanel {
 			+ "images/texteditdisabled.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
-			if (MultiCursorController.isDefaultCursor(event)) {
+			if (NoMultiCursorController.isDefaultCursor(event)) {
 				super.onBrowserEvent(event);
 			}
 		}
@@ -77,7 +77,7 @@ public class Toolbar extends VerticalPanel {
 			+ "images/cursordisabled.png")) {
 		@Override
 		public void onBrowserEvent(Event event) {
-			if (MultiCursorController.isDefaultCursor(event)) {
+			if (NoMultiCursorController.isDefaultCursor(event)) {
 				super.onBrowserEvent(event);
 			}
 		}
@@ -128,7 +128,7 @@ public class Toolbar extends VerticalPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (!MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+				if (!NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					event.preventDefault();
 				}
 			}

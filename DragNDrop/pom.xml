@@ -18,12 +18,6 @@
 	<artifactId>DragNDrop</artifactId>
 	<name>DragNDrop</name>
 	<description >A multi-pointer and touch capable drag and drop library. The library relies on the extra information added to native mouse events through the multi-pointer functionality and allows - with a touch sensitive implementation to provide drag and drop functionalities on touch-based devices with the same API.</description>
-	<dependencies>
-		<dependency>
-			<groupId>ch.unifr.pai.twice.multipointer</groupId>
-			<artifactId>Multipointer</artifactId>
-		</dependency>
-	</dependencies>
 	<parent>
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Lib</artifactId>
@@ -31,4 +25,10 @@
 		<relativePath>../TWICE-Lib</relativePath>
 	</parent>
 	<version>${twice.version}</version>
+	<dependencies>
+		<dependency>
+			<groupId>ch.unifr.pai.twice.mouseControl</groupId>
+			<artifactId>MouseControl</artifactId>
+		</dependency>
+	</dependencies>
 </project>

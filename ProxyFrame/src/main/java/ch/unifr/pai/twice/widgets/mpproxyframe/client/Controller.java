@@ -14,7 +14,7 @@ package ch.unifr.pai.twice.widgets.mpproxyframe.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

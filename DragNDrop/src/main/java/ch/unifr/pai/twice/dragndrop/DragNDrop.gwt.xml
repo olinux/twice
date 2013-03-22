@@ -15,7 +15,7 @@
 -->
 <module rename-to='dragndrop'>
 	<inherits name='com.google.gwt.user.User' />
-	<inherits name="ch.unifr.pai.twice.multipointer.Multipointer" />
+	<inherits name="ch.unifr.pai.twice.multipointer.provider.MultipointerProvider" />
 	<replace-with class="ch.unifr.pai.twice.dragndrop.client.TouchDragNDrop">
 		<when-type-is class="ch.unifr.pai.twice.dragndrop.client.MPDragNDrop" />
 		<when-property-is name="deviceType" value="touch" />

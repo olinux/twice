@@ -142,11 +142,6 @@
 				<version>${twice.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>ch.unifr.pai.twice.multipointer</groupId>
-				<artifactId>Multipointer</artifactId>
-				<version>${twice.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>ch.unifr.pai.twice.module</groupId>
 				<artifactId>TWICEModule</artifactId>
 				<version>${twice.version}</version>

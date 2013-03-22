@@ -24,7 +24,7 @@ import ch.unifr.pai.twice.dragndrop.client.configuration.DragConfiguration;
 import ch.unifr.pai.twice.dragndrop.client.factories.DropTargetHandlerFactory.Priority;
 import ch.unifr.pai.twice.dragndrop.client.intf.DragNDropHandler;
 import ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler;
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -132,7 +132,7 @@ public class MindMapCanvas extends MindMapComponent {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				String deviceId = MultiCursorController.getUUID(event.getNativeEvent());
+				String deviceId = NoMultiCursorController.getUUID(event.getNativeEvent());
 				String selected = selectedElements.get(deviceId);
 				if (selectedElements.get(deviceId) != null) {
 					eventBus.fireEvent(UpdateMindmapNoteEvent.block(selected, false));

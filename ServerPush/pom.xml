@@ -61,6 +61,6 @@
 	</parent>
 	<version>${twice.version}</version>
 	<properties>
-		<atmosphere.version>1.0.6</atmosphere.version>
+		<atmosphere.version>1.0.12</atmosphere.version>
 	</properties>
 </project>

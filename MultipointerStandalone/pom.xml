@@ -21,10 +21,6 @@
 	<name>MultipointerStandalone</name>
 	<dependencies>
 		<dependency>
-			<groupId>ch.unifr.pai.twice.multipointer</groupId>
-			<artifactId>Multipointer</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>ch.unifr.pai.twice.mouseControl</groupId>
 			<artifactId>MouseControl</artifactId>
 		</dependency>

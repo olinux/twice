@@ -28,7 +28,7 @@ import ch.unifr.pai.twice.dragndrop.client.intf.Draggable;
 import ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler;
 import ch.unifr.pai.twice.dragndrop.client.utils.Triple;
 import ch.unifr.pai.twice.dragndrop.client.utils.Tuple;
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;

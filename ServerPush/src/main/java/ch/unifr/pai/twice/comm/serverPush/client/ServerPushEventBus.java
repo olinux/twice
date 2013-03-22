@@ -161,6 +161,7 @@ public class ServerPushEventBus extends SimpleEventBus {
 			@Override
 			public void onConnected(int heartbeat, int connectionID) {
 				GWT.log("comet.connected [" + heartbeat + ", " + connectionID + "]");
+				sendPingEvent();
 			}
 
 			@Override
@@ -221,12 +222,7 @@ public class ServerPushEventBus extends SimpleEventBus {
 			 */
 			@Override
 			public void onEvent(PingEvent event) {
-				PingEvent e = GWT.create(PingEvent.class);
-				e.setTimestamp(remoteEventing.getEstimatedServerTime(null));
-				AtmosphereEventWrapper wrapper = new AtmosphereEventWrapper();
-				wrapper.setEvent(e, security);
-				GWT.log("Send ping");
-				atmosphereClient.post(wrapper);
+				sendPingEvent();
 			}
 		});
 	}
@@ -242,5 +238,21 @@ public class ServerPushEventBus extends SimpleEventBus {
 			source = ((RemoteWidget) source).getEventSource();
 		}
 		return super.addHandlerToSource(type, source, handler);
+	}
+
+	public void sendPingEvent() {
+		PingEvent e = GWT.create(PingEvent.class);
+		e.setTimestamp(remoteEventing.getEstimatedServerTime(null));
+		// AtmosphereEventWrapper wrapper = new AtmosphereEventWrapper();
+		// wrapper.setEvent(e, security);
+		GWT.log("Send ping");
+		// atmosphereClient.post(wrapper);
+		try {
+			atmosphereClient.post(e.serialize(security));
+		}
+		catch (MessagingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }

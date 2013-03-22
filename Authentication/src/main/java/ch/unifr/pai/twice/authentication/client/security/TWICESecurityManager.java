@@ -15,8 +15,6 @@ package ch.unifr.pai.twice.authentication.client.security;
  * limitations under the License.
  */
 
-import com.googlecode.gwt.crypto.bouncycastle.DataLengthException;
-import com.googlecode.gwt.crypto.bouncycastle.InvalidCipherTextException;
 import com.googlecode.gwt.crypto.client.TripleDesCipher;
 
 /**
@@ -52,19 +50,20 @@ public class TWICESecurityManager {
 	 *             if the message can not be encrypted
 	 */
 	public String encryptMessage(String message) throws MessagingException {
-		try {
-			// message = encoding.encode(cipher.encrypt(message));
-			message = cipher.encrypt(message);
-		}
-		catch (DataLengthException e1) {
-			throw new MessagingException("Was not able to encode the message", e1);
-		}
-		catch (IllegalStateException e1) {
-			throw new MessagingException("Was not able to encode the message", e1);
-		}
-		catch (InvalidCipherTextException e1) {
-			throw new MessagingException("Was not able to encode the message", e1);
-		}
+		// try {
+		// // message = encoding.encode(cipher.encrypt(message));
+		// // message = cipher.encrypt(message);
+		//
+		// }
+		// catch (DataLengthException e1) {
+		// throw new MessagingException("Was not able to encode the message", e1);
+		// }
+		// catch (IllegalStateException e1) {
+		// throw new MessagingException("Was not able to encode the message", e1);
+		// }
+		// catch (InvalidCipherTextException e1) {
+		// throw new MessagingException("Was not able to encode the message", e1);
+		// }
 		return message;
 	}
 
@@ -79,20 +78,20 @@ public class TWICESecurityManager {
 	 *             ensure the validity of a message.
 	 */
 	public String decryptMessage(String message) throws MessagingException {
-		try {
-			// message = cipher.decrypt(encoding.decode(message));
-			message = cipher.decrypt(message);
-
-		}
-		catch (DataLengthException e) {
-			e.printStackTrace();
-		}
-		catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-		catch (InvalidCipherTextException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// // message = cipher.decrypt(encoding.decode(message));
+		// message = cipher.decrypt(message);
+		//
+		// }
+		// catch (DataLengthException e) {
+		// e.printStackTrace();
+		// }
+		// catch (IllegalStateException e) {
+		// e.printStackTrace();
+		// }
+		// catch (InvalidCipherTextException e) {
+		// e.printStackTrace();
+		// }
 		return message;
 	}
 

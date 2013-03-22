@@ -17,7 +17,7 @@ package ch.unifr.pai.twice.widgets.mpproxy.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.unifr.pai.twice.multipointer.client.widgets.MultiFocusTextBox;
+import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
 import ch.unifr.pai.twice.widgets.mpproxy.client.navig.Navigation;
 import ch.unifr.pai.twice.widgets.mpproxy.shared.Rewriter;
 import ch.unifr.pai.twice.widgets.mpproxy.shared.URLParser;

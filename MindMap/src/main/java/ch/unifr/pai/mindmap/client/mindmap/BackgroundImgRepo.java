@@ -14,7 +14,7 @@ package ch.unifr.pai.mindmap.client.mindmap;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -144,7 +144,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 		PushButton emptyBg = new PushButton(new Image(GWT.getModuleBaseURL() + "images/emptyscreen.png")) {
 			@Override
 			public void onBrowserEvent(Event event) {
-				if (MultiCursorController.isDefaultCursor(event)) {
+				if (NoMultiCursorController.isDefaultCursor(event)) {
 					super.onBrowserEvent(event);
 				}
 			}
@@ -155,7 +155,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+				if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					BackgroundImgRepo.this.bgImg.setVisible(false);
 				}
 			}
@@ -199,7 +199,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 					PushButton button = new PushButton(img) {
 						@Override
 						public void onBrowserEvent(Event event) {
-							if (MultiCursorController.isDefaultCursor(event)) {
+							if (NoMultiCursorController.isDefaultCursor(event)) {
 								super.onBrowserEvent(event);
 							}
 						}
@@ -215,7 +215,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 						 */
 						@Override
 						public void onClick(ClickEvent event) {
-							if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+							if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 								BackgroundImgRepo.this.bgImg.setVisible(true);
 								BackgroundImgRepo.this.bgImg.getElement().setAttribute("src", img.getElement().getAttribute("src"));
 							}
@@ -230,7 +230,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 						 */
 						@Override
 						public void onMouseOver(MouseOverEvent event) {
-							if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+							if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 								BackgroundImgRepo.this.previewImage.getElement().getStyle().setDisplay(Display.BLOCK);
 								BackgroundImgRepo.this.previewImage.getElement().setAttribute("src", img.getElement().getAttribute("src"));
 								Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -257,7 +257,7 @@ public class BackgroundImgRepo extends AbsolutePanel {
 						 */
 						@Override
 						public void onMouseOut(MouseOutEvent event) {
-							if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+							if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 
 								BackgroundImgRepo.this.previewImage.getElement().getStyle().setDisplay(Display.NONE);
 							}

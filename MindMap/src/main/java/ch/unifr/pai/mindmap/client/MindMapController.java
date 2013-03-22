@@ -18,8 +18,8 @@ import ch.unifr.pai.mindmap.client.components.MindmapCreateEditWidget;
 import ch.unifr.pai.mindmap.client.mindmap.MindMapComponent;
 import ch.unifr.pai.mindmap.client.mindmap.MindMapModule;
 import ch.unifr.pai.twice.layout.client.DynamicLayout;
-import ch.unifr.pai.twice.mousecontrol.client.TouchPadModule;
-import ch.unifr.pai.twice.mousecontrol.client.TouchPadWidget;
+import ch.unifr.pai.twice.multipointer.controller.client.TouchPadModule;
+import ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget;
 import ch.unifr.pai.twice.utils.device.client.DeviceType;
 
 import com.google.gwt.core.client.GWT;

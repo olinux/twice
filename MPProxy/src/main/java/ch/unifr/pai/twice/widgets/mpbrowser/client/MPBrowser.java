@@ -14,7 +14,7 @@ package ch.unifr.pai.twice.widgets.mpbrowser.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.client.WebsocketControl;
+import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class MPBrowser implements EntryPoint {
 
-	private final WebsocketControl multiCursor = new WebsocketControl();
+	private final MultiCursorController multiCursor = new MultiCursorController();
 	HorizontalPanel navig = new HorizontalPanel();
 	HorizontalPanel navig2 = new HorizontalPanel();
 	Frame frame = new NamedFrame("mpFrame");

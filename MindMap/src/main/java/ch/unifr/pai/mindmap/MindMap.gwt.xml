@@ -21,8 +21,8 @@
 	<!-- <inherits name="ch.unifr.pai.mice.gwt.dragNDrop.DragNDrop" /> -->
 	<inherits name="ch.unifr.pai.twice.utils.cursorSimulator.CursorSimulation" />
 	<!-- <inherits name="ch.unifr.pai.mice.gwt.utils.device.DeviceUtils" /> -->
-	<inherits name="ch.unifr.pai.twice.mousecontrol.MouseControl" />
-	<inherits name='ch.unifr.pai.twice.multipointer.Multipointer' />
+	<inherits name='ch.unifr.pai.twice.multipointer.controller.MultipointerController' />	
+	<inherits name='ch.unifr.pai.twice.multipointer.provider.MultipointerProvider' />
 	<inherits name='ch.unifr.pai.twice.widgets.RemoteWidgets' />
 	<inherits name="ch.unifr.pai.twice.layout.DynamicLayout" />
 	<inherits name="com.google.gwt.resources.Resources" />

@@ -17,7 +17,7 @@ package ch.unifr.pai.mindmap.client.mindmap;
 import ch.unifr.pai.mindmap.client.rpc.CreateMindmapNoteEvent;
 import ch.unifr.pai.mindmap.client.rpc.UpdateMindmapNoteEvent;
 import ch.unifr.pai.twice.dragndrop.client.intf.Draggable;
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
@@ -85,7 +85,7 @@ public class MindmapNoteWidget extends FocusPanel implements Draggable {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (MultiCursorController.isDefaultCursor(event.getNativeEvent())) {
+				if (NoMultiCursorController.isDefaultCursor(event.getNativeEvent())) {
 					toggleDisclosure(!disclosed);
 				}
 			}

@@ -20,7 +20,7 @@ import ch.unifr.pai.twice.dragndrop.client.configuration.DragConfiguration;
 import ch.unifr.pai.twice.dragndrop.client.factories.DropTargetHandlerFactory.Priority;
 import ch.unifr.pai.twice.dragndrop.client.intf.DragNDropHandler;
 import ch.unifr.pai.twice.dragndrop.client.intf.DropTargetHandler;
-import ch.unifr.pai.twice.multipointer.client.MultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

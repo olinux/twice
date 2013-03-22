@@ -14,7 +14,8 @@ package ch.unifr.pai.twice.multipointer.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.client.widgets.MultiFocusTextBox;
+import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
+import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -47,7 +48,7 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class MultiPointerStandalone implements EntryPoint {
 
-	MultiCursorController c = GWT.create(MultiCursorController.class);
+	NoMultiCursorController c = GWT.create(NoMultiCursorController.class);
 
 	Label l = new Label("TEST");
 
@@ -90,8 +91,8 @@ public class MultiPointerStandalone implements EntryPoint {
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
 				l.getElement().getStyle().setBackgroundColor("yellow");
-				GWT.log("Mouse over " + MultiCursorController.getUUID(event.getNativeEvent()) + " "
-						+ MultiCursorController.getColorNative(event.getNativeEvent()));
+				GWT.log("Mouse over " + NoMultiCursorController.getUUID(event.getNativeEvent()) + " "
+						+ NoMultiCursorController.getColorNative(event.getNativeEvent()));
 			}
 		});
 		l.addMouseOutHandler(new MouseOutHandler() {
@@ -99,8 +100,8 @@ public class MultiPointerStandalone implements EntryPoint {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				l.getElement().getStyle().setBackgroundColor(null);
-				GWT.log("Mouse out " + MultiCursorController.getUUID(event.getNativeEvent()) + " "
-						+ MultiCursorController.getColorNative(event.getNativeEvent()));
+				GWT.log("Mouse out " + NoMultiCursorController.getUUID(event.getNativeEvent()) + " "
+						+ NoMultiCursorController.getColorNative(event.getNativeEvent()));
 
 			}
 		});
@@ -108,24 +109,24 @@ public class MultiPointerStandalone implements EntryPoint {
 
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				GWT.log("Mouse down " + MultiCursorController.getUUID(event.getNativeEvent()) + " "
-						+ MultiCursorController.getColorNative(event.getNativeEvent()));
+				GWT.log("Mouse down " + NoMultiCursorController.getUUID(event.getNativeEvent()) + " "
+						+ NoMultiCursorController.getColorNative(event.getNativeEvent()));
 			}
 		});
 		l.addMouseMoveHandler(new MouseMoveHandler() {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-				GWT.log("Mouse move " + MultiCursorController.getUUID(event.getNativeEvent()) + " "
-						+ MultiCursorController.getColorNative(event.getNativeEvent()));
+				GWT.log("Mouse move " + NoMultiCursorController.getUUID(event.getNativeEvent()) + " "
+						+ NoMultiCursorController.getColorNative(event.getNativeEvent()));
 			}
 		});
 		l.addMouseUpHandler(new MouseUpHandler() {
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-				GWT.log("Mouse up " + MultiCursorController.getUUID(event.getNativeEvent()) + " "
-						+ MultiCursorController.getColorNative(event.getNativeEvent()));
+				GWT.log("Mouse up " + NoMultiCursorController.getUUID(event.getNativeEvent()) + " "
+						+ NoMultiCursorController.getColorNative(event.getNativeEvent()));
 
 			}
 		});
@@ -133,7 +134,7 @@ public class MultiPointerStandalone implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				GWT.log("Click " + MultiCursorController.getUUID(event.getNativeEvent()) + " " + MultiCursorController.getColorNative(event.getNativeEvent()));
+				GWT.log("Click " + NoMultiCursorController.getUUID(event.getNativeEvent()) + " " + NoMultiCursorController.getColorNative(event.getNativeEvent()));
 			}
 		});
 	}
