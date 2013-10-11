@@ -26,6 +26,7 @@ import ch.unifr.pai.twice.authentication.client.security.TWICESecurityManager;
 import ch.unifr.pai.twice.comm.serverPush.shared.Constants;
 import ch.unifr.pai.twice.comm.serverPush.shared.PingEvent;
 import ch.unifr.pai.twice.comm.serverPush.shared.PingEvent.PingEventHandler;
+import ch.unifr.pai.twice.utils.device.client.UUID;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.StatusCodeException;
@@ -243,6 +244,7 @@ public class ServerPushEventBus extends SimpleEventBus {
 	public void sendPingEvent() {
 		PingEvent e = GWT.create(PingEvent.class);
 		e.setTimestamp(remoteEventing.getEstimatedServerTime(null));
+		e.setOriginatingDevice(UUID.get());
 		// AtmosphereEventWrapper wrapper = new AtmosphereEventWrapper();
 		// wrapper.setEvent(e, security);
 		GWT.log("Send ping");

@@ -25,6 +25,6 @@ public abstract class RemoteMouseDownEvent extends DiscardingRemoteEvent<Handler
 	public static interface Handler extends RemoteEventHandler<RemoteMouseDownEvent> {
 	}
 
-	public boolean rightButton;
+	public Boolean rightButton;
 
 }

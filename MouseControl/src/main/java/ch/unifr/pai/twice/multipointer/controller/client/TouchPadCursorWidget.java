@@ -68,7 +68,7 @@ public class TouchPadCursorWidget extends TouchPadWidget {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-				// event.preventDefault();
+				event.preventDefault();
 				x = event.getRelativeX(dragArea.getElement());
 				y = event.getRelativeY(dragArea.getElement());
 			}

@@ -46,6 +46,15 @@ public abstract class InformationUpdateEvent extends DiscardingRemoteEvent<Handl
 		return event;
 	}
 
+	public static InformationUpdateEvent changeColorAndResize(String color, int width, int height, String targetClientUUID) {
+		InformationUpdateEvent event = GWT.create(InformationUpdateEvent.class);
+		event.color = color;
+		event.width = width;
+		event.height = height;
+		event.setReceipients(targetClientUUID);
+		return event;
+	}
+
 	public static InformationUpdateEvent lastAction(String lastAction, String targetClientUUID) {
 		InformationUpdateEvent event = GWT.create(InformationUpdateEvent.class);
 		event.lastAction = lastAction;

@@ -249,7 +249,8 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 		assignedMouseCursors.put(uuid, m);
 		if (storage != null)
 			storage.setItem("ch.unifr.pai.mice.multicursor.assignedCursor." + m.getFileName(), uuid);
-		CommunicationManager.getBidirectionalEventBus().fireEvent(InformationUpdateEvent.changeColor(m.getColor(), uuid));
+		CommunicationManager.getBidirectionalEventBus().fireEvent(
+				InformationUpdateEvent.changeColorAndResize(m.getColor(), Window.getClientWidth(), Window.getClientHeight(), uuid));
 		return m;
 	}
 
