@@ -29,10 +29,14 @@ import ch.unifr.pai.ice.client.clickblobs.ClickBlobs1user;
 import ch.unifr.pai.ice.client.dragNdrop.DnD1user;
 import ch.unifr.pai.ice.client.textedit.TextEntry1Space;
 import ch.unifr.pai.ice.client.tracking.LineTracking1user;
+import ch.unifr.pai.twice.multipointer.controller.client.TouchPadWidget;
 import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
 import ch.unifr.pai.twice.multipointer.provider.client.NoMultiCursorController;
+import ch.unifr.pai.twice.utils.device.client.DeviceType;
+import ch.unifr.pai.twice.utils.device.client.UUID;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -75,71 +79,79 @@ public class ICEMain implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-
-		/***************************************
-		 * Get the size of the browser window.
-		 ***************************************/
-		c.start();
-		identifier = String.valueOf(new Date().getTime() / 1000);
-		Window.alert("Start experiment: " + identifier);
-		RootLayoutPanel.get().add(tabPanel);
-		/*
-		 * tabPanel setup
-		 */
-
-		tabPanel.add(trainingCheckBoxes, "TA");
-		tabPanel.add(trainingTextEntry1Space1User, "TB");
-		tabPanel.add(trainingDNdBoxes, "TC");
-		tabPanel.add(trainingLineTracking, "TD");
-		// tabPanel.add(textEntry1Space2Users, "TE 1 Space - 2 users");
-		// tabPanel.add(textEntry1Space4Users, "TE 1 Space - 4 users");
-		// tabPanel.add(textEntrySepSpace2Users, "TE multi Space - 2 users");
-		// tabPanel.add(textEntrySepSpace4Users, "TE multi Space - 4 users");
-		tabPanel.add(checkBoxes, "A");
-		tabPanel.add(textEntry1Space1User, "B");
-		// tabPanel.add(checkB2u, "Click blobs 2 users");
-		// tabPanel.add(checkB4u, "Click blobs 4 users");
-		tabPanel.add(dNdBoxes, "C");
-		// tabPanel.add(dNdBoxes2S, "D & D 2 spaces");
-		// tabPanel.add(dNdBoxes4S, "D & D 4 spaces");
-		// tabPanel.add(dN4dropBoxes, "D & 4 D boxes");
-		tabPanel.add(lineTracking, "D");
-		// tabPanel.add(lineTracking2users, "L tracking 2");
-		// tabPanel.add(lineTracking4users, "L tracking 4");
-		tabPanel.selectTab(0);
-		if (tabPanel.getWidget(0) instanceof RequireInitialisation) {
-			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-				@Override
-				public void execute() {
-					((RequireInitialisation) tabPanel.getWidget(0)).initialise();
-				}
-			});
+		if (DeviceType.getDeviceType() != DeviceType.MULTICURSOR) {
+			TouchPadWidget widget = GWT.create(TouchPadWidget.class);
+			RootLayoutPanel.get().add(widget);
+			widget.initialize(UUID.get(), null, null);
+			widget.start();
 		}
+		else {
 
-		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			/***************************************
+			 * Get the size of the browser window.
+			 ***************************************/
+			c.start();
+			identifier = String.valueOf(new Date().getTime() / 1000);
+			Window.alert("Start experiment: " + identifier);
+			RootLayoutPanel.get().add(tabPanel);
+			/*
+			 * tabPanel setup
+			 */
 
-			@Override
-			public void onSelection(SelectionEvent event) {
-
+			tabPanel.add(trainingCheckBoxes, "TA");
+			tabPanel.add(trainingTextEntry1Space1User, "TB");
+			tabPanel.add(trainingDNdBoxes, "TC");
+			tabPanel.add(trainingLineTracking, "TD");
+			// tabPanel.add(textEntry1Space2Users, "TE 1 Space - 2 users");
+			// tabPanel.add(textEntry1Space4Users, "TE 1 Space - 4 users");
+			// tabPanel.add(textEntrySepSpace2Users, "TE multi Space - 2 users");
+			// tabPanel.add(textEntrySepSpace4Users, "TE multi Space - 4 users");
+			tabPanel.add(checkBoxes, "A");
+			tabPanel.add(textEntry1Space1User, "B");
+			// tabPanel.add(checkB2u, "Click blobs 2 users");
+			// tabPanel.add(checkB4u, "Click blobs 4 users");
+			tabPanel.add(dNdBoxes, "C");
+			// tabPanel.add(dNdBoxes2S, "D & D 2 spaces");
+			// tabPanel.add(dNdBoxes4S, "D & D 4 spaces");
+			// tabPanel.add(dN4dropBoxes, "D & 4 D boxes");
+			tabPanel.add(lineTracking, "D");
+			// tabPanel.add(lineTracking2users, "L tracking 2");
+			// tabPanel.add(lineTracking4users, "L tracking 4");
+			tabPanel.selectTab(0);
+			if (tabPanel.getWidget(0) instanceof RequireInitialisation) {
 				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
 					@Override
 					public void execute() {
-						((RequireInitialisation) tabPanel.getWidget(tabPanel.getSelectedIndex())).initialise();
+						((RequireInitialisation) tabPanel.getWidget(0)).initialise();
 					}
 				});
 			}
-		});
 
-		/*
-		 * re-position of the widgets on the resized window
-		 */
-		Window.addResizeHandler(new ResizeHandler() {
-			@Override
-			public void onResize(ResizeEvent event) {
+			tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 
-			}
-		});
+				@Override
+				public void onSelection(SelectionEvent event) {
+
+					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+						@Override
+						public void execute() {
+							((RequireInitialisation) tabPanel.getWidget(tabPanel.getSelectedIndex())).initialise();
+						}
+					});
+				}
+			});
+
+			/*
+			 * re-position of the widgets on the resized window
+			 */
+			Window.addResizeHandler(new ResizeHandler() {
+				@Override
+				public void onResize(ResizeEvent event) {
+
+				}
+			});
+		}
 	}
 }
