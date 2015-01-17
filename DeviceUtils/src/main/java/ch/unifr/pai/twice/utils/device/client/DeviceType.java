@@ -27,6 +27,7 @@ import com.google.gwt.core.client.GWT;
  * 
  */
 public enum DeviceType {
+	
 	/**
 	 * Cursor-oriented devices (e.g. desktop-PCs, notebooks)
 	 */
@@ -48,6 +49,8 @@ public enum DeviceType {
 	 * The current {@link DeviceTypeProvider}
 	 */
 	private static DeviceTypeProvider provider;
+	public static final String SESSION_STORAGE_VARIABLE="ch.unifr.pai.twice.deviceType";
+	
 
 	/**
 	 * Function to get the current device type through deferred binding. To save resources, the provider is instantiated lazily

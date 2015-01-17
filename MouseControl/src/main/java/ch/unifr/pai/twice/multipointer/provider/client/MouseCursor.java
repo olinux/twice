@@ -15,24 +15,14 @@ package ch.unifr.pai.twice.multipointer.provider.client;
  * limitations under the License.
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ch.unifr.pai.twice.comm.serverPush.client.RemoteEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseDownEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseMoveEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseUpEvent;
-
+import ch.unifr.pai.twice.multipointer.commons.client.events.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.FrameElement;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Timer;
@@ -41,6 +31,9 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The represenation and logic of a mouse pointer
@@ -272,43 +265,37 @@ public class MouseCursor extends SimplePanel {
 	/**
 	 * Fire a key down event
 	 * 
-	 * @param keyCode
-	 * @param charcode
 	 */
-	private void keyDown(int keyCode, int charcode) {
+	void keyDown(RemoteKeyDownEvent keyDownEvent) {
 		Element e = focussedElement;
 		if (e == null)
 			e = Document.get().getDocumentElement();
 		e.focus();
-		fireKeyboardEvent("keydown", uuid, color, e, keyCode, charcode, false, false, false, false);
+		fireKeyboardEvent("keydown", uuid, color, e, keyDownEvent.keyCode, 0, false, false, false, false);
 	}
 
 	/**
 	 * Fire a key up event
 	 * 
-	 * @param keyCode
-	 * @param charcode
 	 */
-	private void keyUp(int keyCode, int charcode) {
+	void keyUp(RemoteKeyUpEvent keyUpEvent) {
 		Element e = focussedElement;
 		if (e == null)
 			e = Document.get().getDocumentElement();
 		e.focus();
-		fireKeyboardEvent("keyup", uuid, color, e, keyCode, charcode, false, false, false, false);
+		fireKeyboardEvent("keyup", uuid, color, e, keyUpEvent.keyCode, 0, false, false, false, false);
 	}
 
 	/**
 	 * Fire a key press event
 	 * 
-	 * @param keyCode
-	 * @param charcode
 	 */
-	private void keyPress(int keyCode, int charcode) {
+	void keyPress(RemoteKeyPressEvent keyPressEvent) {
 		Element e = focussedElement;
 		if (e == null)
 			e = Document.get().getDocumentElement();
 		e.focus();
-		fireKeyboardEvent("keypress", uuid, color, e, keyCode, charcode, false, false, false, false);
+		fireKeyboardEvent("keypress", uuid, color, e, keyPressEvent.keyCode, keyPressEvent.charCode, false, false, false, false);
 	}
 
 	/**

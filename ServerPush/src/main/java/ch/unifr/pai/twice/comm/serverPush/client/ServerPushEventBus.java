@@ -203,7 +203,6 @@ public class ServerPushEventBus extends SimpleEventBus {
 			@Override
 			public void onMessage(List<?> messages) {
 				for (Object message : messages) {
-					GWT.log("received message: " + message);
 					if (message instanceof AtmosphereEventWrapper)
 						handleRemoteMessage(((AtmosphereEventWrapper) message).getSerializedEvent());
 					else if (message instanceof Serializable)
@@ -245,15 +244,11 @@ public class ServerPushEventBus extends SimpleEventBus {
 		PingEvent e = GWT.create(PingEvent.class);
 		e.setTimestamp(remoteEventing.getEstimatedServerTime(null));
 		e.setOriginatingDevice(UUID.get());
-		// AtmosphereEventWrapper wrapper = new AtmosphereEventWrapper();
-		// wrapper.setEvent(e, security);
 		GWT.log("Send ping");
-		// atmosphereClient.post(wrapper);
 		try {
 			atmosphereClient.post(e.serialize(security));
 		}
 		catch (MessagingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}

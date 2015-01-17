@@ -16,5 +16,6 @@
 -->
 <module>
 	<inherits name="com.google.gwt.user.User" />
+	<inherits name="ch.unifr.pai.twice.comm.serverPush.ServerPush"/>
 	<source path="client"/>
 </module>

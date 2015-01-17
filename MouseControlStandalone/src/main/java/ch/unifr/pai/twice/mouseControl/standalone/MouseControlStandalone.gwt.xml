@@ -16,7 +16,7 @@
 -->
 <module rename-to="mouseControl">
 	<inherits name="com.google.gwt.user.User" />
-	<inherits name="ch.unifr.pai.twice.mousecontrol.MouseControl"/>
+	<inherits name="ch.unifr.pai.twice.multipointer.controller.MultipointerController"/>
 	<inherits name="ch.unifr.pai.twice.layout.DynamicLayout"/>
 	<source path="client" />
 	<entry-point class="ch.unifr.pai.twice.mouseControl.standalone.client.MouseControlStandalone"/>

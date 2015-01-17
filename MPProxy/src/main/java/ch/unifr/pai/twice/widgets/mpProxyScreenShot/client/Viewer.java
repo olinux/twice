@@ -48,8 +48,7 @@ public class Viewer implements EntryPoint {
 					e.printStackTrace();
 				}
 			}};
-			t.run();
-//		t.scheduleRepeating(1000);
+		t.scheduleRepeating(2000);
 		
 	}
 

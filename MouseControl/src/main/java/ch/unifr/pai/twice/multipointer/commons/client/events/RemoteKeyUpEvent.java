@@ -1,3 +1,5 @@
+package ch.unifr.pai.twice.multipointer.commons.client.events;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import ch.unifr.pai.twice.comm.serverPush.client.DiscardingRemoteEvent;
+import ch.unifr.pai.twice.comm.serverPush.client.RemoteEventHandler;
+import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteKeyUpEvent.Handler;
 
-package ch.unifr.pai.twice.multipointer.commons.client.rpc;
+public abstract class RemoteKeyUpEvent extends DiscardingRemoteEvent<Handler> {
 
-import java.util.List;
+	public static final Type<Handler> TYPE = new Type<Handler>();
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+	public static interface Handler extends RemoteEventHandler<RemoteKeyUpEvent> {
+	}
 
-@RemoteServiceRelativePath(".." + MouseControllerService.PATH)
-public interface MouseControllerService extends RemoteService {
-
-	public static final String PATH = "/miceControl/mouseControllerService";
-
-	List<String> getMPProviders();
-
-	void registerAsMPProvider(String uuid);
+	public Integer keyCode;
 
 }
