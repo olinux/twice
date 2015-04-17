@@ -14,20 +14,13 @@ package ch.unifr.pai.twice.widgets.mpproxy.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
+import ch.unifr.pai.twice.utils.device.client.DeviceType;
 import ch.unifr.pai.twice.widgets.mpproxy.client.navig.Navigation;
 import ch.unifr.pai.twice.widgets.mpproxy.shared.Rewriter;
 import ch.unifr.pai.twice.widgets.mpproxy.shared.URLParser;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.EventTarget;
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.*;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -37,6 +30,9 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Standard (non-multi pointer proxy)
@@ -81,7 +77,9 @@ public class ProxyBody {
 		publishInterfaces();
 		rewriteUrls((Element) Document.get().getDocumentElement());
 		addDomChangeEvents();
-		// screenShot.start();
+		if(DeviceType.getDeviceType() != DeviceType.MULTICURSOR) {
+			screenShot.start();
+		}
 		if (!isParentFrame()) {
 			Element e = DOM.getElementById("miceNavigation");
 			if (e != null)

@@ -15,24 +15,13 @@ package ch.unifr.pai.twice.multipointer.provider.client;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import ch.unifr.pai.twice.comm.serverPush.client.CommunicationManager;
 import ch.unifr.pai.twice.comm.serverPush.client.RemoteEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.InformationUpdateEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseDownEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseMoveEvent;
-import ch.unifr.pai.twice.multipointer.commons.client.events.RemoteMouseUpEvent;
+import ch.unifr.pai.twice.multipointer.commons.client.events.*;
 import ch.unifr.pai.twice.multipointer.commons.client.rpc.MouseControllerService;
 import ch.unifr.pai.twice.multipointer.commons.client.rpc.MouseControllerServiceAsync;
 import ch.unifr.pai.twice.multipointer.provider.client.MouseCursorTimeoutEvent.Handler;
 import ch.unifr.pai.twice.utils.device.client.UUID;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -43,6 +32,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+
+import java.util.*;
 
 /**
  * The currently used controller for multi-cursor device types
@@ -172,6 +163,33 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
 					if (m != null)
 						m.up(event);
+				}
+			}));
+			currentRemoteEventHandlers.add(eventBus.addHandler(RemoteKeyDownEvent.TYPE, new RemoteKeyDownEvent.Handler() {
+
+				@Override
+				public void onEvent(RemoteKeyDownEvent event) {
+					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
+					if (m != null)
+						m.keyDown(event);
+				}
+			}));
+			currentRemoteEventHandlers.add(eventBus.addHandler(RemoteKeyUpEvent.TYPE, new RemoteKeyUpEvent.Handler() {
+
+				@Override
+				public void onEvent(RemoteKeyUpEvent event) {
+					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
+					if (m != null)
+						m.keyUp(event);
+				}
+			}));
+			currentRemoteEventHandlers.add(eventBus.addHandler(RemoteKeyPressEvent.TYPE, new RemoteKeyPressEvent.Handler() {
+
+				@Override
+				public void onEvent(RemoteKeyPressEvent event) {
+					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
+					if (m != null)
+						m.keyPress(event);
 				}
 			}));
 			MouseControllerServiceAsync svc = GWT.create(MouseControllerService.class);

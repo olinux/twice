@@ -122,7 +122,6 @@ public class ServerPush {
 	private void handleMessage(Serializable message) {
 		// boolean ownEvent = (message instanceof BasicMiceEvent && ((BasicMiceEvent)message).getOriginatorUUID().equals(clientUUID));
 		if (message instanceof MiceEvent) {
-			GWT.log("GOT MESSAGE: " + ((MiceEvent) message).getType());
 			Set<MiceEventHandler<?, ?>> set = handlers.get(((MiceEvent) message).getType());
 			if (set != null) {
 				for (MiceEventHandler<?, ?> handler : set) {

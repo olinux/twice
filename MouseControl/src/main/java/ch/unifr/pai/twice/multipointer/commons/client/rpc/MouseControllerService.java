@@ -23,7 +23,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath(".." + MouseControllerService.PATH)
 public interface MouseControllerService extends RemoteService {
 
-	public static final String PATH = "/mouseControl/mouseControllerService";
+	public static final String PATH = "/miceControl/mouseControllerService";
 
 	List<String> getMPProviders();
 

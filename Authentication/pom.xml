@@ -10,13 +10,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.unifr.pai.twice.authentication</groupId>
 	<artifactId>Authentication</artifactId>
-	<dependencies>
-		<dependency>
-			<groupId>com.googlecode.gwt.crypto</groupId>
-			<artifactId>gwt-crypto</artifactId>
-			<version>1.0.2</version>
-		</dependency>
-	</dependencies>
 	<parent>
 		<groupId>ch.unifr.pai.twice</groupId>
 		<artifactId>TWICE-Lib</artifactId>

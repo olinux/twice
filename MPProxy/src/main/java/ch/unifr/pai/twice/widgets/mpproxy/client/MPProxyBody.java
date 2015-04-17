@@ -14,14 +14,8 @@ package ch.unifr.pai.twice.widgets.mpproxy.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
 import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
-
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.Element;
@@ -29,6 +23,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Multipointer extension of the {@link ProxyBody}
@@ -56,7 +55,7 @@ public class MPProxyBody extends ProxyBody {
 		for (int i = 0; i < inputFields.getLength(); i++) {
 			final com.google.gwt.dom.client.Element el = inputFields.getItem(i);
 			String type = el.getAttribute("type");
-			if (type == null || type.isEmpty() || type.equalsIgnoreCase("text")) {
+			if (type == null || type.isEmpty() || type.equalsIgnoreCase("text") || type.equalsIgnoreCase("search")) {
 				MultiFocusTextBox box = new MultiFocusTextBox();
 				box.replaceTextInput(InputElement.as(el));
 				replacements.add(box);
