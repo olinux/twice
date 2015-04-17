@@ -14,6 +14,8 @@ package ch.unifr.pai.twice.widgets.mpbrowser.client;
  * limitations under the License.
  */
 import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
+import ch.unifr.pai.twice.utils.device.client.DeviceType;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.IFrameElement;
@@ -23,6 +25,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 public class BrowserWindow extends DockLayoutPanel{
@@ -50,7 +53,7 @@ public class BrowserWindow extends DockLayoutPanel{
 		navig.setCellWidth(go, "50px");
 		navig.setWidth("100%");
 		
-		frame.setUrl(GWT.getHostPageBaseURL() + "https://duckduckgo.com/");
+		frame.setUrl("https://duckduckgo.com/?deviceType=multicursor");
 		frame.setHeight("100%");
 		frame.setWidth("100%");
 		frame.getElement().setAttribute("scrolling", "no");
@@ -58,8 +61,9 @@ public class BrowserWindow extends DockLayoutPanel{
 
 			@Override
 			public void onLoad(LoadEvent event) {
-				if (frame.getUrl() != null && !frame.getUrl().startsWith(GWT.getHostPageBaseURL())) {
-					frame.setUrl(GWT.getHostPageBaseURL() + frame.getUrl());
+				if(!frame.getUrl().contains(DeviceType.MULTICURSOR.name().toLowerCase())){
+					String appendParam = (frame.getUrl().contains("?") ? "&":"?")+"deviceType="+DeviceType.MULTICURSOR.name().toLowerCase();
+					frame.setUrl(frame.getUrl()+appendParam);
 					updateScrollBar();
 				}
 				Document d = IFrameElement.as(frame.getElement()).getContentDocument();

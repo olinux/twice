@@ -28,10 +28,6 @@ This software contains graphical art work from the icon theme of the Oxygen proj
 The Oxygen project web page is available at
 	http://www.oxygen-icons.org/
 
-Cryptography functionalities are provided by the gwt-crypto library package which is open source software.
-The original software is available from
-	http://code.google.com/p/gwt-crypto/
-
 JSON functionalities are provided by the org.json library package copyright by JSON.org as well as by the json-simple library package.
 The original software is available from
 	https://github.com/douglascrockford/JSON-java

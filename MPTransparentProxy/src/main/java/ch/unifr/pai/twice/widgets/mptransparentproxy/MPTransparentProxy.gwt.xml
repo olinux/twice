@@ -14,11 +14,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<module rename-to="micebrowser">
+<module rename-to="transparentproxy">
 	<inherits name="com.google.gwt.user.User" />
-	<inherits name="ch.unifr.pai.twice.multipointer.provider.MultipointerProvider" />	
-	<inherits name="ch.unifr.pai.twice.multipointer.controller.MultipointerController" />
+	<inherits name='ch.unifr.pai.twice.utils.device.DeviceUtils'/>
+	<inherits name="ch.unifr.pai.twice.multipointer.provider.MultipointerProvider" />
+
 	<source path="client" />
-	<entry-point class="ch.unifr.pai.twice.widgets.mpbrowser.client.MPBrowser" />
+	<source path="shared" />
+	
+	<entry-point class="ch.unifr.pai.twice.widgets.mptransparentproxy.client.ProxyEntryPoint" />
+	<replace-with class="ch.unifr.pai.twice.widgets.mptransparentproxy.client.MPProxyBody">
+		<when-type-is class="ch.unifr.pai.twice.widgets.mptransparentproxy.client.ProxyBody" />
+		<when-property-is name="deviceType" value="multicursor" />
+	</replace-with>
 	<add-linker name='xsiframe' />
 </module>

@@ -15,7 +15,6 @@ package ch.unifr.pai.twice.authentication.client.security;
  * limitations under the License.
  */
 
-import com.googlecode.gwt.crypto.client.TripleDesCipher;
 
 /**
  * The security manager handles the encryption and decryption of the messages passed through the distributed event bus of the toolkit. This implementation is a
@@ -29,14 +28,14 @@ public class TWICESecurityManager {
 
 	Base64 encoding = new Base64();
 
-	TripleDesCipher cipher = new TripleDesCipher();
+//	TripleDesCipher cipher = new TripleDesCipher();
 
 	private final static byte[] key = new byte[] { (byte) 4, (byte) 8, (byte) 3, (byte) 80, (byte) 12, (byte) -9, (byte) -5, (byte) 101, (byte) 15, (byte) -8,
 			(byte) 3, (byte) 0, (byte) 90, (byte) -9, (byte) 55, (byte) -41, (byte) -9, (byte) 90, (byte) 3, (byte) 100, (byte) -40, (byte) 79, (byte) 5,
 			(byte) 102 };
 
 	public TWICESecurityManager() {
-		cipher.setKey(key);
+//		cipher.setKey(key);
 
 	}
 
