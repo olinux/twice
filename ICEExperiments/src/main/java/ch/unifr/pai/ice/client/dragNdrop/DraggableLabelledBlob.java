@@ -43,6 +43,11 @@ public class DraggableLabelledBlob extends HTML implements Draggable {
 	double dropTime;
 	double dragNdropTime;
 	Boolean isStarted = false;
+	
+	double false_dropTime;  
+	double false_dragNdropTime; 
+	
+	
 
 	// -- Constructors ------------------------------------------
 
@@ -101,6 +106,12 @@ public class DraggableLabelledBlob extends HTML implements Draggable {
 		this.dropTime = dropTime;
 		this.dragNdropTime = dropTime - dragStartTime;
 	}
+	
+	public void setFalseDropTime(double false_dropTime) {   //for unsuccessful DnDs
+		this.false_dropTime = false_dropTime; 
+		this.false_dragNdropTime = false_dropTime - dragStartTime;
+	}
+	
 
 	/**
 	 * Get the time needed to drag and drop the blob (in ms)
@@ -110,6 +121,10 @@ public class DraggableLabelledBlob extends HTML implements Draggable {
 	public double getDragNdropTime() {
 		return dragNdropTime;
 	}
+	
+	public double getFalseDragNdropTime() { 
+		return false_dragNdropTime ;
+	}
 
 	/**
 	 * Set the time to drag and drop the blob (in ms)
@@ -118,6 +133,10 @@ public class DraggableLabelledBlob extends HTML implements Draggable {
 	 */
 	public void setDragNdropTime(double dragNdropTime) {
 		this.dragNdropTime = dragNdropTime;
+	}
+	
+	public void setFalseDragNdropTime(double false_dragNdropTime) {  
+		this.false_dragNdropTime = false_dragNdropTime;
 	}
 
 	public void setBlobNumber(int blobNumber) {

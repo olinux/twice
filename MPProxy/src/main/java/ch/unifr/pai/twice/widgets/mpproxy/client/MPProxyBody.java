@@ -14,7 +14,7 @@ package ch.unifr.pai.twice.widgets.mpproxy.client;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.provider.client.MultiCursorController;
+
 import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.NodeList;
@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,13 +36,16 @@ import java.util.Set;
  */
 public class MPProxyBody extends ProxyBody {
 
-	private static TextBox hiddenTextBoxForFocusControl = new TextBox();
-	private final String[] colors = { "red", "green", "blue", "yellow" };
-	private final Map<String, String> deviceToColor = new HashMap<String, String>();
-	private final int currentColorIndex = -1;
+	// private static TextBox hiddenTextBoxForFocusControl = new TextBox();
+	// private final String[] colors = { "red", "green", "blue", "yellow" };
+	// private final Map<String, String> deviceToColor = new HashMap<String,
+	// String>();
+	// private final int currentColorIndex = -1;
 	private static Map<String, TextBoxBase> focusedElement = new HashMap<String, TextBoxBase>();
 	private static Set<String> owningDevices = new HashSet<String>();
-	private final MultiCursorController multiCursor = new MultiCursorController();
+
+	// private final MultiCursorController multiCursor = new
+	// MultiCursorController();
 
 	/**
 	 * Replace all textboxes with multi focus text boxes
@@ -51,11 +53,13 @@ public class MPProxyBody extends ProxyBody {
 	 * @param mainElement
 	 */
 	private void replaceAllTextBoxes(Element mainElement) {
-		NodeList<com.google.gwt.dom.client.Element> inputFields = mainElement.getElementsByTagName("input");
+		NodeList<com.google.gwt.dom.client.Element> inputFields = mainElement
+				.getElementsByTagName("input");
 		for (int i = 0; i < inputFields.getLength(); i++) {
 			final com.google.gwt.dom.client.Element el = inputFields.getItem(i);
 			String type = el.getAttribute("type");
-			if (type == null || type.isEmpty() || type.equalsIgnoreCase("text") || type.equalsIgnoreCase("search")) {
+			if (type == null || type.isEmpty() || type.equalsIgnoreCase("text")
+					|| type.equalsIgnoreCase("search")) {
 				MultiFocusTextBox box = new MultiFocusTextBox();
 				box.replaceTextInput(InputElement.as(el));
 				replacements.add(box);
@@ -81,8 +85,10 @@ public class MPProxyBody extends ProxyBody {
 		// // hiddenTextBoxForFocusControl.setWidth("0px");
 		// // hiddenTextBoxForFocusControl.getElement().getStyle()
 		// // .setPosition(Position.ABSOLUTE);
-		// // hiddenTextBoxForFocusControl.getElement().getStyle().setZIndex(-1);
-		// // hiddenTextBoxForFocusControl.getElement().getStyle().setTop(0, Unit.PX);
+		// //
+		// hiddenTextBoxForFocusControl.getElement().getStyle().setZIndex(-1);
+		// // hiddenTextBoxForFocusControl.getElement().getStyle().setTop(0,
+		// Unit.PX);
 		// // hiddenTextBoxForFocusControl.getElement().getStyle()
 		// // .setLeft(0, Unit.PX);
 		// // RootPanel.get().add(hiddenTextBoxForFocusControl);
@@ -200,11 +206,14 @@ public class MPProxyBody extends ProxyBody {
 
 	/**
 	 * @param e
-	 * @return a textbox or textarea widget if the element is one of those, otherwise null
+	 * @return a textbox or textarea widget if the element is one of those,
+	 *         otherwise null
 	 */
 	private TextBoxBase getTextBoxBase(Element e) {
 		if (e.getTagName().equalsIgnoreCase("input")
-				&& (e.getAttribute("type") == null || e.getAttribute("type").isEmpty() || e.getAttribute("type").equalsIgnoreCase("text")))
+				&& (e.getAttribute("type") == null
+						|| e.getAttribute("type").isEmpty() || e.getAttribute(
+						"type").equalsIgnoreCase("text")))
 			return TextBox.wrap(e);
 		else if (e.getTagName().equalsIgnoreCase("textarea"))
 			return TextArea.wrap(e);

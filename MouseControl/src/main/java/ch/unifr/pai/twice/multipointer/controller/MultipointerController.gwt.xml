@@ -86,7 +86,7 @@
 
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />
-	<stylesheet src="MouseControl.css" />
+	<!--<stylesheet src="MouseControl.css" /> -->
 
 
 </module>

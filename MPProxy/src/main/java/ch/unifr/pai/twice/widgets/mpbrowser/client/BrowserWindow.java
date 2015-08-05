@@ -1,4 +1,5 @@
 package ch.unifr.pai.twice.widgets.mpbrowser.client;
+
 /*
  * Copyright 2013 Oliver Schmid
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -6,17 +7,17 @@ package ch.unifr.pai.twice.widgets.mpbrowser.client;
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
-import ch.unifr.pai.twice.utils.device.client.DeviceType;
 
+import ch.unifr.pai.twice.multipointer.provider.client.widgets.MultiFocusTextBox;
 import com.google.gwt.core.client.GWT;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.dom.client.Style.Unit;
@@ -24,19 +25,18 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
-public class BrowserWindow extends DockLayoutPanel{
-	
-	
+public class BrowserWindow extends DockLayoutPanel {
+
 	Frame frame;
 	HorizontalPanel navig = new HorizontalPanel();
 	MultiFocusTextBox textBox = new MultiFocusTextBox();
 	DockLayoutPanel scrollBar = new DockLayoutPanel(Unit.PX);
-	
-	public BrowserWindow(String frameName){
+
+	public BrowserWindow(String frameName) {
 		super(Unit.PX);
 		frame = new NamedFrame(frameName);
 		scrollBar.getElement().getStyle().setBackgroundColor("lightgrey");
@@ -52,8 +52,8 @@ public class BrowserWindow extends DockLayoutPanel{
 		navig.add(go);
 		navig.setCellWidth(go, "50px");
 		navig.setWidth("100%");
-		
-		frame.setUrl("https://duckduckgo.com/?deviceType=multicursor");
+
+		frame.setUrl(GWT.getHostPageBaseURL() + "https://duckduckgo.com/"); // frame.setUrl("https://duckduckgo.com/?deviceType=multicursor");
 		frame.setHeight("100%");
 		frame.setWidth("100%");
 		frame.getElement().setAttribute("scrolling", "no");
@@ -61,34 +61,41 @@ public class BrowserWindow extends DockLayoutPanel{
 
 			@Override
 			public void onLoad(LoadEvent event) {
-				if(!frame.getUrl().contains(DeviceType.MULTICURSOR.name().toLowerCase())){
-					String appendParam = (frame.getUrl().contains("?") ? "&":"?")+"deviceType="+DeviceType.MULTICURSOR.name().toLowerCase();
-					frame.setUrl(frame.getUrl()+appendParam);
+				if (frame.getUrl() != null
+						&& !frame.getUrl().startsWith(GWT.getHostPageBaseURL())) { // if(!frame.getUrl().contains(DeviceType.MULTICURSOR.name().toLowerCase())){
+					frame.setUrl(GWT.getHostPageBaseURL() + frame.getUrl());
+					// String appendParam = (frame.getUrl().contains("?") ?
+					// "&":"?")+"deviceType="+DeviceType.MULTICURSOR.name().toLowerCase();
+					// frame.setUrl(frame.getUrl()+appendParam);
 					updateScrollBar();
 				}
-				Document d = IFrameElement.as(frame.getElement()).getContentDocument();
+
+				Document d = IFrameElement.as(frame.getElement())
+						.getContentDocument();
 				textBox.setValue(d.getURL());
+
 			}
+
 		});
 		addNorth(navig, 25);
 		addEast(scrollBar, 30);
 		add(frame);
 	}
-	
-	Button forward = new Button("Forward", new ClickHandler() {
 
-		@Override
-		public void onClick(ClickEvent event) {
-			History.forward();
-		}
-	});
-	Button backward = new Button("Backward", new ClickHandler() {
+	Button forward = new Button("&#9654", new ClickHandler() { // Forward
+				@Override
+				public void onClick(ClickEvent event) {
+					History.forward();
+				}
+			});
 
-		@Override
-		public void onClick(ClickEvent event) {
-			History.back();
-		}
-	});
+	Button backward = new Button("&#9664", new ClickHandler() { // Backward
+				@Override
+				public void onClick(ClickEvent event) {
+					History.back();
+				}
+			});
+
 	Button go = new Button("Go", new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
@@ -96,36 +103,41 @@ public class BrowserWindow extends DockLayoutPanel{
 		}
 	});
 
+	Button scrollDown = new Button("&#9660", new ClickHandler() { // "Down"
+				@Override
+				public void onClick(ClickEvent event) {
+					Document d = IFrameElement.as(frame.getElement())
+							.getContentDocument();
+					if (d != null) {
+						d.getBody().setScrollTop(
+								Math.min(d.getBody().getScrollTop() + 20, d
+										.getBody().getScrollHeight()));
+					}
+				}
+			});
 
-	Button scrollDown = new Button("Down", new ClickHandler() {
+	Button scrollUp = new Button("&#9650", new ClickHandler() { // "Up"
+				@Override
+				public void onClick(ClickEvent event) {
+					Document d = IFrameElement.as(frame.getElement())
+							.getContentDocument();
+					if (d != null) {
+						d.getBody().setScrollTop(
+								Math.max(d.getBody().getScrollTop() - 20, 0));
+					}
+				}
+			});
 
-		@Override
-		public void onClick(ClickEvent event) {
-			Document d = IFrameElement.as(frame.getElement()).getContentDocument();
-			if (d != null) {
-				d.getBody().setScrollTop(Math.min(d.getBody().getScrollTop() + 20, d.getBody().getScrollHeight()));
-			}
-		}
-	});
-	Button scrollUp = new Button("Up", new ClickHandler() {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			Document d = IFrameElement.as(frame.getElement()).getContentDocument();
-			if (d != null) {
-				d.getBody().setScrollTop(Math.max(d.getBody().getScrollTop() - 20, 0));
-			}
-		}
-	});
-	
-	
 	private void updateScrollBar() {
 		Document d = IFrameElement.as(frame.getElement()).getContentDocument();
-		boolean scrollVertical = d.getBody().getScrollHeight() > frame.getOffsetHeight();
-		boolean scrollHorizontal = d.getBody().getScrollWidth() > frame.getOffsetWidth();
+		boolean scrollVertical = d.getBody().getScrollHeight() > frame
+				.getOffsetHeight();
+		boolean scrollHorizontal = d.getBody().getScrollWidth() > frame
+				.getOffsetWidth();
 		scrollDown.setEnabled(scrollVertical);
 		scrollUp.setEnabled(scrollVertical);
-		scrollBar.getElement().getStyle().setBackgroundColor(scrollVertical ? "lightgrey" : "lightgrey");
+		scrollBar.getElement().getStyle()
+				.setBackgroundColor(scrollVertical ? "lightgrey" : "lightgrey");
 	}
-	
+
 }

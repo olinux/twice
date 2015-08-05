@@ -26,6 +26,7 @@ package ch.unifr.pai.ice.client.textedit;
 import java.util.Collection;
 import java.util.Vector;
 
+
 import ch.unifr.pai.ice.client.ICEMain;
 import ch.unifr.pai.ice.client.RequireInitialisation;
 import ch.unifr.pai.ice.client.rpc.EventingService;
@@ -35,14 +36,17 @@ import ch.unifr.pai.ice.client.utils.ICEDataLogger;
 import ch.unifr.pai.ice.shared.ExperimentIdentifier;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, RequireInitialisation {
 
-	VerticalPanel vPanel = new VerticalPanel();
+	VerticalPanel vPanel = new VerticalPanel(); 
+	
 	TextEditor textEd;
 	Vector<String> resultVector;
 	int nbExpFinished = 0;
@@ -54,22 +58,26 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 	int experimentNo;
 	int startingUserNo = 1;
 
+
 	/****************
 	 * Constructors
 	 ****************/
 	public TextEntry1Space(int nbUser, int nbSentences, int experimentNo) {
 
 		super();
+		
 		this.nbUser = nbUser;
 		this.experimentNo = experimentNo;
 
-		vPanel.setHeight("100%");
+		vPanel.setHeight("100%"); 
+		
 		this.add(vPanel);
 
 		for (int i = 0; i < nbUser; i++) {
 			textEd = new TextEditor(this, i + 1, nbSentences);
 			vPanel.add(textEd);
 		}
+		
 	}
 
 	/**
@@ -111,7 +119,7 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 		this.nbUser = nbUser;
 		this.hasToLogToParent = hasToLogToParent;
 		this.parent = parent;
-		this.experimentNo = experimentNo;
+		this.experimentNo = experimentNo; 
 
 		vPanel.setHeight("100%");
 
@@ -142,6 +150,7 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 		this.parent = parent;
 		this.experimentNo = experimentNo;
 		this.startingUserNo = startingUserNo;
+	
 		vPanel.setHeight("100%");
 
 		this.add(vPanel);
@@ -170,6 +179,7 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 		this.parent = parent;
 		this.experimentNo = experimentNo;
 		this.startingUserNo = startingUserNo;
+		
 		vPanel.setHeight("100%");
 
 		this.add(vPanel);
@@ -183,14 +193,14 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 	// ------------------------------------------------------------------------
 
 	private void log() {
-		if (experimentNo != -1) {
+//		if (experimentNo != -1) { 
 			EventingServiceAsync svc = GWT.create(EventingService.class);
 			svc.log(ICEMain.identifier, loggedData, ExperimentIdentifier.TEXTEDIT, 1, new AsyncCallback<Void>() {
 
 				@Override
 				public void onSuccess(Void result) {
 					TextEntry1Space.this.clear();
-					Window.alert("Task finished");
+					Window.alert("Successfully logged! Experiment finished");
 				}
 
 				@Override
@@ -199,12 +209,6 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 					Window.alert("Task finished but was not able to log!");
 				}
 			});
-		}
-		else {
-
-			TextEntry1Space.this.clear();
-			Window.alert("Task finished!");
-		}
 
 	}
 
@@ -223,21 +227,37 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 	// ------------------------------------------------------------------------------
 
 	@Override
-	public void setLoggedData(Collection<? extends String> textData) {
+	public void setLoggedData(Vector<String> textData , boolean finished , boolean check) { 
 		if (nbExpFinished < nbUser) {
-			userLogVector.addAll(textData);
-			nbExpFinished++;
+			
+			//if(finished) { 
+				userLogVector.addAll(textData);
+				
+				nbExpFinished++;
+			//}
+			//else
+			//{
+			//	userLogVector.add(textData.lastElement()); 
+			//	System.out.println("test amacli 1 a:  " + textData.lastElement() ); 
+			//}
+			
 		}
 
 		if (nbExpFinished == nbUser) {
-
 			if (hasToLogToParent && (parent != null)) {
-				parent.setLoggedData(userLogVector);
-			}
-			else {
 
+				if(!finished){
+					userLogVector.add(textData.lastElement()); 
+
+				}
+				parent.setLoggedData(userLogVector, finished , check); 
+				
+			}
+		
+			else {
 				loggedData = new String[userLogVector.size()];
 				userLogVector.copyInto(loggedData);
+
 				log();
 			}
 		}
@@ -249,7 +269,7 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 	 * @param blobData
 	 */
 	@Override
-	public void setLoggedData(Vector<CursorXY> blobData) {
+	public void setLoggedData(Vector<CursorXY> blobData, boolean finished) {
 
 	}
 
@@ -263,5 +283,8 @@ public class TextEntry1Space extends AbsolutePanel implements ICEDataLogger, Req
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 }
+

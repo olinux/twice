@@ -67,8 +67,10 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 	private final Canvas c;
 	private final Timer blinkTimer;
 	private boolean cursorsVisible;
+	
+	private String color;
 
-	private void showCursor() {
+	private void showCursor() { 
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
 
 			@Override
@@ -93,6 +95,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 
 	int currentWidth;
 	int currentHeight;
+
 
 	public void replaceTextInput(InputElement el) {
 		if (!el.isDisabled() && !el.getAttribute("multifocus").equals("true")) {
@@ -138,6 +141,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 	}
 
 	public MultiFocusTextBox() {
+		
 		blinkTimer = new Timer() {
 
 			@Override
@@ -148,6 +152,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 				cursorsVisible = !cursorsVisible;
 			}
 		};
+		
 		blinkTimer.scheduleRepeating(cursorSpeed);
 		p.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 		c = Canvas.createIfSupported();
@@ -160,14 +165,21 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
 				processInput(NoMultiCursorController.getUUID(event.getNativeEvent()), event.getCharCode());
+				String textcolor = NoMultiCursorController.getColorNative(event.getNativeEvent());
+				setTextColor(textcolor);	
+				
 			}
 		});
+		
 		c.addKeyUpHandler(new KeyUpHandler() {
+			
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				Cursor c = cursors.get(NoMultiCursorController.getUUID(event.getNativeEvent()));
+				
 				if (c != null) {
+					
 					switch (event.getNativeKeyCode()) {
 						case KeyCodes.KEY_LEFT:
 							c.setPosition(Math.max(0, c.position - 1));
@@ -207,18 +219,24 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 								}
 								scrollIfNecessary();
 							}
+							break;	
+						case KeyCodes.KEY_ENTER:  //ICEExperiments-TextEdit
+							setValue("");
+							c.setPosition(0);
+									
 							break;
 					}
 				}
 			}
 		});
+		
 		c.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				repositionCursor(NoMultiCursorController.getUUID(event.getNativeEvent()), NoMultiCursorController.getColorNative(event.getNativeEvent()),
 						event.getRelativeX(c.getCanvasElement()), event.getRelativeY(c.getCanvasElement()));
-			}
+							}
 		});
 		multiFocus.insert(c, 0, 0, 0);
 		initWidget(multiFocus);
@@ -235,7 +253,8 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		multiFocus.setHeight("25px");
 
 	}
-
+	
+		
 	private void repositionCursor(String uuid, String color, int x, int y) {
 		Cursor c = getOrCreateCursor(uuid, color);
 		if (c != null) {
@@ -307,6 +326,16 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 				c.show();
 			}
 		}
+		
+//		private int getYpositionForLine(int linenumber){
+//			StringBuilder sb = new StringBuilder();
+//			for(int i=0; i<linenumber;i++){
+//				sb.append(i).append('\n');
+//			}
+//			return (int) Math.max(0, context.measureText(sb.toString())..getHeight());
+//			
+//			
+//		}
 
 		public int getPosition() {
 			return position;
@@ -350,8 +379,11 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		}
 		if (value == null)
 			setValue(String.valueOf(c));
+			
+		
 		else if (pos <= value.length()) {
 			setValue(value.substring(0, pos) + c + ((pos == value.length()) ? "" : value.substring(pos)));
+			
 		}
 		for (Cursor cursor : cursors.values()) {
 			if (pos <= cursor.getPosition()) {
@@ -382,9 +414,10 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 			}
 		}
 	}
-
+	
 	@Override
 	public void setValue(String value) {
+		
 		this.value = value;
 		if (replacedElement != null)
 			replacedElement.setValue(value);
@@ -393,6 +426,7 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		context.setTextAlign(TextAlign.LEFT);
 		context.setTextBaseline(TextBaseline.TOP);
 		context.fillText(value, 0, 0);
+	
 	}
 
 	@Override
@@ -400,4 +434,16 @@ public class MultiFocusTextBox extends Composite implements HasValue<String> {
 		setValue(value);
 		// TODO
 	}
+	
+	public void setTextColor(String color){
+		context.setFillStyle(color);
+		this.color= color;
+		
+	}
+	
+	public String getTextColor(){
+		return this.color;
+	}
+
+	
 }

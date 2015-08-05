@@ -62,7 +62,7 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 	// int dropPanelWidth;
 	// int dropPanelHeight;
 
-	Vector<String> resultVector;
+	Vector<String> resultVector; 
 
 	int blobsToDrop = 0;
 	String blobColor = "black";
@@ -78,6 +78,17 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 
 	// Current image : 50x50 px
 	String imageName = GWT.getModuleBaseURL() + "trash-bin50x50.jpg";
+	
+	boolean logcheck = false ; 
+	int count = 0; 
+	int trialcount = 0; 
+	int setcount = 0; 
+	boolean isStarted = false; 
+	boolean isSetFinished = false;  
+	long startTime; 
+	long setFinishTime; 
+	
+	
 
 	/******************************************************************
 	 * Constructor
@@ -103,6 +114,7 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 		// binPanel.setSize("100px", "100px");
 		binPanel.getElement().getStyle().setBackgroundImage("url('" + imageName + "')");
 	}
+	
 
 	@Override
 	public void initialise() {
@@ -156,7 +168,7 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 			// }
 			// }
 
-			addBlobs();
+			addBlobs(true); 
 
 			final FocusPanel panel = new FocusPanel();
 			panel.addMouseMoveHandler(new MouseMoveHandler() {
@@ -191,7 +203,8 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 	 * Blobs generator with the draggable capabilities
 	 **************************************************/
 
-	private void addBlobs() {
+	private void addBlobs( boolean check) { 
+		logcheck= check;
 		final int blobwidth = 30;
 		final int blobheight = 30;
 		for (int i = 0; i < blobCoord.length; i++) {
@@ -210,12 +223,21 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 
 				@Override
 				public void onStartDrag(String deviceId, Widget draggedWidget) {
-
+					
+					if(!isStarted){
+						long time = System.currentTimeMillis(); 
+						System.out.println(userNo + "  Start Time:" + time ); //to be deleted
+						isStarted = true; 
+						startTime = time; 
+						}
+					
 					if (!((DraggableLabelledBlob) draggedWidget).isDragStarted()) {
 
 						// set the starting time
 						((DraggableLabelledBlob) draggedWidget).setDragStarted(true);
 						((DraggableLabelledBlob) draggedWidget).setDragStartTime(System.currentTimeMillis());
+
+						
 					}
 				}
 
@@ -239,7 +261,7 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 					// } else
 					if (isInsideBin(dragProxyLeft, dragProxyTop, binPanel)) {
 
-						System.out.println(binPanel.getAbsoluteLeft());
+						//System.out.println(binPanel.getAbsoluteLeft()); 
 						// dragProxyLeft > (panelWidth / 2)) {
 
 						remove(draggedWidget);
@@ -247,23 +269,82 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 						// Set the drop time
 						((DraggableLabelledBlob) draggedWidget).setDropTime(System.currentTimeMillis());
 						((DraggableLabelledBlob) draggedWidget).setDragStarted(false);
+						
+						((DraggableLabelledBlob) draggedWidget).setFalseDropTime(0); 
+						
+						//System.out.println("DROP TIME: " + (( (DraggableLabelledBlob) draggedWidget).getDropTime() )) ;
+						//System.out.println("DROP check amacli: "+ System.currentTimeMillis() ); //to be deleted
+						//System.out.println("ASIL TEST:  " + ((System.currentTimeMillis()) -((( (DraggableLabelledBlob) draggedWidget).getDropTime() )) ) ); //to be deleted
+						//System.out.println("belli olan fonksiyon: "+ (((DraggableLabelledBlob) draggedWidget).getDragNdropTime())  ); //to be deleted
 
 						// add the result in the log vector
 						resultVector.add(
 
+//						new String(userNo + "; blob" + ((DraggableLabelledBlob) draggedWidget).getBlobNumber() + ";"
+//								+ ((DraggableLabelledBlob) draggedWidget).getDragNdropTime()
+//								+ ";" + count)); 
+						
 						new String(userNo + "; blob" + ((DraggableLabelledBlob) draggedWidget).getBlobNumber() + ";"
-								+ ((DraggableLabelledBlob) draggedWidget).getDragNdropTime()));
-
-						if (--blobsToDrop == 0) {
+								+ ((DraggableLabelledBlob) draggedWidget).getDragNdropTime()
+								));
+						
+						//to be deleted//
+						System.out.println("(LOG INFO) " + userNo + " ;"
+							      	  +    "   BlobNo: " + "blob" + ((DraggableLabelledBlob) draggedWidget).getBlobNumber() + " ;"
+									  +    "   Drop time: " 	  + ((DraggableLabelledBlob) draggedWidget).getDragNdropTime()
+									  
+									  /*+    "   Unsucess blob count:" + count*/);
+						
+						
+						if (! logcheck ) {
+							blobsToDrop= blobsToDrop-1;
+							log(false);
+							
+						}
+						
+						
+						if(logcheck){ 
+							if (--blobsToDrop == 0 ) { 
 							// log the results if all blobs are
 							// dropped!!!
-							log();
+							
+							log(true);}
 						}
 					}
 					else {
+						
+						
+						((DraggableLabelledBlob) draggedWidget).setFalseDropTime(System.currentTimeMillis());
+						((DraggableLabelledBlob) draggedWidget).setDragStarted(false);
+						
+						((DraggableLabelledBlob) draggedWidget).setDropTime(0);	
+						count= count+1;
+						
+						resultVector.add(  
+
+//								new String(userNo + "; blob" + ((DraggableLabelledBlob) draggedWidget).getBlobNumber() + ";"
+//										+ ((DraggableLabelledBlob) draggedWidget).getFalseDragNdropTime()
+//										+ ";" + count) + " ; unsuccessful dNd");
+						
+						new String(userNo + "; blob" + ((DraggableLabelledBlob) draggedWidget).getBlobNumber() + ";"
+								+ ((DraggableLabelledBlob) draggedWidget).getFalseDragNdropTime()
+								+ ";" + count) + ". unsuccessful dNd");
+						
+						if (! logcheck ){
+							log(false);
+							trialcount++; 
+						}
+						
+						if (logcheck ){
+							setcount++;
+						}
+						
+						System.out.println(userNo+ ":  " + "Unsuccess Drag&Drop!" + " ; BlobNo:" + ((DraggableLabelledBlob) draggedWidget).getBlobNumber() + " ; Unsuccess Drop Time:" + ((DraggableLabelledBlob) draggedWidget).getFalseDragNdropTime() ); //to be deleted						
+						
 						return false;
 					}
 					return true;
+
 				}
 			}
 
@@ -273,14 +354,27 @@ public class DnD1userGeneric extends LayoutPanel implements RequireInitialisatio
 			setWidgetTopHeight(blob, blobCoord[i][0] - blobheight / 2, Unit.PX, blobheight, Unit.PX);
 			setWidgetLeftWidth(blob, blobCoord[i][1] - blobwidth / 2, Unit.PX, blobwidth, Unit.PX);
 		}
-
+		
 	}
 
 	// ------------------------------------------------------------------------
 
-	private void log() {
-		logger.setLoggedData(resultVector);
+	private void log(boolean doLog) {
+		
+		if(!isSetFinished){
+			long setfinishtime = System.currentTimeMillis(); 
+			isSetFinished = true; 
+			setFinishTime = setfinishtime; 
+			}
+		
+		logger.setLoggedData(resultVector , doLog , true);
+		
+		if (blobsToDrop == 0){
+
+		addBlobs(false);} // for user to keep doing task until others finish
+		
 	}
+			
 
 	// ------------------------------------------------------------------------
 	/**

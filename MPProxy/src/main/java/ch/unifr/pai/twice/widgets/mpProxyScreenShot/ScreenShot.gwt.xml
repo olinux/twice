@@ -16,6 +16,9 @@
 -->
 <module rename-to="miceScreenShot">
 	<inherits name="com.google.gwt.user.User" />
+	<inherits name="ch.unifr.pai.twice.multipointer.provider.MultipointerProvider" />
+	<inherits name='ch.unifr.pai.twice.multipointer.controller.MultipointerController' /> 
+	
 	<source path="client"/>
 	<entry-point class="ch.unifr.pai.twice.widgets.mpProxyScreenShot.client.Viewer" />
 </module>

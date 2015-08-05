@@ -30,10 +30,10 @@ import ch.unifr.pai.ice.client.tracking.CursorXY;
 
 public interface ICEDataLogger {
 
-	public void setLoggedData(Vector<CursorXY> blobData);
+	public void setLoggedData(Vector<CursorXY> blobData , boolean finished);  
 
-	public void setLoggedData(String[] blobData);
+	public void setLoggedData(String[] blobData); 
 
-	public void setLoggedData(Collection<? extends String> blobData);
+	public void setLoggedData(Vector<String> blobData , boolean finished , boolean check); 
 
 }

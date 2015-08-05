@@ -25,6 +25,7 @@ package ch.unifr.pai.ice.client.clickblobs;
 
 import java.util.Collection;
 import java.util.Vector;
+import java.lang.Math;
 
 import ch.unifr.pai.ice.client.ICEMain;
 import ch.unifr.pai.ice.client.RequireInitialisation;
@@ -48,19 +49,31 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 	int nbUser = 0;
 	int iteration = 0;
 	int nbExpFinished = 0;
+	
+	long startTime ; 
+	long finishTime ; 
 
 	String blob1 = GWT.getModuleBaseURL() + "circle_black.png";
 	String blob2 = GWT.getModuleBaseURL() + "circle_red.png";
-	String blob3 = GWT.getModuleBaseURL() + "circle_blue.png";
+	String blob3 = GWT.getModuleBaseURL() + "circle_blue.png"; 
 	String blob4 = GWT.getModuleBaseURL() + "circle_green.png";
 	String blob5 = GWT.getModuleBaseURL() + "circle_magenta.png";
 	String blob6 = GWT.getModuleBaseURL() + "circle_violet.png";
 	String blob7 = GWT.getModuleBaseURL() + "circle_grey.png";
 	String blob8 = GWT.getModuleBaseURL() + "circle.png";
 
-	AbsolutePanel absPanel;
+	AbsolutePanel absPanel;   
 
 	Vector<CursorXY> userLogVector = new Vector<CursorXY>();
+	Vector<CursorXY> user1LogVec = new Vector<CursorXY>();  
+	Vector<CursorXY> user2LogVec = new Vector<CursorXY>();  
+	Vector<CursorXY> user3LogVec = new Vector<CursorXY>();  
+	Vector<CursorXY> user4LogVec = new Vector<CursorXY>(); 
+	String [] user1result; 
+	String [] user2result; 
+	String [] user3result; 
+	String [] user4result; 
+	
 	String[][] loggedData;
 
 	boolean init;
@@ -112,12 +125,12 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 		// forces to maintain the size of the cell
 		hPanel1.setCellWidth(user1Panel, "50%");
 		hPanel1.setCellHeight(user1Panel, "50%");
-		hPanel1.add(user2Panel);
+		hPanel1.add(user3Panel); 
 
-		hPanel2.add(user3Panel);
-		hPanel2.setCellWidth(user3Panel, "50%");
-		hPanel2.setCellHeight(user3Panel, "50%");
-		hPanel2.add(user4Panel);
+		hPanel2.add(user4Panel);  //user3Panel
+		hPanel2.setCellWidth(user4Panel, "50%");  //user3Panel 
+		hPanel2.setCellHeight(user4Panel, "50%"); //user3Panel 
+		hPanel2.add(user2Panel); //user4Panel
 
 		this.add(hPanel1);
 		this.add(hPanel2);
@@ -161,6 +174,7 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 
 			// set the blob position array around a circle
 			blobCoord = initBlobPosInCircle(nbBlobs, panelWidth / 2, panelHeight / 2, (panelHeight / 2) - 50);
+			
 			setUsers();
 			init = true;
 		}
@@ -191,21 +205,33 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 
 		user1 = new Blob(blob1, "User 1", iteration, user1Panel, this, blobCoord, 0, 0, 0, true);
 		user1Panel.add(user1);
-		user1Panel.setWidgetPosition(user1, panelWidth / 2, panelHeight / 2);
+		//user1Panel.setWidgetPosition(user1, panelWidth / 2, panelHeight / 2); 
+		user1Panel.setWidgetPosition(user1, blobCoord[0][0], blobCoord[0][1]);
 
-		user2 = new Blob(blob2, "User 2", iteration, user2Panel, this, blobCoord, 0, 0, 1, true);
+		user2 = new Blob(blob2, "User 2", iteration, user2Panel, this, blobCoord, 0, 0, 0, true);
 		user2Panel.add(user2);
-		user2Panel.setWidgetPosition(user2, panelWidth / 2, panelHeight / 2);
-
-		user3 = new Blob(blob8, "User 3", iteration, user3Panel, this, blobCoord, 0, 0, 2, true);
+		//user2Panel.setWidgetPosition(user2, panelWidth / 2, panelHeight / 2);
+		user2Panel.setWidgetPosition(user2, blobCoord[0][0], blobCoord[0][1]);
+		
+		user3 = new Blob(blob3, "User 3", iteration, user3Panel, this, blobCoord, 0, 0, 0, true);
 		user3Panel.add(user3);
-		user3Panel.setWidgetPosition(user3, panelWidth / 2, panelHeight / 2);
+		//user3Panel.setWidgetPosition(user3, panelWidth / 2, panelHeight / 2); 
+		user3Panel.setWidgetPosition(user3, blobCoord[0][0], blobCoord[0][1]);
 
-		user4 = new Blob(blob4, "User 4", iteration, user4Panel, this, blobCoord, 0, 0, 3, true);
+		user4 = new Blob(blob4, "User 4", iteration, user4Panel, this, blobCoord, 0, 0, 0, true); 
 		user4Panel.add(user4);
-		user4Panel.setWidgetPosition(user4, panelWidth / 2, panelHeight / 2);
+		//user4Panel.setWidgetPosition(user4, panelWidth / 2, panelHeight / 2);
+		user4Panel.setWidgetPosition(user4, blobCoord[0][0], blobCoord[0][1]);
 
 		nbUser = 4;
+		
+		//PRINTING LOGS
+		System.out.println("Experiment Identifier: " + ICEMain.identifier);
+		System.out.println("Name of Experiment Task: " + ExperimentIdentifier.CLICKBLOB);
+		System.out.println("User Number: " + nbUser);
+		System.out.println();
+
+		
 	}
 
 	/**
@@ -214,23 +240,194 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 	 * @param blobData
 	 */
 	@Override
-	public void setLoggedData(Vector<CursorXY> blobData) {
+	public void setLoggedData(Vector<CursorXY> blobData , boolean finished) { 
 
-		if (nbExpFinished <= nbUser) {
-			userLogVector.addAll(blobData);
-			nbExpFinished++;
+		if (nbExpFinished <= nbUser) { //other users did not finished yet 
+			
+			if(finished) {  
+				userLogVector.addAll(blobData);
+				nbExpFinished++;
+			}
+			
+			else {  
+				userLogVector.add(blobData.lastElement());
+			}  
+			
 		}
 
-		if (nbExpFinished == nbUser) {
+		if (nbExpFinished == nbUser) { //for the last user
+		
+		long maxtime = Math.max(Math.max(user1.setFinishTime,user2.setFinishTime),Math.max(user3.setFinishTime,user4.setFinishTime)); 
+		finishTime = maxtime;
 
-			loggedData = new String[userLogVector.size()][4];
+			loggedData = new String[userLogVector.size()][5];
 
 			for (int i = 0; i < loggedData.length; i++) {
 				loggedData[i][0] = userLogVector.get(i).getUser();
 				loggedData[i][1] = String.valueOf(userLogVector.get(i).getX());
 				loggedData[i][2] = String.valueOf(userLogVector.get(i).getY());
 				loggedData[i][3] = String.valueOf(userLogVector.get(i).getTimeStamp());
+				loggedData[i][4] = String.valueOf(userLogVector.get(i).getblobNumber());
+				
 			}
+			
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println("******TASK FINISHED******");
+			for (int i = 0; i < loggedData.length; i++) { 
+				System.out.println( i + ".  user:" + loggedData[i][0] + ";  " + 
+				"x:"+ loggedData[i][1] + ";  " +
+				"y:"+loggedData[i][2]  + ";  " +
+				"time:" +loggedData[i][3] + ";  " +
+				"blobNo:" +loggedData[i][4]);
+				
+				}
+			System.out.println("");
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println("User1; " + user1.count + " + "  + user1.trialcount + " times out of blob");
+			System.out.println("");
+			System.out.println("User2; " + user2.count + " + "  + user2.trialcount + " times out of blob");
+			System.out.println("");
+			System.out.println("User3; " + user3.count + " + "  + user3.trialcount + " times out of blob");
+			System.out.println("");
+			System.out.println("User4; " + user4.count + " + "  + user4.trialcount + " times out of blob");
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println("User1; Start time:"+ user1.startTime + " ;  Finish time:"+ finishTime);
+			System.out.println("User1; Experiment Completion Time: " + ((finishTime)-user1.startTime) ); 
+			System.out.println("User1; Set Finish time:"+ user1.setFinishTime);
+			System.out.println("User1; Set Completion Time: " + (user1.setFinishTime-user1.startTime) ); 
+			System.out.println("");
+			System.out.println("User2; Start time:"+ user2.startTime + " ;  Finish time:"+ finishTime);
+			System.out.println("User2; Experiment Completion Time: " + ((finishTime)-user2.startTime) ); 
+			System.out.println("User2; Set Finish time:"+ user2.setFinishTime);
+			System.out.println("User2; Set Completion Time: " + (user2.setFinishTime-user2.startTime) ); 
+			System.out.println("");
+			System.out.println("User3; Start time:"+ user3.startTime + " ;  Finish time:"+ finishTime);
+			System.out.println("User3; Experiment Completion Time: " + ((finishTime)-user3.startTime) ); 
+			System.out.println("User3; Set Finish time:"+ user3.setFinishTime);
+			System.out.println("User3; Set Completion Time: " + (user3.setFinishTime-user3.startTime) ); 
+			System.out.println("");
+			System.out.println("User4; Start time:"+ user4.startTime + " ;  Finish time:"+ finishTime);
+			System.out.println("User4; Experiment Completion Time: " + ((finishTime)-user4.startTime) ); 
+			System.out.println("User4; Set Finish time:"+ user4.setFinishTime);
+			System.out.println("User4; Set Completion Time: " + (user4.setFinishTime-user4.startTime) ); 
+			System.out.println("-------------------------------------------------------------------");
+			
+			//********************************************************
+			//FORMING USER1 LOG VECTOR
+			for(int i=0; i< userLogVector.size() ; i++) {
+				
+				if(userLogVector.get(i).getUser().equals("User 1") && userLogVector.get(i).getblobNumber() != -5){
+					user1LogVec.add(userLogVector.get(i));
+				}	
+			}
+			
+			//********************************************************
+			//FORMING USER2 LOG VECTOR
+			for(int i=0; i< userLogVector.size() ; i++) {
+				
+				if(userLogVector.get(i).getUser().equals("User 2") && userLogVector.get(i).getblobNumber() != -5){
+					user2LogVec.add(userLogVector.get(i));		
+				}	
+			}
+			//********************************************************
+			//FORMING USER3 LOG VECTOR
+			for(int i=0; i< userLogVector.size() ; i++) {
+				
+				if(userLogVector.get(i).getUser().equals("User 3") && userLogVector.get(i).getblobNumber() != -5){
+					user3LogVec.add(userLogVector.get(i));
+				}	
+			}
+			//********************************************************
+			//FORMING USER4 LOG VECTOR
+			for(int i=0; i< userLogVector.size() ; i++) {
+				
+				if(userLogVector.get(i).getUser().equals("User 4") && userLogVector.get(i).getblobNumber() != -5){
+					user4LogVec.add(userLogVector.get(i));		
+				}	
+			}
+			//********************************************************
+			//DIAMETER BLOBS FOR USER1	
+			user1result = new String[user1LogVec.size() / 2];
+			int j=0;
+			for(int i=0 ; i< user1LogVec.size() ; i++){
+				
+				if((user1LogVec.get(i).getblobNumber() %2 == 0) && ((i+1) < user1LogVec.size()) ){ //if blobNo is even && next element exists
+					
+					if(user1LogVec.get(i+1).getblobNumber() == (user1LogVec.get(i).getblobNumber() + 1) )
+					{
+						user1result[j] = user1LogVec.get(i).getUser() + "; Time passed between blob" +user1LogVec.get(i).getblobNumber() + " and blob" + user1LogVec.get(i+1).getblobNumber() + ":  " +
+								(user1LogVec.get(i+1).getTimeStamp() - user1LogVec.get(i).getTimeStamp()) + '\n' ;
+						System.out.println( user1LogVec.get(i).getUser()+ "; Time passed between blob" +user1LogVec.get(i).getblobNumber() + " and blob" + user1LogVec.get(i+1).getblobNumber() + ":  " +
+								(user1LogVec.get(i+1).getTimeStamp() - user1LogVec.get(i).getTimeStamp())  );
+						j++;
+					}
+					
+				}
+			}
+			System.out.println("");
+			
+			//********************************************************
+			//DIAMETER BLOBS FOR USER2	
+			user2result = new String[user2LogVec.size() / 2];
+			int k=0;
+			for(int i=0 ; i< user2LogVec.size() ; i++){
+				
+				if( (user2LogVec.get(i).getblobNumber() %2 == 0) && ((i+1) < user2LogVec.size()) ){ //if blobNo is even && next element exists
+					
+					if(user2LogVec.get(i+1).getblobNumber() == (user2LogVec.get(i).getblobNumber() + 1) )
+					{
+						user2result[k] =user2LogVec.get(i).getUser()+ "; Time passed between blob" +user2LogVec.get(i).getblobNumber() + " and blob" + user2LogVec.get(i+1).getblobNumber() + ":  " +
+								(user2LogVec.get(i+1).getTimeStamp() - user2LogVec.get(i).getTimeStamp()) + '\n';
+						System.out.println( user2LogVec.get(i).getUser()+ "; Time passed between blob" +user2LogVec.get(i).getblobNumber() + " and blob" + user2LogVec.get(i+1).getblobNumber() + ":  " +
+								(user2LogVec.get(i+1).getTimeStamp() - user2LogVec.get(i).getTimeStamp())  );
+						
+						k++;
+					}
+				}
+			}
+			System.out.println("");
+
+			//********************************************************
+			//DIAMETER BLOBS FOR USER3	
+			user3result = new String[user3LogVec.size() / 2];
+			int l=0;
+			for(int i=0 ; i< user3LogVec.size() ; i++){
+				
+				if( (user3LogVec.get(i).getblobNumber() %2 == 0) && ((i+1) < user3LogVec.size()) ){ //if blobNo is even && next element exists
+					
+					if(user3LogVec.get(i+1).getblobNumber() == (user3LogVec.get(i).getblobNumber() + 1) )
+					{
+						user3result[l] =user3LogVec.get(i).getUser()+ "; Time passed between blob" +user3LogVec.get(i).getblobNumber() + " and blob" + user3LogVec.get(i+1).getblobNumber() + ":  " +
+								(user3LogVec.get(i+1).getTimeStamp() - user3LogVec.get(i).getTimeStamp()) + '\n';
+						
+						
+						System.out.println( user3LogVec.get(i).getUser()+ "; Time passed between blob" +user3LogVec.get(i).getblobNumber() + " and blob" + user3LogVec.get(i+1).getblobNumber() + ":  " +
+								(user3LogVec.get(i+1).getTimeStamp() - user3LogVec.get(i).getTimeStamp()) );
+						l++;
+					}
+				}
+			}
+			System.out.println("");
+			
+			//********************************************************
+			//DIAMETER BLOBS FOR USER4	
+			user4result = new String[user4LogVec.size() / 2];
+			int m=0;
+			for(int i=0 ; i< user4LogVec.size() ; i++){
+				
+				if( (user4LogVec.get(i).getblobNumber() %2 == 0) && ((i+1) < user4LogVec.size()) ){ //if blobNo is even && next element exists
+					
+					if(user4LogVec.get(i+1).getblobNumber() == (user4LogVec.get(i).getblobNumber() + 1) )
+					{
+						user4result[m] =user4LogVec.get(i).getUser()+ "; Time passed between blob" +user4LogVec.get(i).getblobNumber() + " and blob" + user4LogVec.get(i+1).getblobNumber() + ":  " +
+								(user4LogVec.get(i+1).getTimeStamp() - user4LogVec.get(i).getTimeStamp()) + '\n';
+						System.out.println( user4LogVec.get(i).getUser()+ "; Time passed between blob" +user4LogVec.get(i).getblobNumber() + " and blob" + user4LogVec.get(i+1).getblobNumber() + ":  " +
+								(user4LogVec.get(i+1).getTimeStamp() - user4LogVec.get(i).getTimeStamp())  );
+						m++;
+					}
+				}
+			}
+			System.out.println("-------------------------------------------------------------------");
 
 			log();
 		}
@@ -245,12 +442,14 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 
 			@Override
 			public void onSuccess(Void result) {
-				Window.alert("Successfully logged! Experiment finished");
+				ClickBlobs4users.this.clear();
+;				Window.alert("Successfully logged! Experiment finished");
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
 				GWT.log("Error:", caught);
+				ClickBlobs4users.this.clear(); 
 				Window.alert("Not logged");
 			}
 		});
@@ -264,11 +463,58 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 	 */
 
 	private String[] getLoggedResult(String[][] data) {
-		String[] result = new String[data.length];
+		String[] result = new String[data.length + 1];
+		String messageU1 = "";
+		String messageU2 = "";
+		String messageU3 = "";
+		String messageU4 = "";
 
-		for (int i = 1; i < result.length; i++) {
-			result[i] = data[i][0] + ";" + data[i][1] + ";" + data[i][2] + ";" + data[i][3] + " \n";
+		for (int i = 0; i < data.length; i++) {
+			result[i] = data[i][0] + ";" + data[i][1] + ";" + data[i][2] + ";" + data[i][3] + ";" + data[i][4] + " \n";
 		}
+		
+		for(int j = 0; j< user1result.length ; j++){
+
+			 messageU1 = messageU1+ user1result[j];	
+		}
+		for(int k = 0; k< user2result.length ; k++){
+
+			 messageU2 = messageU2+ user2result[k];	
+		}
+		for(int l = 0; l< user3result.length ; l++){
+
+			 messageU3 = messageU3+ user3result[l];	
+		}
+		for(int m = 0; m< user4result.length ; m++){
+
+			 messageU4 = messageU4+ user4result[m];	
+		}
+		
+		
+		result[data.length] = '\n'+ "---------------------------------------------------------------"+ '\n' 
+			    +"User1; Start Time:" + user1.startTime + " ;  Finish Time:" + finishTime +" ; Experiment Completion Time: " + ((finishTime)-user1.startTime) + '\n' 
+				+"Set Finish time: " + user1.setFinishTime +  " ; Set Completion Time:" + (user1.setFinishTime-user1.startTime)
+				+'\n'
+				+"User2; Start Time:" + user2.startTime  + " ; Finish Time:"+ finishTime +" ; Experiment Completion Time: "+ ((finishTime)-user2.startTime) + '\n' 
+				+"Set Finish time: " + user2.setFinishTime +  " ; Set Completion Time:" + (user2.setFinishTime-user2.startTime)
+				+ '\n' 
+				+"User3; Start Time:" + user3.startTime + " ;  Finish Time:" + finishTime +" ; Experiment Completion Time: " + ((finishTime)-user3.startTime) + '\n' 
+				+"Set Finish time: " + user3.setFinishTime +  " ; Set Completion Time:" + (user3.setFinishTime-user3.startTime)
+				+'\n'
+				+"User4; Start Time:" + user4.startTime + " ;  Finish Time:" + finishTime +" ; Experiment Completion Time: " + ((finishTime)-user4.startTime) + '\n' 
+				+"Set Finish time: " + user4.setFinishTime +  " ; Set Completion Time:" + (user4.setFinishTime-user4.startTime) + '\n'
+				+"---------------------------------------------------------------"+ '\n'
+				+"User 1; " + user1.count + " + "  + user1.trialcount + " times out of blob"  + '\n'
+				+"User 2; " + user2.count + " + "  + user2.trialcount + " times out of blob"  + '\n'
+				+"User 3; " + user3.count + " + "  + user3.trialcount + " times out of blob"  + '\n'
+				+"User 4; " + user4.count + " + "  + user4.trialcount + " times out of blob"  + '\n'
+				+ "---------------------------------------------------------------"+ '\n'
+				+ messageU1 + '\n'
+				+ messageU2 + '\n'
+				+ messageU3 + '\n'
+				+ messageU4 ; 
+		
+		
 		return result;
 	}
 
@@ -295,7 +541,7 @@ public class ClickBlobs4users extends VerticalPanel implements ICEDataLogger, Re
 	}
 
 	@Override
-	public void setLoggedData(Collection<? extends String> blobData) {
+	public void setLoggedData(Vector<String> blobData , boolean finished , boolean check) {
 		// TODO Auto-generated method stub
 
 	}
