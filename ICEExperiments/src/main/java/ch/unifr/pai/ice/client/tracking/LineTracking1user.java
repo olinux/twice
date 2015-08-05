@@ -77,7 +77,7 @@ public class LineTracking1user extends AbsolutePanel implements RequireInitialis
 		@Override
 		public void run() {
 			if (tracking && (x != prevX || y != prevY)) {
-				cursorPosVector.add(new CursorXY("user1", x, y, System.currentTimeMillis()));
+				cursorPosVector.add(new CursorXY("user1", x, y, System.currentTimeMillis() , 0));  
 				prevX = x;
 				prevY = y;
 			}
@@ -181,6 +181,11 @@ public class LineTracking1user extends AbsolutePanel implements RequireInitialis
 
 	@Override
 	public void initialise() {
+		
+				System.out.println("Experiment Identifier:  " + ICEMain.identifier);
+				System.out.println("Name of Experiment Task: " + ExperimentIdentifier.TRACKING);
+				System.out.println("User Number:  " + 1);
+				System.out.println(); 
 
 		this.setWidgetPosition(startBt, 0, lineImage.getOffsetHeight() + lineOffset);
 		this.setWidgetPosition(stopBt, lineImage.getOffsetWidth(), lineImage.getOffsetHeight() + lineOffset);
@@ -237,6 +242,15 @@ public class LineTracking1user extends AbsolutePanel implements RequireInitialis
 		for (int i = 0; i < result.length; i++) {
 			result[i] = lineImage.getUrl() + "; " + data.get(i).getUser() + "; " + data.get(i).getX() + "; " + data.get(i).getY() + "; "
 					+ data.get(i).getTimeStamp();
+			
+			//PRINTING LOGS
+			System.out.println("Path Image: " + lineImage.getUrl() + " -"
+					+ "   Username: " + data.get(i).getUser() + " -"
+					+ "   X Coordinate of Cursor: " + data.get(i).getX() + " -"
+					+ "   Y Coordinate of Cursor: " + data.get(i).getY() + " -"
+					+ "   Current Time:  " + data.get(i).getTimeStamp() );
+			
+			
 		}
 		return result;
 	}

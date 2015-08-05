@@ -34,6 +34,10 @@
 			<groupId>ch.unifr.pai.twice.comm.serverPush</groupId>
 			<artifactId>ServerPush</artifactId>
 		</dependency>
+		<dependency> 
+			<groupId>ch.unifr.pai.twice.widgets</groupId> 
+			<artifactId>RemoteWidgets</artifactId>
+			</dependency>   
 	</dependencies>
 	<parent>
 		<groupId>ch.unifr.pai.twice</groupId>

@@ -15,11 +15,12 @@ package ch.unifr.pai.ice.client.utils;
  * limitations under the License.
  */
 public class PositioningUtils {
+	
 	public static int[][] getPositionsInCircle(int nbElements, int xCenter, int yCenter, int radius) {
 
-		int nbPos = (nbElements == 0) ? 2 : nbElements;
+		int nbPos = (nbElements == 0) ? 2 : nbElements; 
 		// check if nbPos is even
-		nbPos = (nbPos % 2 == 0) ? nbPos : nbPos + 1;
+		nbPos = (nbPos % 2 == 0) ? nbPos : nbPos + 1; //nbPos is always even
 
 		int[][] blobPos = new int[nbPos][2];
 		int dAngle = 360 / nbPos;
@@ -35,20 +36,20 @@ public class PositioningUtils {
 		blobPos[1][1] = yCenter + radius;
 
 		for (int i = 2; i < nbPos; i = i + 2) {
-			angle = angle + dAngle;
-
+			angle = angle + dAngle;  
 			if (angle < 90) {
 
 				x = radius * Math.sin(Math.toRadians(angle));
 				y = radius * Math.cos(Math.toRadians(angle));
 
-				blobPos[i][0] = (int) (xCenter + x);
-				blobPos[i][1] = (int) (yCenter - y);
+				blobPos[i][0] = (int) (xCenter + x); 
+				blobPos[i][1] = (int) (yCenter - y); 
 				blobPos[i + 1][0] = (int) (xCenter - x);
 				blobPos[i + 1][1] = (int) (yCenter + y);
 
 			}
 			else if (angle == 90) {
+
 				blobPos[i][0] = xCenter + radius;
 				blobPos[i][1] = (yCenter);
 				blobPos[i + 1][0] = xCenter - radius;
@@ -56,7 +57,7 @@ public class PositioningUtils {
 
 			}
 			else if (angle > 90) {
-
+				
 				x = radius * Math.cos(Math.toRadians(angle - 90));
 				y = radius * Math.sin(Math.toRadians(angle - 90));
 
@@ -69,4 +70,6 @@ public class PositioningUtils {
 
 		return blobPos;
 	}
+	
+	
 }

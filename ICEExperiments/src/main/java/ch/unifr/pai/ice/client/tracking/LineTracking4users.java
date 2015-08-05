@@ -92,7 +92,7 @@ public class LineTracking4users extends VerticalPanel implements RequireInitiali
 		@Override
 		public void run() {
 			if (startBt1.isDown() && !stopBt1.isDown() && (x1 != prevX1 || y1 != prevY1)) {
-				cursorPosVector1.add(new CursorXY("user1", x1, y1, System.currentTimeMillis()));
+				cursorPosVector1.add(new CursorXY("user1", x1, y1, System.currentTimeMillis() , 0)); 
 				prevX1 = x1;
 				prevY1 = y1;
 			}
@@ -112,7 +112,7 @@ public class LineTracking4users extends VerticalPanel implements RequireInitiali
 		@Override
 		public void run() {
 			if (startBt2.isDown() && !stopBt2.isDown() && (x2 != prevX2 || y2 != prevY2)) {
-				cursorPosVector2.add(new CursorXY("user2", x2, y2, System.currentTimeMillis()));
+				cursorPosVector2.add(new CursorXY("user2", x2, y2, System.currentTimeMillis() , 0)); 
 				prevX2 = x2;
 				prevY2 = y2;
 			}
@@ -133,7 +133,7 @@ public class LineTracking4users extends VerticalPanel implements RequireInitiali
 		@Override
 		public void run() {
 			if (startBt3.isDown() && !stopBt3.isDown() && (x3 != prevX3 || y3 != prevY3)) {
-				cursorPosVector3.add(new CursorXY("user3", x3, y3, System.currentTimeMillis()));
+				cursorPosVector3.add(new CursorXY("user3", x3, y3, System.currentTimeMillis() , 0)); 
 				prevX3 = x3;
 				prevY3 = y3;
 			}
@@ -153,7 +153,7 @@ public class LineTracking4users extends VerticalPanel implements RequireInitiali
 		@Override
 		public void run() {
 			if (startBt4.isDown() && !stopBt4.isDown() && (x4 != prevX4 || y4 != prevY4)) {
-				cursorPosVector4.add(new CursorXY("user4", x4, y4, System.currentTimeMillis()));
+				cursorPosVector4.add(new CursorXY("user4", x4, y4, System.currentTimeMillis() , 0));
 				prevX4 = x4;
 				prevY4 = y4;
 			}

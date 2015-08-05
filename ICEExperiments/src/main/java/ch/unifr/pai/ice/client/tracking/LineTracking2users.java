@@ -81,7 +81,7 @@ public class LineTracking2users extends HorizontalPanel implements RequireInitia
 		@Override
 		public void run() {
 			if (startBt1.isDown() && !stopBt1.isDown() && (x1 != prevX1 || y1 != prevY1)) {
-				cursorPosVector1.add(new CursorXY("user1", x1, y1, System.currentTimeMillis()));
+				cursorPosVector1.add(new CursorXY("user1", x1, y1, System.currentTimeMillis() , 0)); 
 				prevX1 = x1;
 				prevY1 = y1;
 			}
@@ -101,7 +101,7 @@ public class LineTracking2users extends HorizontalPanel implements RequireInitia
 		@Override
 		public void run() {
 			if (startBt2.isDown() && !stopBt2.isDown() && (x2 != prevX2 || y2 != prevY2)) {
-				cursorPosVector2.add(new CursorXY("user2", x2, y2, System.currentTimeMillis()));
+				cursorPosVector2.add(new CursorXY("user2", x2, y2, System.currentTimeMillis() , 0)); 
 				prevX2 = x2;
 				prevY2 = y2;
 			}

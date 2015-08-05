@@ -23,14 +23,20 @@ package ch.unifr.pai.ice.client.rpc;
  * 
  *************************************************************************************************/
 
+
+//import MouseControllerService;
 import ch.unifr.pai.ice.shared.ExperimentIdentifier;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("logger")
+@RemoteServiceRelativePath("logger") 
+
 public interface EventingService extends RemoteService {
 
 	public void log(String experimentId, String[] message, ExperimentIdentifier experimentName, int numberOfUsers);
 	// public void log(Vector<CursorXY> message, int experimentNumber);
+
+	
 }

@@ -36,7 +36,8 @@ import ch.unifr.pai.twice.widgets.mpproxy.shared.Constants;
 public class ReadOnlyPresentation extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private static double scaleFactor = 0.25;
+	private static double scaleFactor = 0.5;
+	private static double scrollFactor = 0.65;
 
 	private static class Screenshot {
 		private String html;
@@ -66,10 +67,10 @@ public class ReadOnlyPresentation extends HttpServlet {
 		Screenshot s = uuidToScreenshot.get(uuid);
 		String html = s.html;
 		html = html.replace("<body", "<body style=\"overflow:hidden; zoom: "+scaleFactor+"!important; -moz-transform: scale("+scaleFactor+"); -moz-transform-origin: 0 0;\"");
-		html = html.replaceAll("<div id=\"miceNavigation\".*?</div>", "");
-		html = html.replaceAll("<div id=\"contentWrapper\".?>", "");
-		html = html.replace("</div></body>", "</div>");
-		html = html.replace("</body>", "<script>document.body.scrollTop="+(s.top*scaleFactor)+";document.body.scrollLeft="+(s.left*scaleFactor)+";</script></body>");
+		//html = html.replaceAll("<div id=\"miceNavigation\".*?</div>", "");
+		//html = html.replaceAll("<div id=\"contentWrapper\".?>", "");
+		//html = html.replace("</div></body>", "</div>");
+		html = html.replace("</body>", "<script>document.body.scrollTop="+(s.top*scrollFactor)+";document.body.scrollLeft="+(s.left*scrollFactor)+";</script></body>");
 		return s != null ? html : null;
 	}
 

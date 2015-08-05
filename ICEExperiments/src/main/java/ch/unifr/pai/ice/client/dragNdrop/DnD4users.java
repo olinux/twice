@@ -51,10 +51,10 @@ public class DnD4users extends VerticalPanel implements ICEDataLogger, RequireIn
 	String blob7 = GWT.getModuleBaseURL() + "circle_grey.png";
 	String blob8 = GWT.getModuleBaseURL() + "circle.png";
 
-	DnD1userGeneric user1Panel = new DnD1userGeneric("user1", 20, blob1, this);
-	DnD1userGeneric user2Panel = new DnD1userGeneric("user2", 20, blob2, this);
-	DnD1userGeneric user3Panel = new DnD1userGeneric("user3", 20, blob3, this);
-	DnD1userGeneric user4Panel = new DnD1userGeneric("user4", 20, blob4, this);
+	DnD1userGeneric user1Panel = new DnD1userGeneric("user1", 10, blob1, this);
+	DnD1userGeneric user2Panel = new DnD1userGeneric("user2", 10, blob2, this);
+	DnD1userGeneric user3Panel = new DnD1userGeneric("user3", 10, blob3, this);
+	DnD1userGeneric user4Panel = new DnD1userGeneric("user4", 10, blob4, this);
 
 	HorizontalPanel hPanel1 = new HorizontalPanel();
 	HorizontalPanel hPanel2 = new HorizontalPanel();
@@ -63,32 +63,38 @@ public class DnD4users extends VerticalPanel implements ICEDataLogger, RequireIn
 	int nbUser = 4;
 	Vector<String> userLogVector = new Vector<String>();
 	String[] loggedData;
+	
+	long finishTime;
 
 	public DnD4users() {
 		super();
-		this.setSize("100%", "100%");
-		hPanel1.setSize("100%", "100%");
-		hPanel2.setSize("100%", "100%");
-
+		
 		user1Panel.setSize("100%", "100%");
 		user2Panel.setSize("100%", "100%");
 		user3Panel.setSize("100%", "100%");
 		user4Panel.setSize("100%", "100%");
+		
+		this.setSize("100%", "100%");
+		hPanel1.setSize("100%", "100%");
+		hPanel2.setSize("100%", "100%");
 
 		hPanel1.add(user1Panel);
 		// forces to maintain the size of the cell
 		hPanel1.setCellWidth(user1Panel, "50%");
 		hPanel1.setCellHeight(user1Panel, "50%");
-		hPanel1.add(user2Panel);
+		hPanel1.add(user3Panel);
 
-		hPanel2.add(user3Panel);
-		hPanel2.setCellWidth(user3Panel, "50%");
-		hPanel2.setCellHeight(user3Panel, "50%");
 		hPanel2.add(user4Panel);
+		hPanel2.setCellWidth(user4Panel, "50%");
+		hPanel2.setCellHeight(user4Panel, "50%");
+		hPanel2.add(user2Panel);
 
 		this.add(hPanel1);
 		this.add(hPanel2);
 		this.setBorderWidth(1);
+		
+		hPanel1.setBorderWidth(1); 
+		hPanel2.setBorderWidth(1); 
 	}
 
 	@Override
@@ -97,23 +103,33 @@ public class DnD4users extends VerticalPanel implements ICEDataLogger, RequireIn
 		user2Panel.initialise();
 		user3Panel.initialise();
 		user4Panel.initialise();
+		
+		
+		//PRINTING LOGS 
+		System.out.println("Experiment Identifier: " + ICEMain.identifier);
+		System.out.println("Name of Experiment Task: " + ExperimentIdentifier.DRAGNDROP);
+		System.out.println("User Number: " + nbUser);
+		System.out.println();
 	}
 
 	/**
 	 * log the data and indicate if logged is OK or not
 	 */
 	private void log() {
+		
 		EventingServiceAsync svc = GWT.create(EventingService.class);
-		svc.log(ICEMain.identifier, loggedData, ExperimentIdentifier.DRAGNDROP, 4, new AsyncCallback<Void>() {
+		svc.log(ICEMain.identifier, getLoggedResult(loggedData), ExperimentIdentifier.DRAGNDROP, 4, new AsyncCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void result) {
+				DnD4users.this.clear();
 				Window.alert("Successfully logged! Experiment finished");
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
 				GWT.log("Error:", caught);
+				DnD4users.this.clear();
 				Window.alert("Not logged");
 			}
 		});
@@ -126,25 +142,103 @@ public class DnD4users extends VerticalPanel implements ICEDataLogger, RequireIn
 	 * @return Array of string containing the user, x, y coord, time stamps of the click
 	 */
 
-	private String[] getLoggedResult(String[][] data) {
-		String[] result = new String[data.length];
+	private String[] getLoggedResult(String[] data) {
+		String[] result = new String[data.length + 1];
 
-		for (int i = 1; i < result.length; i++) {
-			result[i] = data[i][0] + ";" + data[i][1] + ";" + data[i][2] + ";" + data[i][3] + " \n";
+		for (int i = 0; i < data.length; i++) {
+			result[i] = data[i] + " \n";
 		}
+		result[data.length] = '\n' + "---------------------------------------------------------------"+ '\n' 
+						+"User1; Start Time:"+ user1Panel.startTime + " ; Finish Time:"+ finishTime +" ; Experiment Completion Time: " + (finishTime-user1Panel.startTime)  + '\n' 
+					    +"User1; Set Finish time: " + user1Panel.setFinishTime +  " ; Set Completion Time:" + (user1Panel.setFinishTime-user1Panel.startTime) +'\n'
+						+'\n'
+						+"User2; Start Time:"+ user2Panel.startTime + " ; Finish Time:"+ finishTime +" ; Experiment Completion Time: "+ (finishTime-user2Panel.startTime) + '\n' 
+						+"User2; Set Finish time: " + user2Panel.setFinishTime +  " ; Set Completion Time:" + (user2Panel.setFinishTime-user2Panel.startTime)+ '\n'
+						+'\n'
+						+"User3; Start Time:"+ user3Panel.startTime + " ; Finish Time:"+ finishTime +" ; Experiment Completion Time: " + (finishTime-user3Panel.startTime)  + '\n' 
+					    +"User3; Set Finish time: " + user3Panel.setFinishTime +  " ; Set Completion Time:" + (user3Panel.setFinishTime-user3Panel.startTime) +'\n'
+						+'\n'
+						+"User4; Start Time:"+ user4Panel.startTime + " ; Finish Time:"+ finishTime +" ; Experiment Completion Time: " + (finishTime-user4Panel.startTime)  + '\n' 
+					    +"User4; Set Finish time: " + user4Panel.setFinishTime +  " ; Set Completion Time:" + (user4Panel.setFinishTime-user4Panel.startTime) + '\n'
+						+"---------------------------------------------------------------"+ '\n'
+						+"User1 ; "+ user1Panel.setcount + " + "  + user1Panel.trialcount + " times unsuccessful D&D" + '\n'
+						+"User2 ; "+ user2Panel.setcount + " + "  + user2Panel.trialcount + " times unsuccessful D&D" + '\n'
+						+"User3 ; "+ user3Panel.setcount + " + "  + user3Panel.trialcount + " times unsuccessful D&D" + '\n'
+						+"User4 ; "+ user4Panel.setcount + " + "  + user4Panel.trialcount + " times unsuccessful D&D" + '\n'
+						+ "---------------------------------------------------------------"+ '\n';				
+				
 		return result;
 	}
 
 	@Override
-	public void setLoggedData(Collection<? extends String> blobData) {
+	public void setLoggedData(Vector<String> blobData , boolean finished , boolean check) {
+		
+		
 		if (nbExpFinished < nbUser) {
-			userLogVector.addAll(blobData);
-			nbExpFinished++;
+			
+			if(finished){
+				userLogVector.addAll(blobData);
+				nbExpFinished++;
+			}
+			else{
+				userLogVector.add(blobData.lastElement());
+			}
 		}
 
 		if (nbExpFinished == nbUser) {
+			
+			finishTime = System.currentTimeMillis();
+			
 			loggedData = new String[userLogVector.size()];
 			userLogVector.copyInto(loggedData);
+			
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println("***TASK FINISHED***");
+			for(int i=0 ; i<userLogVector.size() ; i++){
+				
+				System.out.println( i+ ".  "+ userLogVector.elementAt(i));
+				}
+			System.out.println("");
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println("User1; " + user1Panel.setcount + " + "  + user1Panel.trialcount + " times unsuccessful D&D");
+			System.out.println("");
+			System.out.println("User2; " + user2Panel.setcount + " + "  + user2Panel.trialcount + " times unsuccessful D&D");
+			System.out.println("");
+			System.out.println("User3; " + user3Panel.setcount + " + "  + user3Panel.trialcount + " times unsuccessful D&D");
+			System.out.println("");
+			System.out.println("User4; " + user4Panel.setcount + " + "  + user4Panel.trialcount + " times unsuccessful D&D");
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println("User1; Start time:"+ user1Panel.startTime + ";  Finish time:"+ finishTime);
+			System.out.println("User1; Completion Time: " + (finishTime-user1Panel.startTime) ); 
+			System.out.println("User1; Set Finish time:"+ user1Panel.setFinishTime);
+			System.out.println("User1; Set Completion Time: " + (user1Panel.setFinishTime-user1Panel.startTime));
+			System.out.println("");
+			System.out.println("User2; Start time:"+ user2Panel.startTime + ";  Finish time:"+ finishTime);
+			System.out.println("User2; Completion Time: " + (finishTime-user2Panel.startTime) ); 
+			System.out.println("User2; Set Finish time:"+ user2Panel.setFinishTime);
+			System.out.println("User2; Set Completion Time: " + (user2Panel.setFinishTime-user2Panel.startTime));
+			System.out.println("");
+			System.out.println("User3; Start time:"+ user3Panel.startTime + ";  Finish time:"+ finishTime);
+			System.out.println("User3; Completion Time: " + (finishTime-user3Panel.startTime) ); 
+			System.out.println("User3; Set Finish time:"+ user3Panel.setFinishTime);
+			System.out.println("User3; Set Completion Time: " + (user3Panel.setFinishTime-user3Panel.startTime));
+			System.out.println("");
+			System.out.println("User4; Start time:"+ user4Panel.startTime + ";  Finish time:"+ finishTime);
+			System.out.println("User4; Completion Time: " + (finishTime-user4Panel.startTime) ); 
+			System.out.println("User4; Set Finish time:"+ user4Panel.setFinishTime);
+			System.out.println("User4; Set Completion Time: " + (user4Panel.setFinishTime-user4Panel.startTime));
+			System.out.println("-------------------------------------------------------------------");
+			
+//			for(int i=(userLogVector.size() -1) ; i>= 0 ; i--){
+//				
+//				if(userLogVector.get(i).startsWith("user1")){
+//					
+//					System.out.println( userLogVector.get(i).charAt((userLogVector.get(i).length() - 1)) ); 
+//				}
+//			}
+			
+			
+			
 			log();
 		}
 
@@ -156,7 +250,7 @@ public class DnD4users extends VerticalPanel implements ICEDataLogger, RequireIn
 	 * @param blobData
 	 */
 	@Override
-	public void setLoggedData(Vector<CursorXY> blobData) {
+	public void setLoggedData(Vector<CursorXY> blobData  , boolean finished) {
 
 	}
 

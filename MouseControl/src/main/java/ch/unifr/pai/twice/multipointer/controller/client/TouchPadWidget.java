@@ -232,7 +232,8 @@ public abstract class TouchPadWidget extends LayoutPanel {
 						keyDownEvent);
 				switch(event.getNativeEvent().getKeyCode()){
 					case KeyCodes.KEY_BACKSPACE:
-					case KeyCodes.KEY_ENTER:
+					//case KeyCodes.KEY_ENTER:
+						
 						event.getNativeEvent().preventDefault();
 						event.getNativeEvent().stopPropagation();
 						event.cancel();
@@ -244,9 +245,11 @@ public abstract class TouchPadWidget extends LayoutPanel {
 				keyUpEvent.keyCode = event.getNativeEvent().getKeyCode();
 				CommunicationManager.getBidirectionalEventBus().fireEvent(
 						keyUpEvent);
+				
 				switch(event.getNativeEvent().getKeyCode()){
 					case KeyCodes.KEY_BACKSPACE:
-					case KeyCodes.KEY_ENTER:
+					//case KeyCodes.KEY_ENTER:
+						
 						event.getNativeEvent().preventDefault();
 						event.getNativeEvent().stopPropagation();
 						event.cancel();

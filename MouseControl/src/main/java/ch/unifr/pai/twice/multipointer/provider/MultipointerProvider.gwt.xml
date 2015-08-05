@@ -18,6 +18,10 @@
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="ch.unifr.pai.twice.utils.device.DeviceUtils"/>
 	<inherits name="ch.unifr.pai.twice.multipointer.commons.MultipointerCommons"/>
+	
+	<inherits name='ch.unifr.pai.twice.comm.serverPush.ServerPush' />
+	<inherits name='ch.unifr.pai.twice.widgets.RemoteWidgets'/> 
+	
 	<source path="client"/>
 	<!-- Use the multi cursor implementation if available. -->
 	<replace-with

@@ -32,7 +32,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-
 import java.util.*;
 
 /**
@@ -81,11 +80,13 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 		visibleCursors.clear();
 		assignedMouseCursors.clear();
 		cursorColors.clear();
-		cursorColors.add(new CursorColor("black", "#1a1a1a"));
-		cursorColors.add(new CursorColor("blue", "#336aa6"));
-		cursorColors.add(new CursorColor("green", "#42a75b"));
+
+		cursorColors.add(new CursorColor("black", "#1a1a1a"));   //user1
+		cursorColors.add(new CursorColor("red", "#ff0000")); 	//user2
+		cursorColors.add(new CursorColor("blue", "#336aa6"));  //user3
+		cursorColors.add(new CursorColor("green", "#088a29"));  //user4
+		
 		cursorColors.add(new CursorColor("grey", "#646663"));
-		cursorColors.add(new CursorColor("red", "#d65555"));
 		cursorColors.add(new CursorColor("yellow", "#f7d64c"));
 		cursorColors.add(new CursorColor("purple", "#cb2c7a"));
 	}
@@ -107,6 +108,8 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 				visibleCursors.remove(c);
 			}
 		});
+		
+	
 		if (visibleCursors.size() < getMaxCursorsOnScreen()) {
 			c.show();
 			visibleCursors.add(c);
@@ -132,6 +135,7 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 	 */
 	@Override
 	public void start() {
+		
 		if (!isInIFrame()) {
 			initializeCursorList();
 			if (r != null)
@@ -165,8 +169,9 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 						m.up(event);
 				}
 			}));
+			
 			currentRemoteEventHandlers.add(eventBus.addHandler(RemoteKeyDownEvent.TYPE, new RemoteKeyDownEvent.Handler() {
-
+				
 				@Override
 				public void onEvent(RemoteKeyDownEvent event) {
 					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
@@ -174,8 +179,8 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 						m.keyDown(event);
 				}
 			}));
+			
 			currentRemoteEventHandlers.add(eventBus.addHandler(RemoteKeyUpEvent.TYPE, new RemoteKeyUpEvent.Handler() {
-
 				@Override
 				public void onEvent(RemoteKeyUpEvent event) {
 					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
@@ -183,8 +188,8 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 						m.keyUp(event);
 				}
 			}));
+			
 			currentRemoteEventHandlers.add(eventBus.addHandler(RemoteKeyPressEvent.TYPE, new RemoteKeyPressEvent.Handler() {
-
 				@Override
 				public void onEvent(RemoteKeyPressEvent event) {
 					MouseCursor m = getOrCreateCursor(event.getOriginatingDevice());
@@ -192,11 +197,13 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 						m.keyPress(event);
 				}
 			}));
+			
 			MouseControllerServiceAsync svc = GWT.create(MouseControllerService.class);
 			svc.registerAsMPProvider(UUID.get(), new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
+					Window.alert("Not Registered");
 					// TODO Auto-generated method stub
 
 				}
@@ -266,7 +273,7 @@ public class MultiCursorController extends NoMultiCursorController implements Re
 		m.setUuid(uuid);
 		assignedMouseCursors.put(uuid, m);
 		if (storage != null)
-			storage.setItem("ch.unifr.pai.mice.multicursor.assignedCursor." + m.getFileName(), uuid);
+			storage.setItem("ch.unifr.pai.mice.multicursor.assignedCursor." + m.getFileName(), uuid); 
 		CommunicationManager.getBidirectionalEventBus().fireEvent(
 				InformationUpdateEvent.changeColorAndResize(m.getColor(), Window.getClientWidth(), Window.getClientHeight(), uuid));
 		return m;

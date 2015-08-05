@@ -26,16 +26,19 @@ public class CursorXY {
 	long timeStamp;
 	String user;
 	int color;
+	
+	int blobNumber ; 
 
 	public CursorXY() {
 
 	}
 
-	public CursorXY(String user, int x, int y, long timeStamp) {
+	public CursorXY(String user, int x, int y, long timeStamp, int blobNumber) {
 		this.user = user;
 		this.x = x;
 		this.y = y;
 		this.timeStamp = timeStamp;
+		this.blobNumber = blobNumber; 
 	}
 
 	public int getColor() {
@@ -77,5 +80,15 @@ public class CursorXY {
 	public void setTimeStamp(long timeStamp) {
 		this.timeStamp = timeStamp;
 	}
+	
+	public int getblobNumber() {  
+		return blobNumber;}
+	
+	public void setblobNumber(int num) {  
+		this.blobNumber = num;
+	}
+	
+	
+	
 
 }

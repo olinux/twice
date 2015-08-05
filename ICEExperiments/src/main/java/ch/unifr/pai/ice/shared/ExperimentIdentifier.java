@@ -1,6 +1,8 @@
 package ch.unifr.pai.ice.shared;
 
-import java.io.Serializable;
+//import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 
 /*
  * Copyright 2013 Pascal Bruegger
@@ -16,6 +18,6 @@ import java.io.Serializable;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public enum ExperimentIdentifier implements Serializable {
+public enum ExperimentIdentifier implements IsSerializable { 
 	CLICKBLOB, DRAGNDROP, DRAGNDROPSPACES, TEXTEDIT, TEXTEDITSPACES, TRACKING;
 }

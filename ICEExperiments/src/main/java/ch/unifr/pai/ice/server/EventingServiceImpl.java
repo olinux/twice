@@ -33,15 +33,17 @@ import ch.unifr.pai.ice.client.rpc.EventingService;
 import ch.unifr.pai.ice.client.tracking.CursorXY;
 import ch.unifr.pai.ice.client.utils.ResultAnalyzer;
 import ch.unifr.pai.ice.shared.ExperimentIdentifier;
+import ch.unifr.pai.twice.multipointer.commons.client.rpc.MouseControllerService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @WebServlet("/icetexteditgwt/logger")
+
 public class EventingServiceImpl extends RemoteServiceServlet implements EventingService {
 
 	private static final long serialVersionUID = 1L;
 	Logger experimentLog = Logger.getLogger("experiment");
-
+	
 	// Logger log1 = Logger.getLogger("experiment1"); // Text Entry
 	// Logger log2 = Logger.getLogger("experiment2"); // Text Entry
 	// Logger log3 = Logger.getLogger("experiment3"); // Text Entry
@@ -70,7 +72,8 @@ public class EventingServiceImpl extends RemoteServiceServlet implements Eventin
 	public void log(String experimentId, String[] message, ExperimentIdentifier experimentName, int numberOfUsers) {
 		// initText(text);
 		for (String m : message) {
-			experimentLog.info(experimentId + "; " + experimentName.name() + "; " + numberOfUsers + "; " + m);
+			experimentLog.info(experimentId + "; " + experimentName.name() + "; " + numberOfUsers + "; " + m); 
+			
 		}
 
 		// // process the text input received from the user
@@ -189,30 +192,30 @@ public class EventingServiceImpl extends RemoteServiceServlet implements Eventin
 		// break;
 		//
 		// case 4: {
-		// log4.info("Click blobs 1 users");
-		// log4.info("Session of " + new Date());
-		// log4.info("user; Xcoord; Ycoord; TimeStamp (ms)");
-		// log4.info("-------------------------------------------------");
-		//
-		// for (String s : message) {
-		// log4.info(s);
-		// }
-		// log4.info("-------------------------------------------------");
+//		 log4.info("Click blobs 1 users");
+//		 log4.info("Session of " + new Date());
+//		 log4.info("user; Xcoord; Ycoord; TimeStamp (ms)");
+//		 log4.info("-------------------------------------------------");
+//		
+//		 for (String s : message) {
+//		 log4.info(s);
+//		 }
+//		 log4.info("-------------------------------------------------");
 		//
 		// break;
 		// }
 		//
 		// case 5:
-		// log5.info("Click blobs 2 users");
-		// log5.info("Session of " + new Date());
-		// log5.info("user; Xcoord; Ycoord; TimeStamp (ms)");
-		// log5.info("-------------------------------------------------");
-		//
-		// for (String s : message) {
-		// log5.info(s);
-		// }
-		// log5.info("-------------------------------------------------");
-		//
+//		 log5.info("Click blobs 2 users");
+//		 log5.info("Session of " + new Date());
+//		 log5.info("user; Xcoord; Ycoord; TimeStamp (ms)");
+//		 log5.info("-------------------------------------------------");
+//		
+//		 for (String s : message) {
+//		 log5.info(s);
+//		 }
+//		 log5.info("-------------------------------------------------");
+//		
 		// break;
 		//
 		// case 6:

@@ -70,10 +70,10 @@ public class ProxyBody {
 				}
 			}
 		});
-		Storage s = Storage.getSessionStorageIfSupported();
-		if (s != null) {
-			RootPanel.get().add(new Label("Multicursor: " + s.getItem("ch.unifr.pai.mice.deviceType")));
-		}
+		//Storage s = Storage.getSessionStorageIfSupported();
+		//if (s != null) {
+		//	RootPanel.get().add(new Label("Multicursor: " + s.getItem("ch.unifr.pai.mice.deviceType")));
+		//}
 		publishInterfaces();
 		rewriteUrls((Element) Document.get().getDocumentElement());
 		addDomChangeEvents();
